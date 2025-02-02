@@ -1,1 +1,49 @@
 # 2025-proyecto-final-grupo2
+
+## Integrantes del equipo
+
+* Maria del Mar Alas Escalante
+* Jhon Puentes
+* Robert Castro
+* Daniel Gamez
+
+## Hoja de trabajo arquitectura
+
+### Objetivos
+
+| Descripción del Objetivo                                                             | Tiempo de cumplimiento | Mejora esperada al negocio                                       |
+|---------------------------------------------------------------------------------------|------------------------|-------------------------------------------------------------------|
+| Aumentar la posición en el mercado ofreciendo el mejor servicio de venta y distribución de productos a los clientes | 4 años                 | Crecer 3% anual                                                    |
+| Entregar los pedidos solicitados con el menor número de inconformidades posible       | 2 años                 | Reducirlo en 10%                                                   |
+| Reducir las pérdidas por perecederos vencidos                                           | 1 año                  | Reducirlo en 60%                                                   |
+
+### Restricciones de negocio
+
+| **#Restriccion de Negocio** | 1 |
+|--------------------------------|-----------------------------------------------------------|
+| **Descripción de la restricción** | La arquitectura debe estar lista en 8 semanas |
+| **Usuario que expresa esta restricción** | Patrocinador del Proyecto – Presidente CCP |
+| **Justificación para esta restricción** | El recaudo del dinero de capital de riesgo depende de que todo el proyecto termine en 16 semanas y para ello la arquitectura se debe plantear de forma rápida sin comprometer su calidad. |
+| **Cómo considera que pueda afectar la arquitectura del sistema esta restricción** | Enfocarse en los requerimientos de alta prioridad primero dejando decisiones de diseño menos importantes para otras etapas.|
+
+| **#Restriccion de Negocio** | 2 |
+|--------------------------------|-----------------------------------------------------------|
+| **Descripción de la restricción** | La arquitectura debe realizarse por un equipo de 4 personas |
+| **Usuario que expresa esta restricción** | Patrocinador del Proyecto – presidente CCP.  |
+| **Justificación para esta restricción** | Es el presupuesto en horas hombre que el presidente/patrocinador considera apropiados para proyectos de este tipo.|
+| **Cómo considera que pueda afectar la arquitectura del sistema esta restricción** | Se prioriza las funcionalidades más importantes para los stakeholders cumpliendo con los objetivos primordiales de los mismos. La arquitectura va a ser producto de la experiencia y horas de trabajo de estas 4 personas.|
+
+| **#Restriccion de Tecnología** | 1 |
+|--------------------------------|-----------------------------------------------------------|
+| **Descripción de la restricción** | La aplicación debe tener una interfaz Web para las funcionalidades del área de compras, área logística y algunas funciones relacionadas con el análisis del desempeño comercial. |
+| **Usuario que expresa esta restricción** | Gerente de tecnología.  |
+| **Justificación para esta restricción** | El proyecto necesita tener disponibles ciertas funcionalidades por interfaz web según el tipo de usuario que va a hacer uso de estas. Esto con base a estudios y análisis realizados a los procesos de las áreas administrativas que laboran en computadores principalmente.|
+| **Cómo considera que pueda afectar la arquitectura del sistema esta restricción** | La arquitectura tendrá que tener en cuenta los retos y ventajas de las interfaces web versus otro tipo de interfaces como las de escritorio.|
+
+| **#Restriccion de Tecnología** | 2 |
+|--------------------------------|-----------------------------------------------------------|
+| **Descripción de la restricción** | La aplicación debe tener una interfaz Móvil para funcionalidades especificas. |
+| **Usuario que expresa esta restricción** | Gerente de tecnología.  |
+| **Justificación para esta restricción** | El proyecto necesita una interfaz Móvil para los usuarios que no tienen acceso a computadores. Esto son los vendedores y clientes. |
+| **Cómo considera que pueda afectar la arquitectura del sistema esta restricción** | La programación en móvil tiene retos y ventajas adicionales a la programación web. Seguramente en  la arquitectura se tendrán que ver tácticas tipo caché u otro tipo para poder cumplir con requisitos funcionales y no funcionales.|
+
