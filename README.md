@@ -33,6 +33,8 @@
 | **Justificación para esta restricción** | Es el presupuesto en horas hombre que el presidente/patrocinador considera apropiados para proyectos de este tipo.|
 | **Cómo considera que pueda afectar la arquitectura del sistema esta restricción** | Se prioriza las funcionalidades más importantes para los stakeholders cumpliendo con los objetivos primordiales de los mismos. La arquitectura va a ser producto de la experiencia y horas de trabajo de estas 4 personas.|
 
+### Restricciones de tecnología
+
 | **#Restriccion de Tecnología** | 1 |
 |--------------------------------|-----------------------------------------------------------|
 | **Descripción de la restricción** | La aplicación debe tener una interfaz Web para las funcionalidades del área de compras, área logística y algunas funciones relacionadas con el análisis del desempeño comercial. |
@@ -46,4 +48,25 @@
 | **Usuario que expresa esta restricción** | Gerente de tecnología.  |
 | **Justificación para esta restricción** | El proyecto necesita una interfaz Móvil para los usuarios que no tienen acceso a computadores. Esto son los vendedores y clientes. |
 | **Cómo considera que pueda afectar la arquitectura del sistema esta restricción** | La programación en móvil tiene retos y ventajas adicionales a la programación web. Seguramente en  la arquitectura se tendrán que ver tácticas tipo caché u otro tipo para poder cumplir con requisitos funcionales y no funcionales.|
+
+| **#Restriccion de Tecnología** | 3 |
+|--------------------------------|-----------------------------------------------------------|
+| **Descripción de la restricción** | El lenguaje de programación para el backend debe ser Python. |
+| **Usuario que expresa esta restricción** | Gerente de tecnología.  |
+| **Justificación para esta restricción** | Es el lenguaje de mayor experiencia en el equipo de trabajo y el que la compañía ha definido como estándar para todos sus proyectos. |
+| **Cómo considera que pueda afectar la arquitectura del sistema esta restricción** | Puede haber impacto en el desempeño del sistema dado que Python es mas lento que otros lenguajes y por ello sea necesario implementar tácticas de arquitectura adicionales a si se usará C++ por ejemplo. |
+
+| **#Restriccion de Tecnología** | 4 |
+|--------------------------------|-----------------------------------------------------------|
+| **Descripción de la restricción** | El framework de programación para el frontend web debe ser Angular |
+| **Usuario que expresa esta restricción** | Gerente de tecnología.  |
+| **Justificación para esta restricción** | Es el framework de mayor experiencia en el equipo de trabajo y el que la compañía ha definido como estándar para todos sus proyectos web. |
+| **Cómo considera que pueda afectar la arquitectura del sistema esta restricción** | Por el momento no se ve mayor impacto por la escogencia de este framework. |
+
+| **#Restriccion de Tecnología** | 5 |
+|--------------------------------|-----------------------------------------------------------|
+| **Descripción de la restricción** | El framework de programación para el frontend móvil debe ser Android con Kotlin y Jetpack Compose |
+| **Usuario que expresa esta restricción** | Gerente de tecnología.  |
+| **Justificación para esta restricción** | Es el framework de mayor experiencia en el equipo de trabajo y el que la compañía ha definido como estándar para todos sus proyectos móviles. |
+| **Cómo considera que pueda afectar la arquitectura del sistema esta restricción** | Por el momento no se ve mayor impacto por la escogencia de este framework. |
 
