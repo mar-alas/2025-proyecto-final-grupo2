@@ -7,6 +7,9 @@
 * Robert Castro
 * Daniel Gamez
 
+## Documento Visión de Arquitectura
+[Visión de Arquitectura Doc.pdf](https://github.com/user-attachments/files/18634986/Vision.de.Arquitectura.Doc.pdf)
+
 ## Hoja de trabajo arquitectura
 
 ### Objetivos
@@ -70,13 +73,16 @@
 | **Justificación para esta restricción** | Es el framework de mayor experiencia en el equipo de trabajo y el que la compañía ha definido como estándar para todos sus proyectos móviles. |
 | **Cómo considera que pueda afectar la arquitectura del sistema esta restricción** | Por el momento no se ve mayor impacto por la escogencia de este framework. |
 
-## EDT Formato Árbol
+
 
 [EDTFormatoArbol.pdf](https://github.com/user-attachments/files/18634956/EDTFormatoArbol.pdf)
 
 
+## EDT
 
-## EDT Formato Lista
+### EDT Formato Árbol
+
+### EDT Formato Lista
 
 [EDT.docx](https://github.com/user-attachments/files/18634958/EDT.docx)
 
