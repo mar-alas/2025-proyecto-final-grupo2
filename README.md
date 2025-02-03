@@ -107,7 +107,8 @@
 
 ![Diagramas de Contexto, Domino, Componentes-Despliegue drawio](https://github.com/user-attachments/assets/85d69c4e-9765-4011-bb4d-84287fac0dd2)
 
-
+## Estrategia de Pruebas
+[Estrategia de Pruebas.pdf](https://github.com/user-attachments/files/18635065/Estrategia.de.Pruebas.pdf)
 
 
 
