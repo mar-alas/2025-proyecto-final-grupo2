@@ -7,6 +7,26 @@
 * Robert Castro
 * Daniel Gamez
 
+## Índice
+
+1. [Integrantes del equipo](#integrantes-del-equipo)
+2. [Documento Visión de Arquitectura](#documento-visión-de-arquitectura)
+3. [Hoja de trabajo arquitectura](#hoja-de-trabajo-arquitectura)
+   - [Objetivos](#objetivos)
+   - [Restricciones de negocio](#restricciones-de-negocio)
+   - [Restricciones de tecnología](#restricciones-de-tecnología)
+4. [EDT](#edt)
+   - [EDT Formato Árbol](#edt-formato-árbol)
+   - [EDT Formato Lista](#edt-formato-lista)
+5. [Diagramas](#diagramas)
+   - [Diagrama de Contexto](#diagrama-de-contexto)
+   - [Diagrama de Dominio](#diagrama-de-dominio)
+   - [Diagrama de Contenedores](#diagrama-de-contenedores)
+   - [Diagrama de Componentes](#diagrama-de-componentes)
+   - [Diagrama de Despliegue](#diagrama-de-despliegue)
+6. [Estrategia de Pruebas](#estrategia-de-pruebas)
+
+
 ## Documento Visión de Arquitectura
 [Visión de Arquitectura Doc.pdf](https://github.com/user-attachments/files/18634986/Vision.de.Arquitectura.Doc.pdf)
 
