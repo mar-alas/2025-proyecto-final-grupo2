@@ -72,12 +72,14 @@
 
 ## EDT Formato Árbol
 
-[EDT-FormatoArbol.pdf](https://github.com/user-attachments/files/18634853/EDT-FormatoArbol.pdf)
+[EDTFormatoArbol.pdf](https://github.com/user-attachments/files/18634956/EDTFormatoArbol.pdf)
+
 
 
 ## EDT Formato Lista
 
-[EDT.docx](https://github.com/user-attachments/files/18634854/EDT.docx)
+[EDT.docx](https://github.com/user-attachments/files/18634958/EDT.docx)
+
 
 ## Diagramas
 
