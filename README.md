@@ -70,3 +70,13 @@
 | **Justificación para esta restricción** | Es el framework de mayor experiencia en el equipo de trabajo y el que la compañía ha definido como estándar para todos sus proyectos móviles. |
 | **Cómo considera que pueda afectar la arquitectura del sistema esta restricción** | Por el momento no se ve mayor impacto por la escogencia de este framework. |
 
+## EDT Formato Árbol
+
+[EDT-FormatoArbol.pdf](https://github.com/user-attachments/files/18634853/EDT-FormatoArbol.pdf)
+
+
+## EDT Formato Lista
+
+[EDT.docx](https://github.com/user-attachments/files/18634854/EDT.docx)
+
+
