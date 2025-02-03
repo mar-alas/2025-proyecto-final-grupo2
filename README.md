@@ -79,4 +79,27 @@
 
 [EDT.docx](https://github.com/user-attachments/files/18634854/EDT.docx)
 
+## Diagramas
+
+### Diagrama de Contexto 
+
+
+![Diagramas de Contexto, Domino, Componentes-Contexto drawio](https://github.com/user-attachments/assets/0c5fdee1-28c6-4a4b-aa13-432eb2d6896f)
+
+
+### Diagrama de Contenedores 
+
+![Diagramas de Contexto, Domino, Componentes-Contenedores drawio](https://github.com/user-attachments/assets/110ebf96-ead2-4b26-a173-8683846450b7)
+
+### Diagrama de Componentes
+
+![Diagramas de Contexto, Domino, Componentes-Componentes drawio](https://github.com/user-attachments/assets/2e202896-f9e7-4da6-bcde-41c95d3a9189)
+
+### Diagrama de Despliegue
+
+![Diagramas de Contexto, Domino, Componentes-Despliegue drawio](https://github.com/user-attachments/assets/85d69c4e-9765-4011-bb4d-84287fac0dd2)
+
+
+
+
 
