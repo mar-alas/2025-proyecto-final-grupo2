@@ -96,6 +96,8 @@
 
 ![Diagramas de Contexto, Domino, Componentes-Contexto drawio](https://github.com/user-attachments/assets/0c5fdee1-28c6-4a4b-aa13-432eb2d6896f)
 
+### Diagrama de Dominio
+![Diagramas de Contexto, Domino, Componentes-Dominio drawio](https://github.com/user-attachments/assets/9b5b49ea-89e8-48cb-a53f-9ed32003ae52)
 
 ### Diagrama de Contenedores 
 
