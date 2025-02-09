@@ -166,9 +166,9 @@
 [Árbol de utilidad.pdf](https://uniandes-my.sharepoint.com/:p:/g/personal/da_gamez96_uniandes_edu_co/Ea1Otd6gMe9Fkv-vmTnfxUsBxw1RKo9l6Rq1BiZQy5kkTQ?e=EUbqrK)
 
 ## Estimación de velocidad y capacidad
-[Estimación Puntos Historia de Usuario.pdf](https://uniandes-my.sharepoint.com/:x:/g/personal/da_gamez96_uniandes_edu_co/EckiTsWHsd5HrplPOmdfgSsBVXJc38TcgI-3KxOAL5CEhg?e=8GutRG)
+[Estimación Puntos Historia de Usuario.xslx](https://uniandes-my.sharepoint.com/:x:/g/personal/da_gamez96_uniandes_edu_co/EckiTsWHsd5HrplPOmdfgSsBVXJc38TcgI-3KxOAL5CEhg?e=8GutRG)
 
-[Calculo de Velocidad Proyecto Final 1.pdf](https://uniandes-my.sharepoint.com/:x:/g/personal/da_gamez96_uniandes_edu_co/EajH4Cir-kZCnJ2ok08Wy_AB3Nhi3XJ2-qicAe75BXELug?e=nLXxUB)
+[Calculo de Velocidad Proyecto Final 1.xslx](https://uniandes-my.sharepoint.com/:x:/g/personal/da_gamez96_uniandes_edu_co/EajH4Cir-kZCnJ2ok08Wy_AB3Nhi3XJ2-qicAe75BXELug?e=nLXxUB)
 
 
 
