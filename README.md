@@ -26,6 +26,8 @@
    - [Diagrama de Despliegue](#diagrama-de-despliegue)
 6. [Estrategia de Pruebas](#estrategia-de-pruebas)
 7. [Definición de Frameworks](#definición-de-frameworks)
+8. [Priorización](#priorización)
+9. [Estimación de velocidad y capacidad](#estimación-de-velocidad-y-capacidad)
 
 
 ## Documento Visión de Arquitectura
@@ -160,6 +162,12 @@
 * JMeter
 * Postman
   
+## Priorización
+[Árbol de utilidad.pdf](https://uniandes-my.sharepoint.com/:p:/g/personal/da_gamez96_uniandes_edu_co/Ea1Otd6gMe9Fkv-vmTnfxUsBxw1RKo9l6Rq1BiZQy5kkTQ?e=EUbqrK)
+
+## Estimación de velocidad y capacidad
+[Estimación Puntos Historia de Usuario.pdf](https://uniandes-my.sharepoint.com/:x:/g/personal/da_gamez96_uniandes_edu_co/EckiTsWHsd5HrplPOmdfgSsBVXJc38TcgI-3KxOAL5CEhg?e=8GutRG)
+[Calculo de Velocidad Proyecto Final 1.pdf](https://uniandes-my.sharepoint.com/:x:/g/personal/da_gamez96_uniandes_edu_co/EajH4Cir-kZCnJ2ok08Wy_AB3Nhi3XJ2-qicAe75BXELug?e=nLXxUB)
 
 
 
