@@ -25,7 +25,7 @@
    - [Diagrama de Componentes](#diagrama-de-componentes)
    - [Diagrama de Despliegue](#diagrama-de-despliegue)
 6. [Estrategia de Pruebas](#estrategia-de-pruebas)
-7. [Definición de Frameworks](#definicion-de-frameworks)
+7. [Definición de Frameworks](#definición-de-frameworks)
 
 
 ## Documento Visión de Arquitectura
