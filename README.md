@@ -25,6 +25,7 @@
    - [Diagrama de Componentes](#diagrama-de-componentes)
    - [Diagrama de Despliegue](#diagrama-de-despliegue)
 6. [Estrategia de Pruebas](#estrategia-de-pruebas)
+7. [Definición de Frameworks](#definicion-de-frameworks)
 
 
 ## Documento Visión de Arquitectura
@@ -133,6 +134,35 @@
 
 ## Estrategia de Pruebas
 [Estrategia de Pruebas.pdf](https://github.com/user-attachments/files/18635065/Estrategia.de.Pruebas.pdf)
+
+## Definición de Frameworks
+
+### Frameworks Componente web
+
+* Desarrollo: Angular
+* Unit testing: TestBed
+* Integración: Jasmine 
+* E2E: Cypress
+### Frameworks Componente móvil
+
+* Desarrollo: Jetpack Compose + Kotlin
+* Unit testing: JUnit
+* Integracion: Espresso
+* E2E: Espresso
+
+### Backend
+* Desarrollo API: Flask en Python
+* Ambiente cloud para backend: GCP
+* Unit testing: Pytest
+
+### Herramientas de Testing Adicionales
+
+* JMeter
+* Postman
+  
+
+
+
 
 
 
