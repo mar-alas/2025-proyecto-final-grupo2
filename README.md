@@ -171,7 +171,7 @@
 [Calculo de Velocidad Proyecto Final 1.xslx](https://uniandes-my.sharepoint.com/:x:/g/personal/da_gamez96_uniandes_edu_co/EajH4Cir-kZCnJ2ok08Wy_AB3Nhi3XJ2-qicAe75BXELug?e=nLXxUB)
 
 
-
+⚠️ Los documentos asociados a la entrega de cada semana los puede encontrar en la carpeta /docs de este repositorio ⚠️
 
 
 
