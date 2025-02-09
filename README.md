@@ -167,6 +167,7 @@
 
 ## Estimación de velocidad y capacidad
 [Estimación Puntos Historia de Usuario.pdf](https://uniandes-my.sharepoint.com/:x:/g/personal/da_gamez96_uniandes_edu_co/EckiTsWHsd5HrplPOmdfgSsBVXJc38TcgI-3KxOAL5CEhg?e=8GutRG)
+
 [Calculo de Velocidad Proyecto Final 1.pdf](https://uniandes-my.sharepoint.com/:x:/g/personal/da_gamez96_uniandes_edu_co/EajH4Cir-kZCnJ2ok08Wy_AB3Nhi3XJ2-qicAe75BXELug?e=nLXxUB)
 
 
