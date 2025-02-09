@@ -163,7 +163,7 @@
 * Postman
   
 ## Priorización
-[Árbol de utilidad.pdf](https://uniandes-my.sharepoint.com/:b:/g/personal/da_gamez96_uniandes_edu_co/Eaw-F7sEYjBEhZzRecNWXS4BTwbG8Tm45zEEVs_pONdxKA?e=Lpz1No)
+[Árbol de utilidad.pdf](https://uniandes-my.sharepoint.com/:b:/g/personal/da_gamez96_uniandes_edu_co/EaNzMLwzX2VOgVnjvLuYFEQBY59vx4ts_YTxHu1Z7O2ANA?e=ZqKNek)
 
 ## Estimación de velocidad y capacidad
 [Estimación Puntos Historia de Usuario.xslx](https://uniandes-my.sharepoint.com/:x:/g/personal/da_gamez96_uniandes_edu_co/EckiTsWHsd5HrplPOmdfgSsBVXJc38TcgI-3KxOAL5CEhg?e=8GutRG)
