@@ -128,14 +128,12 @@
 
 ### Diagrama de Componentes
 
-![Diagramas de Contexto, Domino, Componentes-Componentes drawio](https://github.com/user-attachments/assets/2e202896-f9e7-4da6-bcde-41c95d3a9189)
+
+![Proyecto1Diagramas - Vista funcional (componentes) - v2](https://github.com/user-attachments/assets/6bfcbef6-c0b8-4990-ae8d-597cf6970300)
 
 ### Diagrama de Despliegue
 
-![Diagramas de Contexto, Domino, Componentes-Despliegue drawio](https://github.com/user-attachments/assets/85d69c4e-9765-4011-bb4d-84287fac0dd2)
-
-## Estrategia de Pruebas
-[Estrategia de Pruebas.pdf](https://uniandes-my.sharepoint.com/:b:/g/personal/da_gamez96_uniandes_edu_co/EbZzM6CqlmdKlgiMTvM5HXEBPkdHDj0VyJ9hKycMoFG3bA?e=wnXi3x)
+![Proyecto1Diagramas - Vista de despliegue - v2](https://github.com/user-attachments/assets/bdabb2fc-17b9-47af-98c0-71b09a8fea84)
 
 ## Definición de Frameworks
 
