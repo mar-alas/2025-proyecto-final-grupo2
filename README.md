@@ -135,6 +135,9 @@
 
 ![Proyecto1Diagramas - Vista de despliegue - v2](https://github.com/user-attachments/assets/bdabb2fc-17b9-47af-98c0-71b09a8fea84)
 
+### Diagrama de Concurrencia
+![Proyecto1Diagramas - Vista de concurrencia a nivel de infraestructura](https://github.com/user-attachments/assets/6b5d5de4-32cb-4e09-84d2-567308ae821e)
+
 ## Definición de Frameworks
 
 ### Frameworks Componente web
