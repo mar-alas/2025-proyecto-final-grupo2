@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  pulsar:
+    image: apachepulsar/pulsar:latest
+    command: bin/pulsar standalone
+    ports:
+      - "6650:6650"
+      - "8080:8080"
+
+  api_logistica:
+    build:
+      context: ./api_logistica
+      dockerfile: Dockerfile
+    environment:
+      - PULSAR_SERVICE_URL=pulsar://pulsar:6650
+      - TOPIC_COMANDOS=persistent://public/default/comando_calculo_rutas
+      - TOPIC_EVENTOS=persistent://public/default/evento_ruta_calculada
+    ports:
+      - "5001:5000"
+    depends_on:
+      - pulsar
+  
+  gestor_entregas:
+    build:
+      context: ./gestor_entregas
+      dockerfile: Dockerfile
+    environment:
+      - PULSAR_SERVICE_URL=pulsar://pulsar:6650
+      - TOPIC_COMANDOS=persistent://public/default/comando_calculo_rutas
+      - TOPIC_EVENTOS=persistent://public/default/evento_ruta_calculada
+    depends_on:
+      - pulsar
+
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  delivery_data:
+    driver: local
