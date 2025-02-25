@@ -1,0 +1,65 @@
+#runs with docker-compose up
+#docker-compose down --rmi all
+version: '3.8'
+networks:
+  network_experiment:
+    driver: bridge
+services:
+  rutas-db-container:
+    container_name: rutas-db-container
+    image: postgres:15
+    environment:
+      POSTGRES_DB: rutas-db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    networks:
+      - network_experiment
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  pulsar-container:
+    container_name: pulsar-container
+    image: apachepulsar/pulsar:latest
+    command: bin/pulsar standalone
+    ports:
+      - "6650:6650"
+      - "8080:8080"
+    networks:
+      - network_experiment
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/admin/v2/brokers/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  microservicio_calculo_ruta_entrega_container:
+    container_name: microservicio_calculo_ruta_entrega
+    build:
+      context: microservicio_calculo_ruta_entrega
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    networks:
+      - network_experiment
+    depends_on:
+      rutas-db-container:
+        condition: service_healthy
+      pulsar-container:
+        condition: service_healthy
+  microservicio_monitor_calculo_ruta_entrega_container:
+    container_name: microservicio_monitor_calculo_ruta_entrega
+    build:
+      context: microservicio_monitor_calculo_ruta_entrega
+      dockerfile: Dockerfile
+    networks:
+      - network_experiment
+    depends_on:
+      rutas-db-container:
+        condition: service_healthy
+      pulsar-container:
+        condition: service_healthy
+
