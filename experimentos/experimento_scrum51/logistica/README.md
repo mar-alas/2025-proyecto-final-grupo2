@@ -50,23 +50,32 @@ Este experimento implementa una arquitectura de microservicios con cola de coman
    ```
 
 ## Uso
+### Ejemplo de Uso
 
-- Envía una solicitud a la API del Servicio de Gestión de Entregas para iniciar una solicitud de entrega.
+1. Envía una solicitud a la API del Servicio de Gestión de Entregas para iniciar una solicitud de entrega:
 
+   ```sh
+   curl -X POST http://127.0.0.1:5001/api/entregas \
+     -H "Content-Type: application/json" \
+     -d '{
+       "punto_inicio": "bodega_a",
+       "destinos": ["cliente_a", "cliente_b", "cliente_c"]
+     }'
    ```
-curl -X POST http://127.0.0.1:5001/api/entregas \
-  -H "Content-Type: application/json" \
-  -d '{
-    "punto_inicio": "bodega_a",
-    "destinos": ["cliente_a", "cliente_b", "cliente_c"]
-  }'
-   ```
 
-- Por ahora no se tiene la base de datos con las coordenadas de los clientes, y las bodegas, por lo tanto se generan automaticamente.
-- El resultado del request muestra las coordenadas del punto de inicio y cada destino en el orden de la ruta optima:
+2. Actualmente, no se dispone de una base de datos con las coordenadas de los clientes y las bodegas, por lo que estas se generan automáticamente.
 
-   ```
-{"ruta_optima":[["bodega_a",[4.5963447980258145,-74.140915780082]],["cliente_c",[4.576081264259333,-74.06995657058636]],["cliente_b",[4.65139365472069,-74.07229591781795]],["cliente_a",[4.541978566073393,-73.98980769501749]]]}
+3. El resultado de la solicitud muestra las coordenadas del punto de inicio y cada destino en el orden de la ruta óptima:
+
+   ```json
+   {
+     "ruta_optima": [
+       ["bodega_a", [4.5963447980258145, -74.140915780082]],
+       ["cliente_c", [4.576081264259333, -74.06995657058636]],
+       ["cliente_b", [4.65139365472069, -74.07229591781795]],
+       ["cliente_a", [4.541978566073393, -73.98980769501749]]
+     ]
+   }
    ```
 
 ## Arquitectura
