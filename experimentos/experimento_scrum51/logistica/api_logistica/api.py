@@ -28,7 +28,12 @@ def receive_request():
     message = json.dumps({'punto_inicio': punto_inicio, 'destinos': destinos}).encode('utf-8')
     producer.send(message)
     mejor_ruta = None
-    consumer = client.subscribe(os.environ['TOPIC_EVENTOS'], subscription_name='my-subscription')
+    subscription_name = f'my-subscription'
+    consumer = client.subscribe(
+        os.environ['TOPIC_EVENTOS'],
+        subscription_name=subscription_name,
+        consumer_type=pulsar.ConsumerType.Shared
+    )
     while True:
         mensaje = consumer.receive()
         mejor_ruta = json.loads(mensaje.data().decode('utf-8'))

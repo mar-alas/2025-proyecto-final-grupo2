@@ -21,8 +21,10 @@ def get_puntos_geograficos(ubicacion):
 
 
 def generar_ruta():
-    client = pulsar.Client(os.environ['PULSAR_SERVICE_URL'])
-    # client = pulsar.Client('pulsar://localhost:6650') 
+    if 'PULSAR_SERVICE_URL' not in os.environ:
+        client = pulsar.Client('pulsar://localhost:6650')
+    else:
+        client = pulsar.Client(os.environ['PULSAR_SERVICE_URL'])
     consumer = client.subscribe(
         topic=os.environ['TOPIC_COMANDOS'],
         subscription_name='my-subscription',
