@@ -3,7 +3,15 @@ import random
 from sqlalchemy import create_engine
 import time
 
-for i in range(100):
+numero_requests=1000
+
+#delete data base
+engine = create_engine('postgresql://admin:admin@localhost:5432/rutas-db')
+connection = engine.connect()
+result = connection.execute("DELETE FROM rutas_calculadas")
+connection.close()
+
+for i in range(numero_requests):
     vector_length=random.randint(5, 20)
     rnd_int_list = [random.randint(0, 100) for _ in range(vector_length)]
     url = "http://localhost:5000/calcular-ruta"
@@ -19,6 +27,7 @@ time.sleep(5)
 engine = create_engine('postgresql://admin:admin@localhost:5432/rutas-db')
 connection = engine.connect()
 result = connection.execute("SELECT * FROM rutas_calculadas")
+connection.close()
 
 #export result to excel
 import pandas as pd
