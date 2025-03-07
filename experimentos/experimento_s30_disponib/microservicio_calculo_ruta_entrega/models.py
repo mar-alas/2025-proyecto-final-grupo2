@@ -26,7 +26,7 @@ class RutaSchema(SQLAlchemyAutoSchema):
     
 
 # Create database and tables
-engine = create_engine('postgresql://admin:admin@rutas-db-container:5432/rutas-db')
+engine = create_engine('postgresql://0.0.0.0:5432/rutas-db')
 Base.metadata.create_all(engine)
 
 # Create session factory

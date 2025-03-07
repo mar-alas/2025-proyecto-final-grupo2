@@ -5,7 +5,7 @@ from pulsar import Client
 from models import Session, Ruta,RutaSchema
 import json
 
-pulsar_client = Client('pulsar://pulsar-container:6650')
+pulsar_client = Client('pulsar://0.0.0.0:6650')
 
 ruta_schema = RutaSchema()
 
