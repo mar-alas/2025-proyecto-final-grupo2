@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-logistica-ingress
+  annotations:
+    kubernetes.io/ingress.class: "gce"  # Usamos el Ingress de Google
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: api-logistica  # Nombre del servicio
+            port:
+              number: 5001        # Puerto expuesto en el Service

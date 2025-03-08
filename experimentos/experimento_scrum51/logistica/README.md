@@ -81,3 +81,128 @@ Este experimento implementa una arquitectura de microservicios con cola de coman
 ## Arquitectura
 
 Este proyecto sigue una arquitectura de microservicios, utilizando colas de comandos y eventos para facilitar la comunicación entre servicios. Cada servicio es responsable de una funcionalidad específica, promoviendo la separación de preocupaciones y la escalabilidad.
+
+
+
+
+### Crear el cluster
+```
+sudo gcloud container clusters create experimento-scrum51-v1-cluster \
+  --num-nodes=2 \
+  --zone=us-central1-a
+```
+
+### Conectarme al cluster
+```
+sudo gcloud container clusters get-credentials experimento-scrum51-v1-cluster --zone us-central1-a
+```
+
+## Desplegar los contenedores.
+### pulsar
+```
+sudo kubectl apply -f pulsar-deployment.yaml
+sudo kubectl apply -f pulsar-service.yaml
+```
+
+### api logistica
+```
+sudo kubectl apply -f api-logistica-deployment.yaml
+sudo kubectl apply -f api_logistica-service.yaml
+```
+
+### gestor entregas
+```
+sudo kubectl apply -f gestor-entregas-deployment.yaml
+sudo kubectl apply -f gestor_entregas-service.yaml
+```
+
+## Ver los pods corriendo
+```
+sudo kubectl get pods
+```
+
+## Ver los services corriendo
+```
+sudo kubectl get services
+```
+
+## ver logs de pods
+```
+sudo kubectl logs -f nombre-del-pod
+```
+
+
+## Cargue de imagenes Docker (se hace una vez pro proyecto)
+sudo gcloud services enable artifactregistry.googleapis.com
+
+sudo gcloud artifacts repositories create repositorio-imagenes-docker \
+    --repository-format=docker \
+    --location=us-central1 \
+    --description="Repositorio de imágenes Docker"
+
+## Construir imagen (win)
+sudo docker build -t api-logistica:latest .
+
+## construior la imagen (Mac)
+sudo docker buildx build --platform linux/amd64 -t us-central1-docker.pkg.dev/appnomonoliticas-452202/repositorio-imagenes-docker/api-logistica:latest .
+
+sudo docker buildx build --platform linux/amd64 -t us-central1-docker.pkg.dev/appnomonoliticas-452202/repositorio-imagenes-docker/gestor-entregas:latest .
+
+
+
+## Validar si creó la imagen
+sudo docker images | grep api-logistica
+sudo docker images | grep gestor-entregas
+
+## Etiquetar la imagen 
+sudo docker tag api-logistica:latest gcr.io/appnomonoliticas-452202/api-logistica:latest
+
+sudo docker tag api-logistica:latest us-central1-docker.pkg.dev/appnomonoliticas-452202/repositorio-imagenes-docker/api-logistica:latest
+
+sudo docker tag gestor-entregas:latest us-central1-docker.pkg.dev/appnomonoliticas-452202/repositorio-imagenes-docker/gestor-entregas:latest
+
+## Autenticación en el registro de contenedores.
+gcloud auth configure-docker us-central1-docker.pkg.dev
+
+## Subir imagen (win)
+sudo docker push us-central1-docker.pkg.dev/appnomonoliticas-452202/repositorio-imagenes-docker/api-logistica:latest
+
+## subir la imagen (Mac)
+sudo docker push us-central1-docker.pkg.dev/appnomonoliticas-452202/repositorio-imagenes-docker/api-logistica:latest
+
+sudo docker push us-central1-docker.pkg.dev/appnomonoliticas-452202/repositorio-imagenes-docker/gestor-entregas:latest
+
+
+## -------------------------------
+
+### debo crear una cuenta de servicio para leer las imagenes
+sudo gcloud iam service-accounts create k8s-container-pull \
+    --display-name "Kubernetes Image Pull Service Account"
+
+### Darle permisos a la cuneta
+sudo gcloud projects add-iam-policy-binding appnomonoliticas-452202 \
+    --member=serviceAccount:k8s-container-pull@appnomonoliticas-452202.iam.gserviceaccount.com \
+    --role=roles/artifactregistry.reader
+
+### Generar la key
+sudo gcloud iam service-accounts keys create keyfile.json \
+    --iam-account=k8s-container-pull@appnomonoliticas-452202.iam.gserviceaccount.com
+
+
+## crear secreto para qeu GKE acceso a las imagenes
+Nota: el archivo keyfile.json debe tener todos los permisos. 
+```
+sudo kubectl create secret docker-registry gcr-secret \
+    --docker-server=us-central1-docker.pkg.dev \
+    --docker-username=_json_key \
+    --docker-password="$(cat keyfile.json)" \
+    --docker-email=k8s-container-pull@appnomonoliticas-452202.iam.gserviceaccount.com
+```
+
+
+# creacion del ingress
+
+## Habilitar Ingress en GCP
+sudo gcloud services enable container.googleapis.com
+
+sudo gcloud services enable compute.googleapis.com
