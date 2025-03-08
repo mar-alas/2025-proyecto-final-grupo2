@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose --file docker-compose.yml convert
+    kompose.version: 1.35.0 (HEAD)
+  labels:
+    io.kompose.service: gestor-entregas
+  name: gestor-entregas
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: gestor-entregas
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose --file docker-compose.yml convert
+        kompose.version: 1.35.0 (HEAD)
+      labels:
+        io.kompose.service: gestor-entregas
+    spec:
+      containers:
+        - env:
+            - name: PULSAR_SERVICE_URL
+              value: "pulsar://pulsar.default.svc.cluster.local:6650"
+            - name: TOPIC_COMANDOS
+              value: persistent://public/default/comando_calculo_rutas
+            - name: TOPIC_EVENTOS
+              value: persistent://public/default/evento_ruta_calculada
+          image: us-central1-docker.pkg.dev/appnomonoliticas-452202/repositorio-imagenes-docker/gestor-entregas:latest
+          name: gestor-entregas
+          ports:
+            - containerPort: 6650
+              protocol: TCP
+      restartPolicy: Always

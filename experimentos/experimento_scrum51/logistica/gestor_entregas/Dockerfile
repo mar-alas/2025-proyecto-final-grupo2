@@ -15,5 +15,5 @@ ENV PYTHONPATH=/app
 # Copy the rest of the application code into the container
 COPY . .
 
-# Command to run the application
-CMD ["python", "generador_rutas.py"]
+ENTRYPOINT ["python3"]
+CMD ["generador_rutas.py"]

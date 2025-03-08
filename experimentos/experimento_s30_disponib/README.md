@@ -27,3 +27,68 @@ El algoritmo falla con una probabilidad del 50% y en dichos casos el monitor rev
 
 Este experimento se corre n veces según lo especificado en el script del experimento. 
 
+## Configuraciones GCP
+
+### Crear cluster en GKE
+```
+sudo gcloud container clusters create experimento-scrum30-v1-cluster \
+  --num-nodes=2 \
+  --zone=us-central1-a
+```
+
+### Conectarme al cluster
+```
+sudo gcloud container clusters get-credentials experimento-scrum30-v1-cluster --zone us-central1-a
+```
+
+### Desplegar los contenedores.
+
+#### Base de datos
+```
+sudo kubectl apply -f rutas-db-container-deployment.yaml
+sudo kubectl apply -f rutas-db-container-service.yaml
+```
+
+#### Pulsar
+```
+sudo kubectl apply -f pulsar-container-deployment.yaml
+sudo kubectl apply -f pulsar-container-service.yaml
+```
+
+#### microservicio calculo ruta entrega
+
+##### Build
+```
+sudo docker build -t microservicio_calculo_ruta_entrega:latest .
+```
+
+##### Upload
+sudo docker buildx build --platform linux/amd64 -t us-central1-docker.pkg.dev/appnomonoliticas-452202/repositorio-imagenes-docker/microservicio_calculo_ruta_entrega:latest .
+
+##### Push
+sudo docker push us-central1-docker.pkg.dev/appnomonoliticas-452202/repositorio-imagenes-docker/microservicio_calculo_ruta_entrega:latest
+
+
+```
+sudo kubectl apply -f microservicio-calculo-ruta-entrega-container-deployment.yaml
+sudo kubectl apply -f microservicio_monitor_calculo_ruta_entrega_container-service.yaml
+```
+
+#### Componente MONITOR calculo ruta entrega
+
+##### Build
+```
+sudo docker build -t microservicio_monitor_calculo_ruta_entrega:latest .
+```
+
+##### Upload
+sudo docker buildx build --platform linux/amd64 -t us-central1-docker.pkg.dev/appnomonoliticas-452202/repositorio-imagenes-docker/microservicio_monitor_calculo_ruta_entrega:latest .
+
+##### Push
+sudo docker push us-central1-docker.pkg.dev/appnomonoliticas-452202/repositorio-imagenes-docker/microservicio_monitor_calculo_ruta_entrega:latest
+
+
+```
+sudo kubectl apply -f microservicio-monitor-calculo-ruta-entrega-container-deployment.yaml
+sudo kubectl apply -f microservicio_monitor_calculo_ruta_entrega_container-service.yaml
+```
