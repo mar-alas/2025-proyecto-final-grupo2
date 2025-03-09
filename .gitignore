@@ -1,2 +1,70 @@
 experimentos/experimento_s30_disponib/microservicio_calculo_ruta_entrega/__pycache__
 experimentos/experimento_s30_disponib/microservicio_calculo_ruta_entrega/__pycache__/models.cpython-310.pyc
+
+# 🐍 Archivos de Python compilados
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 📦 Entorno Virtual
+venv/
+.env/
+*.venv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# 🔧 Configuración del IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 🛠 Archivos de dependencias y configuraciones locales
+*.log
+*.bak
+*.sqlite3
+db.sqlite3
+config.json
+*.env
+
+# 📊 Archivos de caché y temporales
+*.cache
+*.pyc
+*.pyo
+.DS_Store
+*.pid
+
+# 📝 Archivos de Jupyter Notebook
+.ipynb_checkpoints/
+
+# 📜 Archivos de paquetes
+dist/
+build/
+*.egg-info/
+.eggs/
+MANIFEST
+
+# 🔍 Cobertura de Pruebas
+.coverage
+htmlcov/
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# 📊 Exportaciones de datos
+*.csv
+*.xls
+*.xlsx
+*.json
+*.parquet
+
+# 🚀 Despliegue en Docker
+docker-compose.override.yml
+.envrc
+.env.*
+
+# 🔒 Seguridad
+secrets.toml

@@ -93,7 +93,7 @@ def calcular_ruta():
 
 @app.route('/rutas', methods=['DELETE'])
 def delete_routes():
-    logging.info("Called API: delete_routes() Path: [/rutas]")
+    logging.info("Called API: delete_routes() Path: [/rutas] Method: DELETE")
     try:
         session = Session()
         try:
@@ -115,6 +115,39 @@ def delete_routes():
             'error': str(e),
             'success': False
         }), 500
+
+
+@app.route('/rutas', methods=['GET'])
+def get_all_routes():
+    logging.info("Called API: get_all_routes() Path: [/rutas] Method: GET")
+    try:
+        session = Session()
+        try:
+            rutas = session.query(Ruta).all()
+            ruta_schema = RutaSchema(many=True)
+            session.close()
+            logging.info(f"Se encontraron {len(rutas)} registros de rutas en la base de datos.")
+            return jsonify({
+                "message": "Todos los registros de la tabla [Ruta] fueron consultados.",
+                "sucess": True,
+                "data": ruta_schema.dump(rutas)
+            }), 200
+        except Exception as e:
+            logging.warning("Error al consultar todos los registros de la tabla Ruta. Mensaje: "+str(e))
+            return jsonify({
+                'error': str(e),
+                'success': False,
+                "data": None
+            }), 500
+        finally:
+            logging.info("Cerrando sesion de la conexion con la BD.")
+            session.close()
+    except Exception as e:
+        return jsonify({
+            'error': str(e),
+            'success': False
+        }), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000,debug=True)

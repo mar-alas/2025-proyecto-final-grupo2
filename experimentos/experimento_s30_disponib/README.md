@@ -1,6 +1,6 @@
 # Experimento Scrum 30 Corrección rápida de errores en cálculo de ruta 
 
-## Como correr el experimento
+## Como correr el experimento en local
 
 En este experimento se probaron los microservicios de: 1) calculo de rutas y 2) monitoreo y validación de rutas. Para correr el experimento primero levantar los contenedores con el comando:
 
@@ -16,6 +16,28 @@ Una vez los contendedores estén corriendo el experimento se puede correr corrie
 python3 correr_experimento.py
 ```
 Los resultados del experimento se guardan en el archivo "rutas_calculadas.xlsx" en la raiz del proyecto despues de correr este script.
+
+## Como correr el experimento para cloud
+
+Cree su entorno virtual
+```bash
+python3 -m venv venv
+```
+
+Active el entorno virtual
+```bash
+source venv/bin/activate
+```
+
+Instale las dependencias necesarias
+```bash
+pip install -r requirements.txt
+```
+
+Ejecute:
+```bash
+
+```
 
 ## Descripción del experimento
 
@@ -78,14 +100,14 @@ sudo kubectl apply -f microservicio_monitor_calculo_ruta_entrega_container-servi
 
 ##### Build
 ```
-sudo docker build -t microservicio_monitor_calculo_ruta_entrega:latest .
+sudo docker build -t microservicio-monitor-calculo-ruta-entrega:latest .
 ```
 
 ##### Upload
-sudo docker buildx build --platform linux/amd64 -t us-central1-docker.pkg.dev/appnomonoliticas-452202/repositorio-imagenes-docker/microservicio_monitor_calculo_ruta_entrega:latest .
+sudo docker buildx build --platform linux/amd64 -t us-central1-docker.pkg.dev/appnomonoliticas-452202/repositorio-imagenes-docker/microservicio-monitor-calculo-ruta-entrega:latest .
 
 ##### Push
-sudo docker push us-central1-docker.pkg.dev/appnomonoliticas-452202/repositorio-imagenes-docker/microservicio_monitor_calculo_ruta_entrega:latest
+sudo docker push us-central1-docker.pkg.dev/appnomonoliticas-452202/repositorio-imagenes-docker/microservicio-monitor-calculo-ruta-entrega:latest
 
 
 ```
