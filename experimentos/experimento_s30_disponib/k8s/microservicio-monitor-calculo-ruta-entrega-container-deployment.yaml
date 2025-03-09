@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose --file docker-compose.yml convert
+    kompose.version: 1.35.0 (HEAD)
+  labels:
+    io.kompose.service: microservicio-monitor-calculo-ruta-entrega-container
+  name: microservicio-monitor-calculo-ruta-entrega-container
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: microservicio-monitor-calculo-ruta-entrega-container
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose --file docker-compose.yml convert
+        kompose.version: 1.35.0 (HEAD)
+      labels:
+        io.kompose.service: microservicio-monitor-calculo-ruta-entrega-container
+    spec:
+      containers:
+        - image: us-central1-docker.pkg.dev/appnomonoliticas-452202/repositorio-imagenes-docker/microservicio-monitor-calculo-ruta-entrega:latest
+          name: microservicio-monitor-calculo-ruta-entrega
+          ports:
+            - containerPort: 5001
+              protocol: TCP
+      restartPolicy: Always

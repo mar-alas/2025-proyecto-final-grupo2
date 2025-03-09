@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-calculo-ruta-entrega-ingress
+  annotations:
+    kubernetes.io/ingress.class: "gce"  # Usamos el Ingress de Google
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: microservicio-calculo-ruta-entrega-container  # Nombre del servicio
+            port:
+              number: 5000        # Puerto expuesto en el Service

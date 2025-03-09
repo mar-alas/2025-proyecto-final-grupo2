@@ -33,7 +33,9 @@ class RutaSchema(SQLAlchemyAutoSchema):
     
 
 # Create database and tables
-engine = create_engine('postgresql://admin:admin@rutas-db-container:5432/rutas-db')
+# TODO: Poner como variable de entorno.
+BASE_DB_URL = "postgresql://admin:admin@rutas-db-container.default.svc.cluster.local:5432/rutas-db"
+engine = create_engine(BASE_DB_URL)
 Base.metadata.create_all(engine)
 
 # Create session factory

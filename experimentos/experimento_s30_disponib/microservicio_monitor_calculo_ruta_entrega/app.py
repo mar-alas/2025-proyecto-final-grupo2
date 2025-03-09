@@ -5,7 +5,9 @@ import json
 import time
 
 # Connect to Pulsar
-client = pulsar.Client('pulsar://pulsar-container:6650')
+# TODO: Poner como variable de entorno.
+BASE_PULSAR_URL = "pulsar://pulsar-container.default.svc.cluster.local:6650"
+client = pulsar.Client(BASE_PULSAR_URL)
 
 # Create a consumer
 consumer = client.subscribe('persistent://public/default/rutas', subscription_name='mysub4')
