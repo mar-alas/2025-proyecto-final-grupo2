@@ -12,6 +12,16 @@ def log_request_info():
     logging.info('Request Headers: %s', request.headers)
     logging.info('Request Body: %s', request.get_data())
 
+@app.route('/', methods=['GET'])
+def root():
+    logging.info('Root Success')
+    return jsonify({'status': "UP"}), 200
+
+@app.route('/ping', methods=['GET'])
+def ping():
+    logging.info('Ping Success')
+    return jsonify({'message': "Pong"}), 200
+
 @app.route('/api/entregas', methods=['POST'])
 def receive_request():
     logging.info('Request received')

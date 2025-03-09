@@ -5,7 +5,9 @@ from pulsar import Client
 from models import Session, Ruta,RutaSchema
 import json
 
-pulsar_client = Client('pulsar://pulsar-container:6650')
+# TODO: Convertir BASE_PULSAR_URL a env var.
+BASE_PULSAR_URL = "pulsar://pulsar-container.default.svc.cluster.local:6650"
+pulsar_client = Client(BASE_PULSAR_URL)
 
 ruta_schema = RutaSchema()
 
@@ -16,9 +18,13 @@ def publish_message(ruta_json:str):
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return 'pong'
+@app.route('/', methods=['GET'])
+def root():
+    return jsonify({'status': "UP"}), 200
+
+@app.route('/ping', methods=['GET'])
+def ping():
+    return jsonify({'message': "Pong"}), 200
 
 @app.route('/calcular-ruta', methods=['POST'])
 def calcular_ruta():

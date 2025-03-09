@@ -1,6 +1,6 @@
 #runs with docker-compose up
 #docker-compose down --rmi all
-version: '3.8'
+
 networks:
   network_experiment:
     driver: bridge
@@ -36,6 +36,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+
   microservicio_calculo_ruta_entrega_container:
     container_name: microservicio_calculo_ruta_entrega
     build:
@@ -50,11 +51,14 @@ services:
         condition: service_healthy
       pulsar-container:
         condition: service_healthy
+        
   microservicio_monitor_calculo_ruta_entrega_container:
     container_name: microservicio_monitor_calculo_ruta_entrega
     build:
       context: microservicio_monitor_calculo_ruta_entrega
       dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
     networks:
       - network_experiment
     depends_on:
