@@ -4,6 +4,7 @@ import random
 from pulsar import Client
 from models import Session, Ruta,RutaSchema
 import json
+import logging
 
 # TODO: Convertir BASE_PULSAR_URL a env var.
 BASE_PULSAR_URL = "pulsar://pulsar-container.default.svc.cluster.local:6650"
@@ -90,7 +91,30 @@ def calcular_ruta():
         }), 500
 
 
+@app.route('/rutas', methods=['DELETE'])
+def delete_routes():
+    logging.info("Called API: delete_routes() Path: [/rutas]")
+    try:
+        session = Session()
+        try:
+            session.query(Ruta).delete()
+            session.commit()
+        except Exception as e:
+            logging.warning("Error al eliminar los registros de la tabla Ruta. Se hara rollback. Mensaje: "+str(e))
+            session.rollback()
+        finally:
+            logging.info("Cerrando sesion de la conexion con la BD.")
+            session.close()
 
+        return jsonify({
+            "message": "Todos los registros de la tabla [Ruta] fueron eliminadas.",
+            "sucess": True
+        }), 200
+    except Exception as e:
+        return jsonify({
+            'error': str(e),
+            'success': False
+        }), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000,debug=True)
