@@ -115,28 +115,29 @@
 ## Diagramas
 
 ### Diagrama de Contexto 
+![image](https://github.com/user-attachments/assets/ff7b2ab1-b150-48b8-8dc2-21a70f126f9c)
 
-
-![Diagramas de Contexto, Domino, Componentes-Contexto drawio](https://github.com/user-attachments/assets/0c5fdee1-28c6-4a4b-aa13-432eb2d6896f)
 
 ### Diagrama de Dominio
-![Diagramas de Contexto, Domino, Componentes-Dominio drawio](https://github.com/user-attachments/assets/9b5b49ea-89e8-48cb-a53f-9ed32003ae52)
+![image](https://github.com/user-attachments/assets/e7ac8a6c-ebf1-40a1-92eb-a1f5e811ddc5)
+
 
 ### Diagrama de Contenedores 
 
-![Diagramas de Contexto, Domino, Componentes-Contenedores drawio](https://github.com/user-attachments/assets/110ebf96-ead2-4b26-a173-8683846450b7)
+![image](https://github.com/user-attachments/assets/bc61b8fa-6195-4c03-b312-3406fe083d95)
+
 
 ### Diagrama de Componentes
+![image](https://github.com/user-attachments/assets/7c8d93d1-2c1a-4462-a055-afc04ddb252e)
 
-
-![Proyecto1Diagramas - Vista funcional (componentes) - v2](https://github.com/user-attachments/assets/6bfcbef6-c0b8-4990-ae8d-597cf6970300)
 
 ### Diagrama de Despliegue
+![image](https://github.com/user-attachments/assets/f780531a-c86e-44fc-a316-90c705ff3407)
 
-![Proyecto1Diagramas - Vista de despliegue - v2](https://github.com/user-attachments/assets/bdabb2fc-17b9-47af-98c0-71b09a8fea84)
 
 ### Diagrama de Concurrencia
-![Proyecto1Diagramas - Vista de concurrencia a nivel de infraestructura](https://github.com/user-attachments/assets/6b5d5de4-32cb-4e09-84d2-567308ae821e)
+![image](https://github.com/user-attachments/assets/ca71a92c-1950-4aa6-865f-02de1363727d)
+
 
 ## Definición de Frameworks
 
