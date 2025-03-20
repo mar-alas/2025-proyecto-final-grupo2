@@ -29,7 +29,295 @@ jobs:
         working-directory: ./backend
         env:
           PYTHONPATH: ${{ env.PYTHONPATH }}
-        run: coverage run -m unittest discover -s compras_servicio/gestor_compras/tests
+        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s compras_servicio/gestor_compras/tests
       - name: Run coverage report
         working-directory: ./backend
         run: coverage report --fail-under=70
+
+  test_gestor_productos:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.10]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install pipenv
+        working-directory: ./backend/inventario_servicio/gestor_productos
+        run: pip install pipenv
+      - name: Install dependencies
+        working-directory: ./backend/inventario_servicio/gestor_productos
+        run: pip install -r requirements.txt
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD/backend/seedwork_compartido:$PWD/backend/inventario_servicio/gestor_productos" >> $GITHUB_ENV
+      - name: Print PYTHONPATH
+        run: echo $PYTHONPATH
+      - name: Run unit tests
+        working-directory: ./backend
+        env:
+          PYTHONPATH: ${{ env.PYTHONPATH }}
+        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s inventario_servicio/gestor_productos/tests
+      - name: Run coverage report
+        working-directory: ./backend
+        run: coverage report --fail-under=70
+
+  test_gestor_stock:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.10]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install pipenv
+        working-directory: ./backend/inventario_servicio/gestor_stock
+        run: pip install pipenv
+      - name: Install dependencies
+        working-directory: ./backend/inventario_servicio/gestor_stock
+        run: pip install -r requirements.txt
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD/backend/seedwork_compartido:$PWD/backend/inventario_servicio/gestor_stock" >> $GITHUB_ENV
+      - name: Print PYTHONPATH
+        run: echo $PYTHONPATH
+      - name: Run unit tests
+        working-directory: ./backend
+        env:
+          PYTHONPATH: ${{ env.PYTHONPATH }}
+        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s inventario_servicio/gestor_stock/tests
+      - name: Run coverage report
+        working-directory: ./backend
+        run: coverage report --fail-under=70
+
+  test_gestor_proveedores:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.10]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install pipenv
+        working-directory: ./backend/compras_servicio/gestor_proveedores
+        run: pip install pipenv
+      - name: Install dependencies
+        working-directory: ./backend/compras_servicio/gestor_proveedores
+        run: pip install -r requirements.txt
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD/backend/seedwork_compartido:$PWD/backend/compras_servicio/gestor_proveedores" >> $GITHUB_ENV
+      - name: Print PYTHONPATH
+        run: echo $PYTHONPATH
+      - name: Run unit tests
+        working-directory: ./backend
+        env:
+          PYTHONPATH: ${{ env.PYTHONPATH }}
+        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s compras_servicio/gestor_proveedores/tests
+      - name: Run coverage report
+        working-directory: ./backend
+        run: coverage report --fail-under=70
+
+  test_generador_reportes_logistica:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.10]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install pipenv
+        working-directory: ./backend/logistica_servicio/generador_reportes
+        run: pip install pipenv
+      - name: Install dependencies
+        working-directory: ./backend/logistica_servicio/generador_reportes
+        run: pip install -r requirements.txt
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD/backend/seedwork_compartido:$PWD/backend/logistica_servicio/generador_reportes" >> $GITHUB_ENV
+      - name: Print PYTHONPATH
+        run: echo $PYTHONPATH
+      - name: Run unit tests
+        working-directory: ./backend
+        env:
+          PYTHONPATH: ${{ env.PYTHONPATH }}
+        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s logistica_servicio/generador_reportes/tests
+      - name: Run coverage report
+        working-directory: ./backend
+        run: coverage report --fail-under=70
+
+  test_gestor_rutas_entrega:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.10]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install pipenv
+        working-directory: ./backend/logistica_servicio/generador_rutas_entrega
+        run: pip install pipenv
+      - name: Install dependencies
+        working-directory: ./backend/logistica_servicio/generador_rutas_entrega
+        run: pip install -r requirements.txt
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD/backend/seedwork_compartido:$PWD/backend/logistica_servicio/generador_rutas_entrega" >> $GITHUB_ENV
+      - name: Print PYTHONPATH
+        run: echo $PYTHONPATH
+      - name: Run unit tests
+        working-directory: ./backend
+        env:
+          PYTHONPATH: ${{ env.PYTHONPATH }}
+        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s logistica_servicio/generador_rutas_entrega/tests
+      - name: Run coverage report
+        working-directory: ./backend
+        run: coverage report --fail-under=70
+
+  test_gestor_entregas:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.10]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install pipenv
+        working-directory: ./backend/logistica_servicio/gestor_entregas
+        run: pip install pipenv
+      - name: Install dependencies
+        working-directory: ./backend/logistica_servicio/gestor_entregas
+        run: pip install -r requirements.txt
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD/backend/seedwork_compartido:$PWD/backend/logistica_servicio/gestor_entregas" >> $GITHUB_ENV
+      - name: Print PYTHONPATH
+        run: echo $PYTHONPATH
+      - name: Run unit tests
+        working-directory: ./backend
+        env:
+          PYTHONPATH: ${{ env.PYTHONPATH }}
+        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s logistica_servicio/gestor_entregas/tests
+      - name: Run coverage report
+        working-directory: ./backend
+        run: coverage report --fail-under=70
+
+  test_generador_reportes_ventas:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.10]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install pipenv
+        working-directory: ./backend/ventas_servicio/generador_reportes
+        run: pip install pipenv
+      - name: Install dependencies
+        working-directory: ./backend/ventas_servicio/generador_reportes
+        run: pip install -r requirements.txt
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD/backend/seedwork_compartido:$PWD/backend/ventas_servicio/generador_reportes" >> $GITHUB_ENV
+      - name: Print PYTHONPATH
+        run: echo $PYTHONPATH
+      - name: Run unit tests
+        working-directory: ./backend
+        env:
+          PYTHONPATH: ${{ env.PYTHONPATH }}
+        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s ventas_servicio/generador_reportes/tests
+      - name: Run coverage report
+        working-directory: ./backend
+        run: coverage report --fail-under=70
+
+  test_gestor_ventas:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.10]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install pipenv
+        working-directory: ./backend/ventas_servicio/gestor_ventas
+        run: pip install pipenv
+      - name: Install dependencies
+        working-directory: ./backend/ventas_servicio/gestor_ventas
+        run: pip install -r requirements.txt
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD/backend/seedwork_compartido:$PWD/backend/ventas_servicio/gestor_ventas" >> $GITHUB_ENV
+      - name: Print PYTHONPATH
+        run: echo $PYTHONPATH
+      - name: Run unit tests
+        working-directory: ./backend
+        env:
+          PYTHONPATH: ${{ env.PYTHONPATH }}
+        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s ventas_servicio/gestor_ventas/tests
+      - name: Run coverage report
+        working-directory: ./backend
+        run: coverage report --fail-under=70
+
+  test_procesador_pedidos:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.10]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install pipenv
+        working-directory: ./backend/ventas_servicio/procesador_pedidos
+        run: pip install pipenv
+      - name: Install dependencies
+        working-directory: ./backend/ventas_servicio/procesador_pedidos
+        run: pip install -r requirements.txt
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD/backend/seedwork_compartido:$PWD/backend/ventas_servicio/procesador_pedidos" >> $GITHUB_ENV
+      - name: Print PYTHONPATH
+        run: echo $PYTHONPATH
+      - name: Run unit tests
+        working-directory: ./backend
+        env:
+          PYTHONPATH: ${{ env.PYTHONPATH }}
+        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s ventas_servicio/procesador_pedidos/tests
+      - name: Run coverage report
+        working-directory: ./backend
+        run: coverage report --fail-under=70
+
+  test_procesador_video:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.10]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install pipenv
+        working-directory: ./backend/ventas_servicio/procesador_video
+        run: pip install pipenv
+      - name: Install dependencies
+        working-directory: ./backend/ventas_servicio/procesador_video
+        run: pip install -r requirements.txt
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD/backend/seedwork_compartido:$PWD/backend/ventas_servicio/procesador_video" >> $GITHUB_ENV
+      - name: Print PYTHONPATH
+        run: echo $PYTHONPATH
+      - name: Run unit tests
+        working-directory: ./backend
+        env:
+          PYTHONPATH: ${{ env.PYTHONPATH }}
+        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s ventas_servicio/procesador_video/tests
+      - name: Run coverage report
+        working-directory: ./backend
+        run: coverage report --fail-under=70
+
+  test_gestor_usuarios:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.10]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install pipenv
+        working-directory: ./backend/seguridad_servicio/gestor_usuarios
+        run: pip install pipenv
+      - name: Install dependencies
+        working-directory: ./backend/seguridad_servicio/gestor_usuarios
+        run: pip install -r requirements.txt
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD/backend/seedwork_compartido:$PWD/backend/seguridad_servicio/gestor_usuarios" >> $GITHUB_ENV
+      - name: Print PYTHONPATH
+        run: echo $PYTHONPATH
+      - name: Run unit tests
+        working-directory: ./backend
+        env:
+          PYTHONPATH: ${{ env.PYTHONPATH }}
+        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s seguridad_servicio/gestor_usuarios/tests
+      - name: Run coverage report
+        working-directory: ./backend
+        run: coverage report --fail-under=70
+
+
