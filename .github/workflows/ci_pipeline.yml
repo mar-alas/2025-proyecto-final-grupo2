@@ -15,6 +15,10 @@ jobs:
         python-version: [3.10]
     steps:
       - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
       - name: Install pipenv
         working-directory: ./backend/compras_servicio/gestor_compras
         run: pip install pipenv
@@ -22,12 +26,14 @@ jobs:
         working-directory: ./backend/compras_servicio/gestor_compras
         run: pip install -r requirements.txt
       - name: Set PYTHONPATH
-        run: echo "PYTHONPATH=$PWD/backend/compras_servicio/gestor_compras:$PWD/backend/seedwork_compartido" >> $GITHUB_ENV
+        run: echo "PYTHONPATH=$PWD/backend/seedwork_compartido:$PWD/backend/compras_servicio/gestor_compras" >> $GITHUB_ENV
+      - name: Print PYTHONPATH
+        run: echo $PYTHONPATH
       - name: Run unit tests
-        working-directory: ./backend/compras_servicio/gestor_compras
+        working-directory: ./backend
         env:
           PYTHONPATH: ${{ env.PYTHONPATH }}
-        run: coverage run -m unittest discover
+        run: coverage run -m unittest discover -s compras_servicio/gestor_compras/tests
       - name: Run coverage report
-        working-directory: ./backend/compras_servicio/gestor_compras
+        working-directory: ./backend
         run: coverage report --fail-under=70
