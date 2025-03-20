@@ -1,0 +1,31 @@
+name: Test Backend
+on:
+  push:
+    branches:
+      - main
+      - '**'
+  pull_request:
+    branches:
+      - main
+jobs:
+  test_gestor_compras:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.10]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install pipenv
+        working-directory: ./backend/compras_servicio/gestor_compras
+        run: pip install pipenv
+      - name: Install dependencies
+        working-directory: ./backend/compras_servicio/gestor_compras
+        run:  pip install -r requirements.txt
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=.:../seedwork_compartido:" >> $GITHUB_ENV
+      - name: Run unit tests
+        working-directory: ./backend/compras_servicio/gestor_compras
+        run: coverage run -m pytest
+      - name: Run coverage report
+        working-directory: ./backend/compras_servicio/gestor_compras
+        run: coverage report --fail-under=70
