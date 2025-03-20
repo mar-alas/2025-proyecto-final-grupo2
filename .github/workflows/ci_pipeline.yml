@@ -94,20 +94,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install pipenv
-        working-directory: ./backend/compras_servicio/gestor_proveedores
+        working-directory: ./backend/inventario_servicio/gestor_proveedores
         run: pip install pipenv
       - name: Install dependencies
-        working-directory: ./backend/compras_servicio/gestor_proveedores
+        working-directory: ./backend/inventario_servicio/gestor_proveedores
         run: pip install -r requirements.txt
       - name: Set PYTHONPATH
-        run: echo "PYTHONPATH=$PWD/backend/seedwork_compartido:$PWD/backend/compras_servicio/gestor_proveedores" >> $GITHUB_ENV
+        run: echo "PYTHONPATH=$PWD/backend/seedwork_compartido:$PWD/backend/inventario_servicio/gestor_proveedores" >> $GITHUB_ENV
       - name: Print PYTHONPATH
         run: echo $PYTHONPATH
       - name: Run unit tests
         working-directory: ./backend
         env:
           PYTHONPATH: ${{ env.PYTHONPATH }}
-        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s compras_servicio/gestor_proveedores/tests
+        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s inventario_servicio/gestor_proveedores/tests
       - name: Run coverage report
         working-directory: ./backend
         run: coverage report --fail-under=70
