@@ -1,0 +1,18 @@
+FROM python:3.10
+
+WORKDIR /app
+
+COPY backend/seguridad_servicio/gestor_usuarios/requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY backend/seguridad_servicio/gestor_usuarios /app/
+COPY backend/seedwork_compartido /app/seedwork_compartido
+
+ENV PYTHONPATH="/app/seedwork_compartido:${PYTHONPATH}"
+
+# Expose port 3011
+EXPOSE 3011
+
+# Define the start command
+CMD ["python", "app.py"]

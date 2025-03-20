@@ -1,0 +1,18 @@
+FROM python:3.10
+
+WORKDIR /app
+
+COPY backend/ventas_servicio/gestor_ventas/requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY backend/ventas_servicio/gestor_ventas /app/
+COPY backend/seedwork_compartido /app/seedwork_compartido
+
+ENV PYTHONPATH="/app/seedwork_compartido:${PYTHONPATH}"
+
+# Expose port 3008
+EXPOSE 3008
+
+# Define the start command
+CMD ["python", "app.py"]

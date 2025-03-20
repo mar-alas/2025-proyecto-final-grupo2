@@ -1,0 +1,319 @@
+version: '3'
+
+services:
+#________________________________COMPRAS SERVICIO ___________________________
+  gestor_compras:
+    build:
+      context: ../
+      dockerfile: backend/Dockerfiles/Dockerfile.gestor_compras
+    ports:
+      - "3000:3000"
+    depends_on:
+      compras_servicio_db:
+        condition: service_healthy
+    environment:
+        - DB_USER=postgres
+        - DB_PASSWORD=postgres
+        - DB_PORT=5432
+        - DB_NAME=compras_servicio_db
+        - DB_HOST=compras_servicio_db
+    networks:
+      - compras_servicio_net
+
+  compras_servicio_db:
+    image: postgres
+    environment:
+      POSTGRES_DB: compras_servicio_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+    networks:
+      - compras_servicio_net
+  
+#________________________________INVENTARIO SERVICIO ___________________________
+  gestor_productos:
+    build:
+      context: ../
+      dockerfile: backend/Dockerfiles/Dockerfile.gestor_productos
+    ports:
+      - "3001:3001"
+    depends_on:
+      inventario_servicio_db:
+        condition: service_healthy
+    environment:
+        - DB_USER=postgres
+        - DB_PASSWORD=postgres
+        - DB_PORT=5432
+        - DB_NAME=inventario_servicio_db
+        - DB_HOST=inventario_servicio_db
+    networks:
+      - inventario_servicio_net
+    
+  gestor_stock:
+    build:
+      context: ../
+      dockerfile: backend/Dockerfiles/Dockerfile.gestor_stock
+    ports:
+      - "3002:3002"
+    depends_on:
+      inventario_servicio_db:
+        condition: service_healthy
+    environment:
+        - DB_USER=postgres
+        - DB_PASSWORD=postgres
+        - DB_PORT=5432
+        - DB_NAME=inventario_servicio_db
+        - DB_HOST=inventario_servicio_db
+    networks:
+      - inventario_servicio_net
+
+  gestor_proveedores:
+    build:
+      context: ../
+      dockerfile: backend/Dockerfiles/Dockerfile.gestor_proveedores
+    ports:
+      - "3003:3003"
+    depends_on:
+      compras_servicio_db:
+        condition: service_healthy
+    environment:
+        - DB_USER=postgres
+        - DB_PASSWORD=postgres
+        - DB_PORT=5432
+        - DB_NAME=compras_servicio_db
+        - DB_HOST=compras_servicio_db
+    networks:
+      - inventario_servicio_net
+
+  inventario_servicio_db:
+    image: postgres
+    environment:
+      POSTGRES_DB: inventario_servicio_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5433:5432"
+    networks:
+      - inventario_servicio_net
+  
+#________________________________LOGISTICA SERVICIO ___________________________
+  generador_reportes_logistica:
+    build:
+      context: ../
+      dockerfile: backend/Dockerfiles/Dockerfile.generador_reportes_logistica
+    ports:
+      - "3004:3004"
+    depends_on:
+      logistica_servicio_db:
+        condition: service_healthy
+    environment:
+        - DB_USER=postgres
+        - DB_PASSWORD=postgres
+        - DB_PORT=5432
+        - DB_NAME=logistica_servicio_db
+        - DB_HOST=logistica_servicio_db
+    networks:
+      - logistica_servicio_net
+    
+  gestor_rutas_entrega:
+    build:
+      context: ../
+      dockerfile: backend/Dockerfiles/Dockerfile.generador_rutas_entrega
+    ports:
+      - "3005:3005"
+    depends_on:
+      logistica_servicio_db:
+        condition: service_healthy
+    environment:
+        - DB_USER=postgres
+        - DB_PASSWORD=postgres
+        - DB_PORT=5432
+        - DB_NAME=logistica_servicio_db
+        - DB_HOST=logistica_servicio_db
+    networks:
+      - logistica_servicio_net
+  
+  gestor_entregas:
+    build:
+      context: ../
+      dockerfile: backend/Dockerfiles/Dockerfile.gestor_entregas
+    ports:
+      - "3006:3006"
+    depends_on:
+      logistica_servicio_db:
+        condition: service_healthy
+    environment:
+        - DB_USER=postgres
+        - DB_PASSWORD=postgres
+        - DB_PORT=5432
+        - DB_NAME=logistica_servicio_db
+        - DB_HOST=logistica_servicio_db
+    networks:
+      - logistica_servicio_net
+
+  logistica_servicio_db:
+    image: postgres
+    environment:
+      POSTGRES_DB: logistica_servicio_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5434:5432"
+    networks:
+      - logistica_servicio_net
+
+#________________________________VENTAS SERVICIO ___________________________
+
+  generador_reportes_ventas:
+    build:
+      context: ../
+      dockerfile: backend/Dockerfiles/Dockerfile.generador_reportes_ventas
+    ports:
+      - "3007:3007"
+    depends_on:
+      ventas_servicio_db:
+        condition: service_healthy
+    environment:
+        - DB_USER=postgres
+        - DB_PASSWORD=postgres
+        - DB_PORT=5432
+        - DB_NAME=ventas_servicio_db
+        - DB_HOST=ventas_servicio_db
+    networks:
+      - ventas_servicio_net
+  
+  gestor_ventas:
+    build:
+      context: ../
+      dockerfile: backend/Dockerfiles/Dockerfile.gestor_ventas
+    ports:
+      - "3008:3008"
+    depends_on:
+      ventas_servicio_db:
+        condition: service_healthy
+    environment:
+        - DB_USER=postgres
+        - DB_PASSWORD=postgres
+        - DB_PORT=5432
+        - DB_NAME=ventas_servicio_db
+        - DB_HOST=ventas_servicio_db
+    networks:
+      - ventas_servicio_net
+  
+  procesador_pedidos:
+    build:
+      context: ../
+      dockerfile: backend/Dockerfiles/Dockerfile.procesador_pedidos
+    ports:
+      - "3009:3009"
+    depends_on:
+      ventas_servicio_db:
+        condition: service_healthy
+    environment:
+        - DB_USER=postgres
+        - DB_PASSWORD=postgres
+        - DB_PORT=5432
+        - DB_NAME=ventas_servicio_db
+        - DB_HOST=ventas_servicio_db
+    networks:
+      - ventas_servicio_net
+  
+  procesador_video:
+    build:
+      context: ../
+      dockerfile: backend/Dockerfiles/Dockerfile.procesador_video
+    ports:
+      - "3010:3010"
+    depends_on:
+      ventas_servicio_db:
+        condition: service_healthy
+    environment:
+        - DB_USER=postgres
+        - DB_PASSWORD=postgres
+        - DB_PORT=5432
+        - DB_NAME=ventas_servicio_db
+        - DB_HOST=ventas_servicio_db
+    networks:
+      - ventas_servicio_net
+  
+  ventas_servicio_db:
+    image: postgres
+    environment:
+      POSTGRES_DB: ventas_servicio_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5435:5432"
+    networks:
+      - ventas_servicio_net
+
+#________________________________SEGURIDAD SERVICIO ___________________________
+
+  gestor_usuarios:
+    build:
+      context: ../
+      dockerfile: backend/Dockerfiles/Dockerfile.gestor_usuarios
+    ports:
+      - "3011:3011"
+    depends_on:
+      seguridad_servicio_db:
+        condition: service_healthy
+    environment:
+        - DB_USER=postgres
+        - DB_PASSWORD=postgres
+        - DB_PORT=5432
+        - DB_NAME=seguridad_servicio_db
+        - DB_HOST=seguridad_servicio_db
+    networks:
+      - seguridad_servicio_net
+
+  seguridad_servicio_db:
+    image: postgres
+    environment:
+      POSTGRES_DB: seguridad_servicio_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5436:5432"
+    networks:
+      - seguridad_servicio_net
+
+#________________________________NETWORKS ___________________________
+
+networks:
+  compras_servicio_net:
+    driver: bridge
+  inventario_servicio_net:
+    driver: bridge
+  logistica_servicio_net:
+    driver: bridge
+  ventas_servicio_net:
+    driver: bridge
+  seguridad_servicio_net:
+    driver: bridge
