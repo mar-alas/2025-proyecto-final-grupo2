@@ -5,6 +5,18 @@ To start the backend, run:
 docker-compose up
 ```
 
+
+To stop the backend, run:
+```sh
+docker-compose down -v
+```
+
+Build containers again
+```sh
+docker-compose up --build
+```
+
+
 ## Running Tests
 
 Set the `PYTHONPATH` environment variable:
@@ -59,3 +71,31 @@ curl http://127.0.0.1:3010/api/v1/ventas/procesador_video/ping
 ```sh
 curl http://127.0.0.1:3011/api/v1/seguridad/gestor_usuarios/ping
 ```
+
+## Conectarse al proyecto GCP y cluster
+
+Ubiquese en la terminal en la ruta: _scripts/gke/_
+
+### 1. Conectese al proyecto GCP.
+
+Ejecute:
+```bash
+bash conectarse_a_proyecto_gcp.sh
+```
+y seleccione el proyecto: proyecto-final-2-454403
+
+### 2. Crear el cluster (si no existe)
+```bash
+bash crear_cluster_produccion.sh
+```
+
+### Conectarme al cluster
+```bash
+bash conectarse_al_cluster.sh
+```
+
+### Generar k8s
+```bash
+bash generar_archivos_k8s.sh
+```
+
