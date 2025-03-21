@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose.yml
+    kompose.version: 1.35.0 (HEAD)
+  labels:
+    io.kompose.service: generador-reportes-logistica
+  name: generador-reportes-logistica
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: generador-reportes-logistica
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../docker-compose.yml
+        kompose.version: 1.35.0 (HEAD)
+      labels:
+        io.kompose.service: generador-reportes-logistica
+    spec:
+      containers:
+        - env:
+            - name: DB_HOST
+              value: logistica_servicio_db
+            - name: DB_NAME
+              value: logistica_servicio_db
+            - name: DB_PASSWORD
+              value: postgres
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              value: postgres
+          image: generador-reportes-logistica
+          name: generador-reportes-logistica
+          ports:
+            - containerPort: 3004
+              protocol: TCP
+      restartPolicy: Always

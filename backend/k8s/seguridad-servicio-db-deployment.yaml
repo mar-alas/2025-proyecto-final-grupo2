@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose.yml
+    kompose.version: 1.35.0 (HEAD)
+  labels:
+    io.kompose.service: seguridad-servicio-db
+  name: seguridad-servicio-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: seguridad-servicio-db
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../docker-compose.yml
+        kompose.version: 1.35.0 (HEAD)
+      labels:
+        io.kompose.service: seguridad-servicio-db
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: seguridad_servicio_db
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_USER
+              value: postgres
+          image: postgres
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready -U postgres
+            failureThreshold: 5
+            periodSeconds: 2
+            timeoutSeconds: 5
+          name: seguridad-servicio-db
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+      restartPolicy: Always
