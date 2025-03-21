@@ -1,0 +1,1 @@
+sudo gcloud container clusters get-credentials prod-cluster-cpp-api --zone us-central1-f
