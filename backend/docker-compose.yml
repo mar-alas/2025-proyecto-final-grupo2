@@ -1,6 +1,13 @@
-version: '3'
+version: "3.8"
 
 services:
+  pulsar:
+    image: apachepulsar/pulsar:latest
+    command: bin/pulsar standalone
+    ports:
+      - "6650:6650"
+      - "8080:8080"
+
 #________________________________COMPRAS SERVICIO ___________________________
   gestor_compras:
     build:
@@ -10,6 +17,8 @@ services:
       - "3000:3000"
     depends_on:
       compras_servicio_db:
+        condition: service_healthy
+      pulsar:
         condition: service_healthy
     environment:
         - DB_USER=postgres
@@ -46,6 +55,8 @@ services:
     depends_on:
       inventario_servicio_db:
         condition: service_healthy
+      pulsar:
+        condition: service_healthy
     environment:
         - DB_USER=postgres
         - DB_PASSWORD=postgres
@@ -64,6 +75,8 @@ services:
     depends_on:
       inventario_servicio_db:
         condition: service_healthy
+      pulsar:
+        condition: service_healthy        
     environment:
         - DB_USER=postgres
         - DB_PASSWORD=postgres
@@ -81,6 +94,8 @@ services:
       - "3003:3003"
     depends_on:
       compras_servicio_db:
+        condition: service_healthy
+      pulsar:
         condition: service_healthy
     environment:
         - DB_USER=postgres
@@ -117,6 +132,8 @@ services:
     depends_on:
       logistica_servicio_db:
         condition: service_healthy
+      pulsar:
+        condition: service_healthy
     environment:
         - DB_USER=postgres
         - DB_PASSWORD=postgres
@@ -135,6 +152,8 @@ services:
     depends_on:
       logistica_servicio_db:
         condition: service_healthy
+      pulsar:
+        condition: service_healthy
     environment:
         - DB_USER=postgres
         - DB_PASSWORD=postgres
@@ -152,6 +171,8 @@ services:
       - "3006:3006"
     depends_on:
       logistica_servicio_db:
+        condition: service_healthy
+      pulsar:
         condition: service_healthy
     environment:
         - DB_USER=postgres
@@ -189,6 +210,8 @@ services:
     depends_on:
       ventas_servicio_db:
         condition: service_healthy
+      pulsar:
+        condition: service_healthy
     environment:
         - DB_USER=postgres
         - DB_PASSWORD=postgres
@@ -206,6 +229,8 @@ services:
       - "3008:3008"
     depends_on:
       ventas_servicio_db:
+        condition: service_healthy
+      pulsar:
         condition: service_healthy
     environment:
         - DB_USER=postgres
@@ -225,6 +250,8 @@ services:
     depends_on:
       ventas_servicio_db:
         condition: service_healthy
+      pulsar:
+        condition: service_healthy
     environment:
         - DB_USER=postgres
         - DB_PASSWORD=postgres
@@ -242,6 +269,8 @@ services:
       - "3010:3010"
     depends_on:
       ventas_servicio_db:
+        condition: service_healthy
+      pulsar:
         condition: service_healthy
     environment:
         - DB_USER=postgres
@@ -278,6 +307,8 @@ services:
       - "3011:3011"
     depends_on:
       seguridad_servicio_db:
+        condition: service_healthy
+      pulsar:
         condition: service_healthy
     environment:
         - DB_USER=postgres
