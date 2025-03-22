@@ -99,3 +99,27 @@ bash conectarse_al_cluster.sh
 bash generar_archivos_k8s.sh
 ```
 
+### 3. Construir imagenes docker
+
+Pre-requisito: Debe existir el repositorio de artifact registry
+Si no esiste, creeelo:
+
+```bash
+bash crear_repositorio_imagenes_en_gcp.sh
+```
+
+Generar imagenes:
+```bash
+bash construir_todas_las_imagenes.sh
+```
+
+Subir imagenes a GCP:
+```bash
+bash subir_imagenes_a_gcp.sh
+```
+
+### 3. Desplegar contenedores en Kubernetes
+Subir imagenes a GCP:
+```bash
+bash desplegar_imagenes_en_gke.sh
+```
