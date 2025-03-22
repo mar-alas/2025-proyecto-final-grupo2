@@ -6,7 +6,7 @@ metadata:
     kompose.version: 1.35.0 (HEAD)
   labels:
     io.kompose.service: procesador-video
-  name: procesador_video
+  name: procesador-video
 spec:
   ports:
     - name: "3010"

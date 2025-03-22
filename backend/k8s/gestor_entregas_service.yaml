@@ -6,7 +6,7 @@ metadata:
     kompose.version: 1.35.0 (HEAD)
   labels:
     io.kompose.service: gestor-entregas
-  name: gestor_entregas
+  name: gestor-entregas
 spec:
   ports:
     - name: "3006"

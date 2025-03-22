@@ -6,7 +6,7 @@ metadata:
     kompose.version: 1.35.0 (HEAD)
   labels:
     io.kompose.service: inventario-servicio-db
-  name: inventario_servicio_db
+  name: inventario-servicio-db
 spec:
   ports:
     - name: "5433"

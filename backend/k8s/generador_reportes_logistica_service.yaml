@@ -6,7 +6,7 @@ metadata:
     kompose.version: 1.35.0 (HEAD)
   labels:
     io.kompose.service: generador-reportes-logistica
-  name: generador_reportes_logistica
+  name: generador-reportes-logistica
 spec:
   ports:
     - name: "3004"

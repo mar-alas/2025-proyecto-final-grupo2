@@ -6,7 +6,7 @@ metadata:
     kompose.version: 1.35.0 (HEAD)
   labels:
     io.kompose.service: gestor-productos
-  name: gestor_productos
+  name: gestor-productos
 spec:
   ports:
     - name: "3001"
