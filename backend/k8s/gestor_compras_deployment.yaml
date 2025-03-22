@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose.yml
+    kompose.version: 1.35.0 (HEAD)
+  labels:
+    io.kompose.service: gestor-compras
+  name: gestor-compras
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: gestor-compras
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../docker-compose.yml
+        kompose.version: 1.35.0 (HEAD)
+      labels:
+        io.kompose.service: gestor-compras
+    spec:
+      containers:
+        - env:
+            - name: DB_HOST
+              value: compras_servicio_db
+            - name: DB_NAME
+              value: compras_servicio_db
+            - name: DB_PASSWORD
+              value: postgres
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              value: postgres
+          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/compras_servicio/gestor_compras:latest
+          name: gestor-compras
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+      restartPolicy: Always
