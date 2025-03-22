@@ -5,27 +5,62 @@ PLATFORM="linux/amd64"
 REPO_BASE="us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker"
 DOCKERFILES_DIR="../../Dockerfiles"
 
-# Definir manualmente los builds
-
-echo "🚀 Construyendo imagen para compras_servicio/gestor_compras desde $DOCKERFILES_DIR/Dockerfile.gestor_compras..."
-
-ERROR_LOG=$(
-docker buildx build --platform linux/amd64 \
-  -t us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/compras_servicio/gestor_compras:latest \
-  -f ../../Dockerfiles/Dockerfile.gestor_compras \
-  --build-context seedwork_compartido=../../../backend/seedwork_compartido \
-  ../../
+# Definir los servicios y sus respectivos Dockerfiles
+declare -A IMAGES
+IMAGES=(
+  ["compras_servicio/gestor_compras"]="Dockerfile.gestor_compras"
+  ["inventario_servicio/gestor_productos"]="Dockerfile.gestor_productos"
+  ["inventario_servicio/gestor_proveedores"]="Dockerfile.gestor_proveedores"
+  ["inventario_servicio/gestor_stock"]="Dockerfile.gestor_stock"
+  ["logistica_servicio/generador_reportes"]="Dockerfile.generador_reportes_logistica"
+  ["logistica_servicio/generador_rutas_entrega"]="Dockerfile.generador_rutas_entrega"
+  ["logistica_servicio/gestor_entregas"]="Dockerfile.gestor_entregas"
+  ["seguridad_servicio/gestor_usuarios"]="Dockerfile.gestor_usuarios"
+  ["ventas_servicio/generador_reportes"]="Dockerfile.generador_reportes_ventas"
+  ["ventas_servicio/gestor_ventas"]="Dockerfile.gestor_ventas"
+  ["ventas_servicio/procesador_pedidos"]="Dockerfile.procesador_pedidos"
+  ["ventas_servicio/procesador_video"]="Dockerfile.procesador_video"
 )
 
+# Construir imágenes
+build_image() {
+  local service=$1
+  local dockerfile=$2
 
-# Verificar si el build fue exitoso
-if [ $? -ne 0 ]; then
-  echo "❌ Error construyendo la imagen para compras_servicio/gestor_compras"
-  echo "🔍 Detalles del error:"
-  echo "$ERROR_LOG"
-  exit 1
-fi
+  echo "🚀 Construyendo imagen para $service desde $DOCKERFILES_DIR/$dockerfile..."
 
-echo "✅ Imagen para compras_servicio/gestor_compras construida exitosamente."
+  ERROR_LOG=$(
+    docker buildx build --platform "$PLATFORM" \
+      -t "$REPO_BASE/$service:latest" \
+      -f "$DOCKERFILES_DIR/$dockerfile" \
+      --build-context seedwork_compartido=../../../backend/seedwork_compartido \
+      ../../
+  )
+
+  if [ $? -ne 0 ]; then
+    echo "❌ Error construyendo la imagen para $service"
+    echo "🔍 Detalles del error:"
+    echo "$ERROR_LOG"
+    exit 1
+  fi
+
+  echo "✅ Imagen para $service construida exitosamente."
+}
+
+# Llamar a la función para cada imagen definida
+# Comentar las lineas de imagenes que no queramos generar.
+build_image "compras_servicio/gestor_compras" "Dockerfile.gestor_compras"
+build_image "inventario_servicio/gestor_productos" "Dockerfile.gestor_productos"
+build_image "inventario_servicio/gestor_proveedores" "Dockerfile.gestor_proveedores"
+build_image "inventario_servicio/gestor_stock" "Dockerfile.gestor_stock"
+build_image "logistica_servicio/generador_reportes" "Dockerfile.generador_reportes_logistica"
+build_image "logistica_servicio/generador_rutas_entrega" "Dockerfile.generador_rutas_entrega"
+build_image "logistica_servicio/gestor_entregas" "Dockerfile.gestor_entregas"
+build_image "seguridad_servicio/gestor_usuarios" "Dockerfile.gestor_usuarios"
+build_image "ventas_servicio/generador_reportes" "Dockerfile.generador_reportes_ventas"
+build_image "ventas_servicio/gestor_ventas" "Dockerfile.gestor_ventas"
+build_image "ventas_servicio/procesador_pedidos" "Dockerfile.procesador_pedidos"
+build_image "ventas_servicio/procesador_video" "Dockerfile.procesador_video"
+
 
 echo "🎉 ¡Todas las imágenes han sido construidas!"
