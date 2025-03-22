@@ -12,6 +12,94 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: gestor-compras  # Nombre del servicio
+            name: gestor-compras
             port:
-              number: 3000        # Puerto expuesto en el Service
+              number: 3000
+
+      - path: /api/v1/inventario/gestor_productos
+        pathType: Prefix
+        backend:
+          service:
+            name: gestor-productos
+            port:
+              number: 3001
+
+      - path: /api/v1/inventario/gestor_stock
+        pathType: Prefix
+        backend:
+          service:
+            name: gestor-stock
+            port:
+              number: 3002
+
+      - path: /api/v1/inventario/gestor_proveedores
+        pathType: Prefix
+        backend:
+          service:
+            name: gestor-proveedores
+            port:
+              number: 3003
+
+      - path: /api/v1/logistica/generador_reportes
+        pathType: Prefix
+        backend:
+          service:
+            name: generador-reportes-logistica
+            port:
+              number: 3004
+
+      - path: /api/v1/logistica/generador_rutas_entrega
+        pathType: Prefix
+        backend:
+          service:
+            name: generador-rutas-entrega
+            port:
+              number: 3005
+
+      - path: /api/v1/logistica/gestor_entregas
+        pathType: Prefix
+        backend:
+          service:
+            name: gestor-entregas
+            port:
+              number: 3006
+
+      - path: /api/v1/ventas/generador_reportes
+        pathType: Prefix
+        backend:
+          service:
+            name: generador-reportes-ventas
+            port:
+              number: 3007
+
+      - path: /api/v1/ventas/gestor_ventas
+        pathType: Prefix
+        backend:
+          service:
+            name: gestor-ventas
+            port:
+              number: 3008
+
+      - path: /api/v1/ventas/procesador_pedidos
+        pathType: Prefix
+        backend:
+          service:
+            name: procesador-pedidos
+            port:
+              number: 3009
+
+      - path: /api/v1/ventas/procesador_video
+        pathType: Prefix
+        backend:
+          service:
+            name: procesador-video
+            port:
+              number: 3010
+
+      - path: /api/v1/seguridad/gestor_usuarios
+        pathType: Prefix
+        backend:
+          service:
+            name: gestor-usuarios
+            port:
+              number: 3011

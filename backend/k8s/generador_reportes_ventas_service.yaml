@@ -6,7 +6,7 @@ metadata:
     kompose.version: 1.35.0 (HEAD)
   labels:
     io.kompose.service: generador-reportes-ventas
-  name: generador_reportes_ventas
+  name: generador-reportes-ventas
 spec:
   ports:
     - name: "3007"

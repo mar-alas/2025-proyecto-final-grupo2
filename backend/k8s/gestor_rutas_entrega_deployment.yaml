@@ -5,20 +5,20 @@ metadata:
     kompose.cmd: kompose convert -f ../docker-compose.yml
     kompose.version: 1.35.0 (HEAD)
   labels:
-    io.kompose.service: gestor-rutas-entrega
-  name: gestor-rutas-entrega
+    io.kompose.service: generador-rutas-entrega
+  name: generador-rutas-entrega
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: gestor-rutas-entrega
+      io.kompose.service: generador-rutas-entrega
   template:
     metadata:
       annotations:
         kompose.cmd: kompose convert -f ../docker-compose.yml
         kompose.version: 1.35.0 (HEAD)
       labels:
-        io.kompose.service: gestor-rutas-entrega
+        io.kompose.service: generador-rutas-entrega
     spec:
       containers:
         - env:
@@ -33,7 +33,7 @@ spec:
             - name: DB_USER
               value: postgres
           image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/logistica_servicio/generador_rutas_entrega:latest
-          name: gestor-rutas-entrega
+          name: generador-rutas-entrega
           ports:
             - containerPort: 3005
               protocol: TCP

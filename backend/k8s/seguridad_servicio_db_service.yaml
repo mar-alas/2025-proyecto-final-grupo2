@@ -6,7 +6,7 @@ metadata:
     kompose.version: 1.35.0 (HEAD)
   labels:
     io.kompose.service: seguridad-servicio-db
-  name: seguridad_servicio_db
+  name: seguridad-servicio-db
 spec:
   ports:
     - name: "5436"

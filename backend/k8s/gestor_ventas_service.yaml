@@ -6,7 +6,7 @@ metadata:
     kompose.version: 1.35.0 (HEAD)
   labels:
     io.kompose.service: gestor-ventas
-  name: gestor_ventas
+  name: gestor-ventas
 spec:
   ports:
     - name: "3008"
