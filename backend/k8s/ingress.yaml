@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cpp-ingress
+  annotations:
+    kubernetes.io/ingress.class: "gce"  # Usamos el Ingress de Google
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /api/v1/compras/gestor_compras
+        pathType: Prefix
+        backend:
+          service:
+            name: gestor-compras  # Nombre del servicio
+            port:
+              number: 3000        # Puerto expuesto en el Service
