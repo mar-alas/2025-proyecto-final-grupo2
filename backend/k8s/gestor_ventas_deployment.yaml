@@ -32,7 +32,7 @@ spec:
               value: "5432"
             - name: DB_USER
               value: postgres
-          image: gestor-ventas
+          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/gestor_ventas:latest
           name: gestor-ventas
           ports:
             - containerPort: 3008

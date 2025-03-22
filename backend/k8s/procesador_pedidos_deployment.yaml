@@ -32,7 +32,7 @@ spec:
               value: "5432"
             - name: DB_USER
               value: postgres
-          image: procesador-pedidos
+          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/procesador_pedidos:latest
           name: procesador-pedidos
           ports:
             - containerPort: 3009
