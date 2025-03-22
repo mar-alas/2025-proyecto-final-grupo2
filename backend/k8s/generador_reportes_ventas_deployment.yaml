@@ -32,7 +32,7 @@ spec:
               value: "5432"
             - name: DB_USER
               value: postgres
-          image: generador-reportes-ventas
+          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/generador_reportes:latest
           name: generador-reportes-ventas
           ports:
             - containerPort: 3007
