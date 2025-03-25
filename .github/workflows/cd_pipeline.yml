@@ -40,4 +40,4 @@ jobs:
         working-directory: backend/scripts/manejo_imagenes
         run: |
           chmod +x desplegar_imagenes_en_gke.sh
-         ./desplegar_imagenes_en_gke.sh
+          ./desplegar_imagenes_en_gke.sh
