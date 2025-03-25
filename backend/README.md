@@ -1,38 +1,38 @@
-## Backend Execution
+## Ejecucion del Backend
 
-To start the backend, run:
+Para iniciar todos los componentes del backen en local
 ```sh
 docker-compose up
 ```
 
 
-To stop the backend, run:
+Detener los componentes del backend en local
 ```sh
 docker-compose down -v
 ```
 
-Build containers again
+Construir de nuevo los componentes del backend en local
 ```sh
 docker-compose up --build
 ```
 
 
-## Running Tests
+## Correr Pruebas
 
-Set the `PYTHONPATH` environment variable:
+Establecer la variable de ambiente `PYTHONPATH`:
 ```sh
 export PYTHONPATH=$PWD/seedwork_compartido:$PWD/inventario_servicio/gestor_productos:$PWD/compras_servicio/gestor_compras
 ```
 
-Run the tests:
+Correr las pruebas:
 ```sh
 python -m unittest discover -s compras_servicio/gestor_compras
 python -m unittest discover -s inventario_servicio/gestor_productos
 ```
 
-## Testing Endpoints
+## Probar los Endpoints
 
-Ping the endpoints to check if they are working:
+Realizar un ping a cada componente
 
 ### Compras
 ```sh
