@@ -23,12 +23,12 @@ jobs:
         with:
           project_id: proyecto-final-2-454403
       - name: Configure Docker to use gcloud as a credential helper
-        run: gcloud auth configure-docker
+        run: gcloud auth configure-docker --quiet
       - name: Set up GKE Credentials
         uses: google-github-actions/get-gke-credentials@v1
         with:
           cluster_name: prod-cluster-cpp-api
-          location: us-central1-f
+          location: us-central1
           project_id: proyecto-final-2-454403
       - name: Build and Push Docker Images
         working-directory: backend/scripts/manejo_imagenes
