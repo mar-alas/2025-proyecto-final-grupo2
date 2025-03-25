@@ -1,0 +1,208 @@
+openapi: 3.0.0
+info:
+  title: API de Registro de Proveedores
+  description: API para gestionar el registro de proveedores en el sistema de forma individual o masiva
+  version: 1.0.0
+servers:
+  - url: https://api.ejemplo.com/v1
+    description: Servidor de producción
+paths:
+  /proveedores:
+    post:
+      tags:
+        - Proveedores
+      summary: Registrar uno o múltiples proveedores
+      description: |
+        Crea nuevos registros de proveedores en el sistema.
+        Puede recibir un solo objeto para registro individual o un array para registro masivo.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/ProveedorInput'
+                - type: array
+                  items:
+                    $ref: '#/components/schemas/ProveedorInput'
+                  minItems: 1
+                  maxItems: 100
+                  example:
+                    - nombre: "Proveedor Uno S.A."
+                      email: "proveedor1@ejemplo.com"
+                      numero_contacto: "+541112345678"
+                      pais: "Argentina"
+                    - nombre: "Proveedor Dos S.A."
+                      email: "proveedor2@ejemplo.com"
+                      numero_contacto: "+541198765432"
+                      pais: "Chile"
+      responses:
+        '201':
+          description: Proveedor(es) registrado(s) exitosamente
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ProveedorResponse'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/ProveedorResponse'
+        '207':
+          description: Multi-Status (para registros masivos con resultados parciales)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchResponse'
+        '400':
+          description: Error en la validación de datos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '413':
+          description: Payload Too Large (cuando se excede el límite de registros masivos)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Límite excedido"
+                  message:
+                    type: string
+                    example: "El registro masivo no puede exceder 100 proveedores por solicitud"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+
+components:
+  schemas:
+    ProveedorInput:
+      type: object
+      required:
+        - nombre
+        - email
+        - numero_contacto
+        - pais
+      properties:
+        nombre:
+          type: string
+          maxLength: 100
+          example: "Proveedor Ejemplo S.A."
+          description: Nombre completo del proveedor
+        email:
+          type: string
+          format: email
+          maxLength: 100
+          example: "contacto@proveedorejemplo.com"
+          description: Correo electrónico del proveedor
+        numero_contacto:
+          type: string
+          maxLength: 20
+          example: "+541112345678"
+          description: Número de teléfono de contacto
+        pais:
+          type: string
+          maxLength: 50
+          example: "Argentina"
+          description: País donde opera el proveedor
+        caracteristicas:
+          type: string
+          maxLength: 500
+          example: "Proveedor de materiales eléctricos con 10 años en el mercado"
+          description: Descripción de las características del proveedor
+        condiciones_comerciales_tributarias:
+          type: string
+          maxLength: 1000
+          example: "Pago a 30 días, exento de IVA según artículo 123"
+          description: Términos y condiciones comerciales/tributarias
+
+    ProveedorResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 12345
+          description: ID único del proveedor
+        nombre:
+          type: string
+        email:
+          type: string
+        numero_contacto:
+          type: string
+        pais:
+          type: string
+        caracteristicas:
+          type: string
+        condiciones_comerciales_tributarias:
+          type: string
+        fecha_registro:
+          type: string
+          format: date-time
+          example: "2023-11-15T12:00:00Z"
+          description: Fecha y hora del registro
+
+    BatchResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 5
+          description: Total de proveedores en la solicitud
+        exitosos:
+          type: integer
+          example: 3
+          description: Número de registros exitosos
+        fallidos:
+          type: integer
+          example: 2
+          description: Número de registros fallidos
+        resultados:
+          type: array
+          items:
+            type: object
+            properties:
+              indice:
+                type: integer
+                example: 1
+                description: Índice del proveedor en la solicitud original
+              status:
+                type: string
+                example: "success"
+                enum: ["success", "failed"]
+                description: Resultado del registro
+              proveedor:
+                $ref: '#/components/schemas/ProveedorResponse'
+              error:
+                type: string
+                example: "El proveedor ya existe"
+                description: Mensaje de error cuando falla el registro
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Datos inválidos"
+        detalles:
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            email: "El formato del email es incorrecto"
+            nombre: "Este campo es requerido"
+
+    ConflictResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "El proveedor ya está registrado"
+        detalles:
+          type: string
+          example: "Ya existe un proveedor con el email contacto
