@@ -49,13 +49,44 @@ jobs:
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/gestor_ventas:latest
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/procesador_pedidos:latest
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/procesador_video:latest
-      - name: Connect to GKE Cluster
-        working-directory: backend/scripts/gke
-        run: |
-          chmod +x conectarse_al_cluster.sh
-          ./conectarse_al_cluster.sh
       - name: Deploy to GKE
         working-directory: backend/scripts/manejo_imagenes
         run: |
-          chmod +x desplegar_imagenes_en_gke.sh
-          ./desplegar_imagenes_en_gke.sh
+          kubectl apply -f ../../k8s/compras_servicio_db_deployment.yaml
+          kubectl apply -f ../../k8s/compras_servicio_db_service.yaml
+          kubectl apply -f ../../k8s/logistica_servicio_db_deployment.yaml
+          kubectl apply -f ../../k8s/logistica_servicio_db_service.yaml
+          kubectl apply -f ../../k8s/seguridad_servicio_db_deployment.yaml
+          kubectl apply -f ../../k8s/seguridad_servicio_db_service.yaml
+          kubectl apply -f ../../k8s/ventas_servicio_db_deployment.yaml
+          kubectl apply -f ../../k8s/ventas_servicio_db_service.yaml
+          kubectl apply -f ../../k8s/inventario_servicio_db_deployment.yaml
+          kubectl apply -f ../../k8s/inventario_servicio_db_service.yaml
+          kubectl apply -f ../../k8s/pulsar_deployment.yaml
+          kubectl apply -f ../../k8s/pulsar_service.yaml
+          kubectl apply -f ../../k8s/gestor_compras_deployment.yaml
+          kubectl apply -f ../../k8s/gestor_compras_service.yaml
+          kubectl apply -f ../../k8s/gestor_productos_deployment.yaml
+          kubectl apply -f ../../k8s/gestor_productos_service.yaml
+          kubectl apply -f ../../k8s/gestor_proveedores_deployment.yaml
+          kubectl apply -f ../../k8s/gestor_proveedores_service.yaml
+          kubectl apply -f ../../k8s/gestor_stock_deployment.yaml
+          kubectl apply -f ../../k8s/gestor_stock_service.yaml
+          kubectl apply -f ../../k8s/generador_reportes_logistica_deployment.yaml
+          kubectl apply -f ../../k8s/generador_reportes_logistica_service.yaml
+          kubectl apply -f ../../k8s/generador_reportes_ventas_deployment.yaml
+          kubectl apply -f ../../k8s/generador_reportes_ventas_service.yaml
+          kubectl apply -f ../../k8s/gestor_rutas_entrega_deployment.yaml
+          kubectl apply -f ../../k8s/gestor_rutas_entrega_service.yaml
+          kubectl apply -f ../../k8s/gestor_entregas_deployment.yaml
+          kubectl apply -f ../../k8s/gestor_entregas_service.yaml
+          kubectl apply -f ../../k8s/gestor_usuarios_deployment.yaml
+          kubectl apply -f ../../k8s/gestor_usuarios_service.yaml
+          kubectl apply -f ../../k8s/gestor_ventas_deployment.yaml
+          kubectl apply -f ../../k8s/gestor_ventas_service.yaml
+          kubectl apply -f ../../k8s/procesador_pedidos_deployment.yaml
+          kubectl apply -f ../../k8s/procesador_pedidos_service.yaml
+          kubectl apply -f ../../k8s/procesador_video_deployment.yaml
+          kubectl apply -f ../../k8s/procesador_video_service.yaml
+          kubectl apply -f ../../k8s/ingress.yaml
+          kubectl get pods
