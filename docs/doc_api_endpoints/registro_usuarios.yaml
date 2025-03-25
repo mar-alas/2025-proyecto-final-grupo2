@@ -1,0 +1,88 @@
+openapi: 3.0.3
+info:
+  title: Registrar usuarios
+  version: 1.0.0
+  description: API para el registro de usuarios en CCP
+
+paths:
+  /signup:
+    post:
+      summary: Registra un nuevo usuario
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        "201":
+          description: Usuario registrado exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignupResponse'
+        "400":
+          description: Datos inválidos en la solicitud.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "409":
+          description: El email ya está registrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    SignupRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+        - role
+        - acceptPolicy
+      properties:
+        name:
+          type: string
+          example: "John Doe"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+        password:
+          type: string
+          format: password
+          minLength: 8
+          example: "P@ssw0rd!"
+        role:
+          type: string
+          enum: [user, admin]
+          example: "user"
+        acceptPolicy:
+          type: boolean
+          example: true
+
+    SignupResponse:
+      type: object
+      properties:
+        userToken:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        message:
+          type: string
+          example: "Usuario registrado exitosamente."
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Email Ya registrado"
+        code:
+          type: integer
+          example: 409
