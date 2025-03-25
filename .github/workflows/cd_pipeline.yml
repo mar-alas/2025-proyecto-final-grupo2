@@ -14,8 +14,6 @@ jobs:
       - name: Check commit message for 'CD'
         if: "contains(github.event.head_commit.message, 'CD')"
         run: echo "Commit message contains 'CD'. Proceeding with deployment."
-      - name: Debug Secret
-        run: echo "${{ secrets.GCP_SA_KEY }}"
       - name: Authenticate with GCP
         uses: google-github-actions/auth@v1
         with:
@@ -27,16 +25,19 @@ jobs:
       - name: Configure Docker to use gcloud as a credential helper
         run: gcloud auth configure-docker
       - name: Build and Push Docker Images
+        working-directory: backend/scripts/manejo_imagenes
         run: |
-          chmod +x backend/scripts/manejo_imagenes/construir_todas_las_imagenes.sh
-          backend/scripts/manejo_imagenes/construir_todas_las_imagenes.sh
-          chmod +x backend/scripts/manejo_imagenes/subir_imagenes_a_gcp.sh
-          backend/scripts/manejo_imagenes/subir_imagenes_a_gcp.sh
+          chmod +x construir_todas_las_imagenes.sh
+          ./construir_todas_las_imagenes.sh
+          chmod +x subir_imagenes_a_gcp.sh
+          ./subir_imagenes_a_gcp.sh
       - name: Connect to GKE Cluster
+        working-directory: backend/scripts/gke
         run: |
-          chmod +x backend/scripts/gke/conectarse_al_cluster.sh
-          backend/scripts/gke/conectarse_al_cluster.sh
+          chmod +x conectarse_al_cluster.sh
+          ./conectarse_al_cluster.sh
       - name: Deploy to GKE
+        working-directory: backend/scripts/manejo_imagenes
         run: |
-          chmod +x backend/scripts/manejo_imagenes/desplegar_imagenes_en_gke.sh
-          backend/scripts/manejo_imagenes/desplegar_imagenes_en_gke.sh
+          chmod +x desplegar_imagenes_en_gke.sh
+         ./desplegar_imagenes_en_gke.sh
