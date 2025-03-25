@@ -207,4 +207,14 @@ components:
           example: "El proveedor ya está registrado"
         detalles:
           type: string
-          example: "Ya existe un proveedor con el email contacto
+          example: "Ya existe un proveedor con el email contacto@proveedorejemplo.com"
+          
+    ServerErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Error interno del servidor"
+        message:
+          type: string
+          example: "Ha ocurrido un error inesperado. Por favor, inténtelo más tarde."
