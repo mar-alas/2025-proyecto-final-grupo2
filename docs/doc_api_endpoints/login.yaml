@@ -1,0 +1,64 @@
+openapi: 3.0.3
+info:
+  title: API de Autenticación
+  version: 1.0.0
+  description: API para el inicio de sesión de usuarios de CCP
+
+paths:
+  /auth/login:
+    post:
+      summary: Inicio de sesión
+      description: Permite a un usuario autenticarse con su email y contraseña.
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "usuario@email.com"
+                password:
+                  type: string
+                  format: password
+                  example: "Secure123"
+      responses:
+        "200":
+          description: Inicio de sesión exitoso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Inicio de sesión exitoso."
+                  access_token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR..."
+        "400":
+          description: Datos de entrada inválidos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "El email o la contraseña no pueden estar vacíos."
+        "401":
+          description: Credenciales incorrectas.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Email o contraseña incorrectos."
