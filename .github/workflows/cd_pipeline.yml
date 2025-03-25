@@ -29,8 +29,8 @@ jobs:
         run: |
           chmod +x construir_todas_las_imagenes.sh
           ./construir_todas_las_imagenes.sh
-          chmod +x subir_imagenes_a_gcp.sh
-          ./subir_imagenes_a_gcp.sh
+          chmod +x subir_imagenes_a_gcp_user.sh
+          ./subir_imagenes_a_gcp_user.sh
       - name: Connect to GKE Cluster
         working-directory: backend/scripts/gke
         run: |
