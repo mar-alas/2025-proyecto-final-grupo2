@@ -4,8 +4,10 @@ info:
   description: API para gestionar el registro de proveedores en el sistema de forma individual o masiva
   version: 1.0.0
 servers:
-  - url: https://api.ejemplo.com/v1
+  - url: http://RUTA_GCP/api/v1/inventario/gestor_proveedores
     description: Servidor de producción
+  - url: http://127.0.0.1:3003/api/v1/inventario/gestor_proveedores
+    description: Servidor de desarrollo
 paths:
   /proveedores:
     post:
