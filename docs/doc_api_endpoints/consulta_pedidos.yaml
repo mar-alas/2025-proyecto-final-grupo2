@@ -23,8 +23,9 @@ paths:
           required: true
           description: ID del cliente que está consultando sus pedidos
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int64
+            example: 123456
         
       responses:
         '200':
@@ -73,9 +74,9 @@ components:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
-          example: "123e4567-e89b-12d3-a456-426614174000"
+          type: integer
+          format: int64
+          example: 123456
           description: Identificador único del pedido
         fecha:
           type: string
