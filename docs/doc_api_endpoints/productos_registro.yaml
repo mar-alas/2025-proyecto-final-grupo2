@@ -31,7 +31,7 @@ paths:
                   maxItems: 100
                   example:
                     - nombre: "Producto Uno"
-                      descripcion: "Este producto es el primero"
+                      descripcion: "Este producto es el primero."
                       tiempo_entrega: "2 días"
                       precio: 100
                       condiciones_almacenamiento: "Almacenar en lugar fresco y seco"
