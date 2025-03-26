@@ -15,27 +15,33 @@ jobs:
         if: contains(github.event.head_commit.message, 'CD')
         run: echo "El mensaje del commit contiene CD, iniciando el despliegue."
       - name: Autenticacion a GCP
+        if: contains(github.event.head_commit.message, 'CD')
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
       - name: Configurar Cloud SDK
+        if: contains(github.event.head_commit.message, 'CD')
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: proyecto-final-2-454403
       - name: Configurar Docker para usar gcloud credential helper
+        if: contains(github.event.head_commit.message, 'CD')
         run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
       - name: Configurar GKE Credentials
+        if: contains(github.event.head_commit.message, 'CD')
         uses: google-github-actions/get-gke-credentials@v1
         with:
           cluster_name: prod-cluster-cpp-api
           location: us-central1-f
           project_id: proyecto-final-2-454403
       - name: Build y Push de las imagenes de Docker
+        if: contains(github.event.head_commit.message, 'CD')
         working-directory: backend/scripts/manejo_imagenes
         run: |
           chmod +x construir_todas_las_imagenes.sh
           ./construir_todas_las_imagenes.sh
       - name: Publicar las imagenes de Docker a GCP
+        if: contains(github.event.head_commit.message, 'CD')
         run: |-
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/compras_servicio/gestor_compras:latest
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/inventario_servicio/gestor_productos:latest
@@ -50,6 +56,7 @@ jobs:
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/procesador_pedidos:latest
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/procesador_video:latest
       - name: Despliegue a GKE
+        if: contains(github.event.head_commit.message, 'CD')
         working-directory: backend/scripts/manejo_imagenes
         run: |
           kubectl apply -f ../../k8s/compras_servicio_db_deployment.yaml
