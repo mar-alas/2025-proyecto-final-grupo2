@@ -28,7 +28,7 @@ paths:
                   items:
                     $ref: '#/components/schemas/ProveedorInput'
                   minItems: 1
-                  maxItems: 100
+                  maxItems: 5000
                   example:
                     - nombre: "Proveedor Uno S.A."
                       email: "proveedor1@ejemplo.com"
@@ -69,7 +69,7 @@ paths:
                     example: "Límite excedido"
                   message:
                     type: string
-                    example: "El registro masivo no puede exceder 100 proveedores por solicitud"
+                    example: "El registro masivo no puede exceder 5000 proveedores por solicitud"
         '500':
           description: Error interno del servidor
           content:
@@ -123,10 +123,10 @@ components:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
-          example: "123e4567-e89b-12d3-a456-426614174000"
-          description: ID único del proveedor en formato UUID v4
+          type: integer
+          format: int64
+          example: 12345
+          description: ID único del proveedor
         nombre:
           type: string
         email:
