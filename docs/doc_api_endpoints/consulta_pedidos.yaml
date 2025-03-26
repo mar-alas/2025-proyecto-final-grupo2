@@ -1,0 +1,122 @@
+openapi: 3.0.0
+info:
+  title: API de consulta de estados de pedidos
+  description: |
+    API para que clientes de CCP puedan consultar el estado actual de sus pedidos.
+  version: 1.0.0
+servers:
+  - url: http://RUTA_GCP/api/v1/ventas/procesador_pedidos
+    description: Servidor de producción
+  - url: http://127.0.0.1:3009/api/v1/ventas/procesador_pedidos
+    description: Servidor de desarrollo
+paths:
+  /pedidos:
+    get:
+      tags:
+        - pedidos
+      summary: Consultar pedidos
+      description: |
+        Obtiene la lista de pedidos del cliente con sus estados actuales.
+      parameters:
+        - name: cliente_id
+          in: query
+          required: true
+          description: ID del cliente que está consultando sus pedidos
+          schema:
+            type: string
+            format: uuid
+        
+      responses:
+        '200':
+          description: Lista de pedidos obtenida exitosamente (puede estar vacía si el cliente no tiene pedidos)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PedidosResponse'
+        '404':
+          description: Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClienteNoEncontradoResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+  
+components:
+  schemas:
+    PedidosResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 42
+          description: Número total de pedidos
+        pages:
+          type: integer
+          example: 5
+          description: Número total de páginas disponibles
+        current_page:
+          type: integer
+          example: 1
+          description: Página actual que se está mostrando
+        pedidos:
+          type: array
+          items:
+            $ref: '#/components/schemas/PedidoResumen'
+          description: Lista de pedidos
+    
+    PedidoResumen:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+          description: Identificador único del pedido
+        fecha:
+          type: string
+          format: date
+          example: "2025-05-31"
+          description: Fecha programada de entrega del pedido
+        cantidad_productos:
+          type: integer
+          example: 10
+          description: Cantidad total de productos en el pedido
+        estado:
+          type: string
+          enum: [por_pagar, procesando, preparando, en_ruta, entregado, cancelado]
+          example: "en_ruta"
+          description: Estado actual del pedido
+
+    ClienteNoEncontradoResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Cliente no encontrado"
+          description: Descripción general del error
+        mensaje:
+          type: string
+          example: "No se encontró el cliente con el ID especificado"
+          description: Mensaje informativo para el usuario
+    
+    ServerErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Error interno del servidor"
+          description: Descripción general del error
+        mensaje:
+          type: string
+          example: "Ha ocurrido un error procesando su solicitud. Por favor, inténtelo más tarde."
+          description: Mensaje para el usuario
+        referencia:
+          type: string
+          format: uuid
+          example: "abcde123-f456-789g-hij0-klmno123pqrs"
+          description: Identificador de referencia para seguimiento del error
