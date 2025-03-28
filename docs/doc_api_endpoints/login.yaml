@@ -39,7 +39,15 @@ paths:
                   message:
                     type: string
                     example: "Inicio de sesión exitoso."
-                  access_token:
+                  role:
+                    type: string
+                    enum: [user, admin, cliente]
+                    example: "user"
+                  userId:
+                    type: integer
+                    format: int64
+                    example: 123456
+                  accessToken:
                     type: string
                     example: "eyJhbGciOiJIUzI1NiIsInR..."
         "400":
