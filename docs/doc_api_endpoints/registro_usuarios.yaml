@@ -79,9 +79,9 @@ components:
       type: object
       properties:
         userId:
-          type: string
-          format: uuid
-          example: "550e8400-e29b-41d4-a716-446655440000"
+          type: integer
+          format: int64
+          example: 123456
         message:
           type: string
           example: "Usuario registrado exitosamente."
