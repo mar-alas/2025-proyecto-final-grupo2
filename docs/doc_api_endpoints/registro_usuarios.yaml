@@ -44,6 +44,9 @@ components:
         - email
         - password
         - role
+        - country
+        - city
+        - address
         - acceptPolicy
       properties:
         name:
@@ -60,16 +63,22 @@ components:
           example: "P@ssw0rd!"
         role:
           type: string
-          enum: [user, admin]
+          enum: [user, admin, cliente]
           example: "user"
-        acceptPolicy:
-          type: boolean
-          example: true
+        country:
+          type: string
+          example: "Colombia"
+        city:
+          type: string
+          example: "Bogota"
+        address:
+          type: string
+          example: "CL 1 # 2 - 3"
 
     SignupResponse:
       type: object
       properties:
-        userToken:
+        userId:
           type: string
           format: uuid
           example: "550e8400-e29b-41d4-a716-446655440000"
