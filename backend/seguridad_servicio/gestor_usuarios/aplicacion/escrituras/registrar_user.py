@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 import logging
+import random
 from dominio.reglas_negocio import validar_campos_requeridos, validar_formato_email, validar_tamanio_name
 
 registrar_user_bp = Blueprint('registrar_user_bp', __name__)
@@ -27,6 +28,6 @@ def registrar_user():
     # TODO: Mapear a entity y registrar en BD.
 
     return jsonify({
-        "userId": 1,
+        "userId": random.randint(1, 5000),
         "message": "Usuario registrado exitosamente."
     }), 201
