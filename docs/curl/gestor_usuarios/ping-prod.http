@@ -1,0 +1,2 @@
+curl --request GET \
+  --url http://34.54.242.49/api/v1/seguridad/gestor_usuarios/ping
