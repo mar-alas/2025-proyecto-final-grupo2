@@ -1,0 +1,7 @@
+curl --request POST \
+  --url http://localhost:3011/api/v1/seguridad/gestor_usuarios/r/auth/login \
+  --header 'content-type: application/json' \
+  --data '{
+  "email": "pepe@gmail.com",
+  "password": "password"
+}'
