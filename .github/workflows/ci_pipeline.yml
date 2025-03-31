@@ -108,7 +108,7 @@ jobs:
         env:
           PYTHONPATH: ${{ env.PYTHONPATH }}
           UTEST: True
-        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s inventario_servicio/gestor_proveedores/tests
+        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s inventario_servicio/gestor_proveedores
 
   test_generador_reportes_logistica:
     runs-on: ubuntu-latest
