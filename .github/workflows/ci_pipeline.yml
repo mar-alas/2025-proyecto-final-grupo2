@@ -100,7 +100,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Set PYTHONPATH
         working-directory: ./backend
-        run: echo "PYTHONPATH=$PWD/seedwork_compartido:$PWD/inventario_servicio/gestor_proveedores" >> $GITHUB_ENV
+        run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
       - name: Print PYTHONPATH
         run: echo $PYTHONPATH
       - name: Run unit tests
