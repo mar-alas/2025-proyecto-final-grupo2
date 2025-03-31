@@ -109,6 +109,9 @@ jobs:
           PYTHONPATH: ${{ env.PYTHONPATH }}
           UTEST: "True"
         run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s inventario_servicio/gestor_proveedores
+      - name: Run coverage report
+        working-directory: ./backend
+        run: coverage report --fail-under=70
 
   test_generador_reportes_logistica:
     runs-on: ubuntu-latest
