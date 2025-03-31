@@ -5,12 +5,13 @@ if [ $? -ne 0 ]; then
   echo "❌ Error: This script must be run inside a Git repository."
   exit 1
 fi
+echo "📦 Repo root es: $REPO_ROOT"
 
 # Configuración
 PLATFORM="linux/amd64"
 REPO_BASE="us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker"
 DOCKERFILES_DIR="$REPO_ROOT/backend/Dockerfiles"
-echo "�� Usando Dockerfiles desde: $DOCKERFILES_DIR"
+echo "📦 Usando Dockerfiles desde: $DOCKERFILES_DIR"
 
 # Definir los servicios y sus respectivos Dockerfiles
 declare -A IMAGES
