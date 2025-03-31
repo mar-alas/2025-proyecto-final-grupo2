@@ -2,14 +2,14 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY ../seguridad_servicio/gestor_usuarios/requirements.txt .
+COPY backend/seguridad_servicio/gestor_usuarios/requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ../seguridad_servicio/gestor_usuarios /app/
-COPY seedwork_compartido /app/seedwork_compartido
+COPY backend/seguridad_servicio/gestor_usuarios /app/
+COPY backend/seedwork_compartido /app/seedwork_compartido
 
-ENV PYTHONPATH="/app/seedwork_compartido:${PYTHONPATH:-}"
+ENV PYTHONPATH="/app/seedwork_compartido:${PYTHONPATH}"
 
 # Expose port 3011
 EXPOSE 3011

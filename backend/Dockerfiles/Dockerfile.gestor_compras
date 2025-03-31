@@ -2,12 +2,12 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY ../compras_servicio/gestor_compras/requirements.txt .
+COPY backend/compras_servicio/gestor_compras/requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ../compras_servicio/gestor_compras /app/
-COPY seedwork_compartido /app/seedwork_compartido
+COPY backend/compras_servicio/gestor_compras /app/
+COPY backend/seedwork_compartido /app/seedwork_compartido
 
 ENV PYTHONPATH="/app/seedwork_compartido:${PYTHONPATH:-}"
 
