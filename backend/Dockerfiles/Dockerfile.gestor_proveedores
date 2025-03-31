@@ -9,7 +9,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY backend/inventario_servicio/gestor_proveedores /app/
 COPY backend/seedwork_compartido /app/seedwork_compartido
 
-ENV PYTHONPATH="/app/seedwork_compartido:${PYTHONPATH:-}"
+ENV PYTHONPATH="/app/seedwork_compartido:${PYTHONPATH}"
 
 EXPOSE 3003
 
