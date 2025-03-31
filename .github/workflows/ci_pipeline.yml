@@ -107,7 +107,7 @@ jobs:
         working-directory: ./backend
         env:
           PYTHONPATH: ${{ env.PYTHONPATH }}
-          UTEST: True
+          UTEST: "True"
         run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s inventario_servicio/gestor_proveedores
 
   test_generador_reportes_logistica:
