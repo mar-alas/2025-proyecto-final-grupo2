@@ -1,9 +1,16 @@
 #!/bin/bash
 
+REPO_ROOT=$(git rev-parse --show-toplevel)
+if [ $? -ne 0 ]; then
+  echo "❌ Error: This script must be run inside a Git repository."
+  exit 1
+fi
+
 # Configuración
 PLATFORM="linux/amd64"
 REPO_BASE="us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker"
-DOCKERFILES_DIR="../../Dockerfiles"
+DOCKERFILES_DIR="$REPO_ROOT/backend/Dockerfiles"
+echo "�� Usando Dockerfiles desde: $DOCKERFILES_DIR"
 
 # Definir los servicios y sus respectivos Dockerfiles
 declare -A IMAGES
@@ -33,7 +40,7 @@ build_image() {
     docker buildx build --platform "$PLATFORM" \
       -t "$REPO_BASE/$service:latest" \
       -f "$DOCKERFILES_DIR/$dockerfile" \
-      --build-context seedwork_compartido=../../../backend/seedwork_compartido \
+      --build-context seedwork_compartido="$REPO_ROOT/backend/seedwork_compartido" \
       ../../
   )
 
@@ -41,6 +48,7 @@ build_image() {
     echo "❌ Error construyendo la imagen para $service"
     echo "🔍 Detalles del error:"
     echo "$ERROR_LOG"
+    echo "🛠️ Comando ejecutado: docker buildx build --platform \"$PLATFORM\" -t \"$REPO_BASE/$service:latest\" -f \"$DOCKERFILES_DIR/$dockerfile\" --build-context seedwork_compartido=../../../backend/seedwork_compartido ../../"
     exit 1
   fi
 
@@ -64,3 +72,4 @@ build_image "ventas_servicio/procesador_video" "Dockerfile.procesador_video"
 
 
 echo "🎉 ¡Todas las imágenes han sido construidas!"
+

@@ -2,14 +2,14 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY ../inventario_servicio/gestor_proveedores/requirements.txt .
+COPY backend/inventario_servicio/gestor_proveedores/requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ../inventario_servicio/gestor_proveedores /app/
-COPY seedwork_compartido /app/seedwork_compartido
+COPY backend/inventario_servicio/gestor_proveedores /app/
+COPY backend/seedwork_compartido /app/seedwork_compartido
 
-ENV PYTHONPATH="/app/seedwork_compartido:${PYTHONPATH:-}"
+ENV PYTHONPATH="/app/seedwork_compartido:${PYTHONPATH}"
 
 # Expose port 3003
 EXPOSE 3003
