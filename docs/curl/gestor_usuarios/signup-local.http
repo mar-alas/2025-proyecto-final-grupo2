@@ -1,0 +1,13 @@
+
+curl --request POST \
+  --url http://localhost:3011/api/v1/seguridad/gestor_usuarios/w/signup \
+  --header 'content-type: application/json' \
+  --data '{
+  "name": "Pepe",
+  "email": "pepe@gmail.com",
+  "password": "password",
+  "role": "cliente",
+  "country": "Colombia",
+  "city": "Bogota D.C.",
+  "address": "CL 1 # 2 - 3"
+}'
