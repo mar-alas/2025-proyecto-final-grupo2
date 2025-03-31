@@ -73,4 +73,3 @@ build_image "ventas_servicio/procesador_video" "Dockerfile.procesador_video"
 
 
 echo "🎉 ¡Todas las imágenes han sido construidas!"
-
