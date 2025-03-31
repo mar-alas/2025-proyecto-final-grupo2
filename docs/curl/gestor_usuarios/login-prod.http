@@ -1,0 +1,7 @@
+curl --request POST \
+  --url http://34.54.242.49/api/v1/seguridad/gestor_usuarios/r/auth/login \
+  --header 'content-type: application/json' \
+  --data '{
+  "email": "pepe@gmail.com",
+  "password": "123abc"
+}'
