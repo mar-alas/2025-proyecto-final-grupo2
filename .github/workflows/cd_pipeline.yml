@@ -36,10 +36,10 @@ jobs:
           project_id: proyecto-final-2-454403
       - name: Build y Push de las imagenes de Docker
         if: contains(github.event.head_commit.message, 'CD')
-        working-directory: backend/scripts/manejo_imagenes
+        working-directory: backend
         run: |
-          chmod +x construir_todas_las_imagenes.sh
-          ./construir_todas_las_imagenes.sh
+          chmod +x /scripts/manejo_imagenes/construir_todas_las_imagenes.sh
+          ./scripts/manejo_imagenes/construir_todas_las_imagenes.sh
       - name: Publicar las imagenes de Docker a GCP
         if: contains(github.event.head_commit.message, 'CD')
         run: |-
