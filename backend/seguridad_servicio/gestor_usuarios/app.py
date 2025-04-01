@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from seedwork_compartido.aplicacion.lectura.ping import ping_bp
 from aplicacion.lecturas.home import home_bp
 from aplicacion.lecturas.private_home import private_home_bp
@@ -12,6 +13,7 @@ URL_HOME = "/"
 URL_PRIVATE_HOME = URL_PREFIX+'/r/private/home'
 
 app = Flask(__name__)
+CORS(app)
 app.register_blueprint(ping_bp, url_prefix=URL_PREFIX)
 app.register_blueprint(home_bp, url_prefix=URL_HOME)
 app.register_blueprint(registrar_user_bp, url_prefix=URL_SIGNUP)
