@@ -42,7 +42,7 @@ build_image() {
       -t "$REPO_BASE/$service:latest" \
       -f "$DOCKERFILES_DIR/$dockerfile" \
       --build-context seedwork_compartido="$REPO_ROOT/backend/seedwork_compartido" \
-      ../../
+      "$REPO_ROOT"
   )
 
   if [ $? -ne 0 ]; then
