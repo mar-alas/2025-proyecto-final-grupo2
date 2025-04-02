@@ -5,20 +5,20 @@ metadata:
     kompose.cmd: kompose convert -f ../docker-compose.yml
     kompose.version: 1.35.0 (HEAD)
   labels:
-    io.kompose.service: gestor-proveedores
-  name: gestor-proveedores
+    io.kompose.service: gestor-proveedores-worker
+  name: gestor-proveedores-worker
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: gestor-proveedores
+      io.kompose.service: gestor-proveedores-worker
   template:
     metadata:
       annotations:
         kompose.cmd: kompose convert -f ../docker-compose.yml
         kompose.version: 1.35.0 (HEAD)
       labels:
-        io.kompose.service: gestor-proveedores
+        io.kompose.service: gestor-proveedores-worker
     spec:
       containers:
         - env:
@@ -34,9 +34,13 @@ spec:
               value: postgres
             - name: PULSAR_HOST
               value: pulsar
-          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/inventario_servicio/gestor_proveedores:latest
-          name: gestor-proveedores
-          ports:
-            - containerPort: 3003
-              protocol: TCP
+          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/inventario_servicio/worker_gestor_proveedores:latest
+          livenessProbe:
+            exec:
+              command:
+                - grep 'python worker.py' /proc/*/cmdline || exit 1
+            failureThreshold: 3
+            periodSeconds: 10
+            timeoutSeconds: 5
+          name: gestor-proveedores-worker
       restartPolicy: Always

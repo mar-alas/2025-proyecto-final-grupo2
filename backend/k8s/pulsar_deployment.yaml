@@ -1,34 +1,51 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -f ../docker-compose.yml
-    kompose.version: 1.35.0 (HEAD)
-  labels:
-    io.kompose.service: pulsar
   name: pulsar
+  labels:
+    app: pulsar
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: pulsar
+      app: pulsar
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert -f ../docker-compose.yml
-        kompose.version: 1.35.0 (HEAD)
       labels:
-        io.kompose.service: pulsar
+        app: pulsar
     spec:
       containers:
-        - args:
-            - bin/pulsar
-            - standalone
-          image: apachepulsar/pulsar:latest
-          name: pulsar
+        - name: broker
+          image: apachepulsar/pulsar:2.10.2
+          command:
+            - "bin/pulsar"
+            - "standalone"
+            - "--no-functions-worker"
+            - "--no-stream-storage"
+            - "--bookkeeper-dir"
+            - "/tmp/bookkeeper"
+          env:
+            - name: PULSAR_EXTRA_OPTS
+              value: "-Dc.defaultRetentionTimeInMinutes=5 -Dc.defaultRetentionSizeInMB=100 -DbrokerDeleteInactiveTopicsEnabled=true -DbrokerDeleteInactiveTopicsMaxInactiveDurationSeconds=300"
           ports:
             - containerPort: 6650
-              protocol: TCP
+              name: broker
             - containerPort: 8080
-              protocol: TCP
-      restartPolicy: Always
+              name: admin
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "500m"
+            limits:
+              memory: "3Gi" 
+              cpu: "750m"
+          readinessProbe:
+            tcpSocket:
+              port: 6650
+            initialDelaySeconds: 120
+            periodSeconds: 60
+          livenessProbe:
+            tcpSocket:
+              port: 6650
+            initialDelaySeconds: 180
+            periodSeconds: 60
