@@ -23,7 +23,7 @@ spec:
       containers:
         - env:
             - name: POSTGRES_DB
-              value: inventario_servicio_db
+              value: inventario-servicio-db
             - name: POSTGRES_PASSWORD
               value: postgres
             - name: POSTGRES_USER
