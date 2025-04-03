@@ -314,8 +314,8 @@ services:
     depends_on:
       seguridad_servicio_db:
         condition: service_healthy
-      pulsar:
-        condition: service_healthy
+      #pulsar:
+      #  condition: service_healthy
     environment:
         - DB_USER=postgres
         - DB_PASSWORD=postgres
