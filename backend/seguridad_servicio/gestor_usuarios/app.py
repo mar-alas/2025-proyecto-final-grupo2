@@ -17,6 +17,8 @@ app = Flask(__name__)
 
 app.config.from_object(Config)
 
+CORS(app)
+
 app.register_blueprint(ping_bp, url_prefix=URL_PREFIX)
 app.register_blueprint(home_bp, url_prefix=URL_HOME)
 app.register_blueprint(registrar_user_bp, url_prefix=URL_SIGNUP)
