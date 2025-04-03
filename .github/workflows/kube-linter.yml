@@ -1,0 +1,23 @@
+name: Linter de Kubernetes
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  kube-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar kube-linter
+        run: |
+          curl -sSL https://github.com/stackrox/kube-linter/releases/latest/download/kube-linter-linux.tar.gz | tar -xz
+          sudo mv kube-linter /usr/local/bin/
+
+      - name: Validar manifiestos con kube-linter
+        continue-on-error: true
+        run: kube-linter lint k8s/
