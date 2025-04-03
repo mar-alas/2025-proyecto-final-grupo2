@@ -9,8 +9,8 @@ metadata:
   name: seguridad-servicio-db
 spec:
   ports:
-    - name: "5436"
-      port: 5436
+    - name: "5432-puerto-posgresql"
+      port: 5432
       targetPort: 5432
   selector:
     io.kompose.service: seguridad-servicio-db

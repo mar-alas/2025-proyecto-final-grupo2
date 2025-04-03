@@ -23,7 +23,7 @@ spec:
       containers:
         - env:
             - name: DB_HOST
-              value: seguridad_servicio_db
+              value: seguridad-servicio-db.default.svc.cluster.local
             - name: DB_NAME
               value: seguridad_servicio_db
             - name: DB_PASSWORD
