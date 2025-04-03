@@ -1,4 +1,6 @@
 from flask import Blueprint, jsonify
+from infraestructura.database import db
+from sqlalchemy.sql import text
 
 home_bp = Blueprint('home', __name__)
 

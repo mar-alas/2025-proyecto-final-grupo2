@@ -31,7 +31,7 @@ services:
         - DB_PASSWORD=postgres
         - DB_PORT=5432
         - DB_NAME=compras_servicio_db
-        - DB_HOST=compras_servicio_db
+        - DB_HOSTNAME=compras_servicio_db
     networks:
       - compras_servicio_net
 
@@ -51,7 +51,7 @@ services:
     networks:
       - compras_servicio_net
   
-#________________________________INVENTARIO SERVICIO ___________________________
+# ________________________________INVENTARIO SERVICIO ___________________________
   gestor_productos:
     build:
       context: ../
@@ -68,7 +68,7 @@ services:
         - DB_PASSWORD=postgres
         - DB_PORT=5432
         - DB_NAME=inventario_servicio_db
-        - DB_HOST=inventario_servicio_db
+        - DB_HOSTNAME=inventario_servicio_db
     networks:
       - inventario_servicio_net
     
@@ -88,7 +88,7 @@ services:
         - DB_PASSWORD=postgres
         - DB_PORT=5432
         - DB_NAME=inventario_servicio_db
-        - DB_HOST=inventario_servicio_db
+        - DB_HOSTNAME=inventario_servicio_db
     networks:
       - inventario_servicio_net
 
@@ -99,7 +99,29 @@ services:
     ports:
       - "3003:3003"
     depends_on:
-      compras_servicio_db:
+      inventario_servicio_db:
+        condition: service_healthy
+      pulsar:
+        condition: service_healthy
+      gestor_proveedores_worker:
+        condition: service_healthy
+    environment:
+        - DB_USER=postgres
+        - DB_PASSWORD=postgres
+        - DB_PORT=5432
+        - DB_NAME=inventario_servicio_db
+        - DB_HOSTNAME=inventario_servicio_db
+        - PULSAR_HOST=pulsar
+    networks:
+      - inventario_servicio_net
+      - pulsar_net
+
+  gestor_proveedores_worker:
+    build:
+      context: ../
+      dockerfile: backend/Dockerfiles/Dockerfile.worker_gestor_proveedores
+    depends_on:
+      inventario_servicio_db:
         condition: service_healthy
       pulsar:
         condition: service_healthy
@@ -107,10 +129,17 @@ services:
         - DB_USER=postgres
         - DB_PASSWORD=postgres
         - DB_PORT=5432
-        - DB_NAME=compras_servicio_db
-        - DB_HOST=compras_servicio_db
+        - DB_NAME=inventario_servicio_db
+        - DB_HOSTNAME=inventario_servicio_db
+        - PULSAR_HOST=pulsar
+    healthcheck:
+      test: ["CMD-SHELL", "grep 'python worker.py' /proc/*/cmdline || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     networks:
       - inventario_servicio_net
+      - pulsar_net
 
   inventario_servicio_db:
     image: postgres
@@ -145,7 +174,7 @@ services:
         - DB_PASSWORD=postgres
         - DB_PORT=5432
         - DB_NAME=logistica_servicio_db
-        - DB_HOST=logistica_servicio_db
+        - DB_HOSTNAME=logistica_servicio_db
     networks:
       - logistica_servicio_net
     
@@ -165,7 +194,7 @@ services:
         - DB_PASSWORD=postgres
         - DB_PORT=5432
         - DB_NAME=logistica_servicio_db
-        - DB_HOST=logistica_servicio_db
+        - DB_HOSTNAME=logistica_servicio_db
     networks:
       - logistica_servicio_net
   
@@ -185,7 +214,7 @@ services:
         - DB_PASSWORD=postgres
         - DB_PORT=5432
         - DB_NAME=logistica_servicio_db
-        - DB_HOST=logistica_servicio_db
+        - DB_HOSTNAME=logistica_servicio_db
     networks:
       - logistica_servicio_net
 
@@ -223,7 +252,7 @@ services:
         - DB_PASSWORD=postgres
         - DB_PORT=5432
         - DB_NAME=ventas_servicio_db
-        - DB_HOST=ventas_servicio_db
+        - DB_HOSTNAME=ventas_servicio_db
     networks:
       - ventas_servicio_net
   
@@ -243,7 +272,7 @@ services:
         - DB_PASSWORD=postgres
         - DB_PORT=5432
         - DB_NAME=ventas_servicio_db
-        - DB_HOST=ventas_servicio_db
+        - DB_HOSTNAME=ventas_servicio_db
     networks:
       - ventas_servicio_net
   
@@ -263,7 +292,7 @@ services:
         - DB_PASSWORD=postgres
         - DB_PORT=5432
         - DB_NAME=ventas_servicio_db
-        - DB_HOST=ventas_servicio_db
+        - DB_HOSTNAME=ventas_servicio_db
     networks:
       - ventas_servicio_net
   
@@ -283,7 +312,7 @@ services:
         - DB_PASSWORD=postgres
         - DB_PORT=5432
         - DB_NAME=ventas_servicio_db
-        - DB_HOST=ventas_servicio_db
+        - DB_HOSTNAME=ventas_servicio_db
     networks:
       - ventas_servicio_net
   
@@ -321,7 +350,7 @@ services:
         - DB_PASSWORD=postgres
         - DB_PORT=5432
         - DB_NAME=seguridad_servicio_db
-        - DB_HOST=seguridad_servicio_db
+        - DB_HOSTNAME=seguridad_servicio_db
     networks:
       - seguridad_servicio_net
 
