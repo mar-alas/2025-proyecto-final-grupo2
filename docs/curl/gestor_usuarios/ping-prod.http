@@ -1,2 +1,3 @@
+@baseUrl = http://34.8.66.38
 curl --request GET \
-  --url http://34.54.242.49/api/v1/seguridad/gestor_usuarios/ping
+  --url {{baseUrl}}/api/v1/seguridad/gestor_usuarios/ping

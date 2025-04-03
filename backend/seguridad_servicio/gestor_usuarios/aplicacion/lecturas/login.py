@@ -1,7 +1,16 @@
 from flask import Blueprint, jsonify, request
 import logging
 import random
-from dominio.reglas_negocio_login import validar_data_presente, validar_campos_requeridos, validar_formato_email, validar_tamanio_email, validar_tamanio_password
+from werkzeug.security import check_password_hash
+from infraestructura.database import db
+from dominio.user import User
+from dominio.reglas_negocio_login import (
+    validar_data_presente, 
+    validar_campos_requeridos, 
+    validar_formato_email, 
+    validar_tamanio_email, 
+    validar_tamanio_password
+)
 from seedwork_compartido.dominio.seguridad.access_token_manager import generar_token
 
 login_user_bp = Blueprint('login_user_bp', __name__)
@@ -34,20 +43,26 @@ def login_user():
     validation_result = validar_tamanio_password(password)
     if validation_result:
         return jsonify({"message": validation_result}), 400
+    
 
-    # TODO: Validar contra BD si existe usuario y traer los datos.
-    roles = ['cliente', 'vendedor', 'proveedor', 'director-ventas', 'encargado-logistica', 'director-compras']
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"message": "Usuario no encontrado."}), 404
 
-    role = random.choice(roles)
-    userId =  random.randint(1, 5000)
+    if not check_password_hash(user.password, password):
+        return jsonify({"message": "Contrasena incorrecta."}), 400
+
     payload = {
-        'userId': userId,
-        'role': 'admin'
+        'userId': user.id,
+        'role': user.role if user.role else 'cliente'
     }
 
+    access_token = generar_token(payload)
+
     return jsonify({
-        "message": "Inicio de sesión exitoso.",
-        "role": role,
-        "userId": userId,
-        "accessToken": generar_token(payload)
+        "message": "Inicio de sesion exitoso.",
+        "role": user.role if user.role else 'cliente',
+        "userId": user.id,
+        "accessToken": access_token
     }), 200
+
