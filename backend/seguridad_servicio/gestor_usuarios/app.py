@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from seedwork_compartido.aplicacion.lectura.ping import ping_bp
 from aplicacion.lecturas.home import home_bp
 from aplicacion.lecturas.private_home import private_home_bp
