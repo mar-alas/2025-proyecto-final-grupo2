@@ -302,21 +302,25 @@ jobs:
         python-version: [3.10]
     steps:
       - uses: actions/checkout@v2
-      - name: Install pipenv
-        working-directory: ./backend/seguridad_servicio/gestor_usuarios
-        run: pip install pipenv
-      - name: Install dependencies
-        working-directory: ./backend/seguridad_servicio/gestor_usuarios
-        run: pip install -r requirements.txt
-      - name: Set PYTHONPATH
-        run: echo "PYTHONPATH=$PWD/backend/seedwork_compartido:$PWD/backend/seguridad_servicio/gestor_usuarios" >> $GITHUB_ENV
-      - name: Print PYTHONPATH
-        run: echo $PYTHONPATH
-      - name: Run unit tests
-        working-directory: ./backend
-        env:
-          PYTHONPATH: ${{ env.PYTHONPATH }}
-        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s seguridad_servicio/gestor_usuarios/tests
-      - name: Run coverage report
-        working-directory: ./backend
-        run: coverage report --fail-under=70
+
+      - name: Create virtual environment
+        working-directory: ./backend/seguridad_servicio
+        run: python3 -m venv venv
+
+      - name: Activate virtual environment and install dependencies
+        working-directory: ./backend/seguridad_servicio
+        run: |
+          source venv/bin/activate
+          pip install -r requirements-test-gestor-usuarios.txt
+
+      - name: Run unit tests with coverage
+        working-directory: ./backend/seguridad_servicio
+        run: |
+          source venv/bin/activate
+          coverage run --source=gestor_usuarios -m pytest
+          coverage report -m
+          coverage_percentage=$(coverage report | grep TOTAL | awk '{print $4}' | sed 's/%//')
+          if (( $(echo "$coverage_percentage < 70" | bc -l) )); then
+            echo "ERROR: La cobertura de pruebas es menor al 70% ($coverage_percentage%)"
+            exit 1
+          fi

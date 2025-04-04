@@ -1,13 +1,10 @@
 from flask import Blueprint, jsonify
-from infraestructura.database import db
-from sqlalchemy.sql import text
 
 home_bp = Blueprint('home', __name__)
 
 @home_bp.route('/', methods=['GET'])
 def home():
     try:
-        db.session.execute(text("SELECT 1"))
         return jsonify({"status": "success"}), 200
     except Exception as e:
-        return jsonify({"status": "FAILED", "error": str(e)}), 500
+        return jsonify({"status": "FAILED", "error": "exception"}), 500
