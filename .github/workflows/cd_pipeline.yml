@@ -50,7 +50,6 @@ jobs:
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/logistica_servicio/generador_reportes:latest
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/logistica_servicio/generador_rutas_entrega:latest
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/logistica_servicio/gestor_entregas:latest
-          docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/seguridad_servicio/gestor_usuarios:latest
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/generador_reportes:latest
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/gestor_ventas:latest
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/procesador_pedidos:latest
@@ -87,8 +86,6 @@ jobs:
           kubectl apply -f ../../k8s/gestor_rutas_entrega_service.yaml
           kubectl apply -f ../../k8s/gestor_entregas_deployment.yaml
           kubectl apply -f ../../k8s/gestor_entregas_service.yaml
-          kubectl apply -f ../../k8s/gestor_usuarios_deployment.yaml
-          kubectl apply -f ../../k8s/gestor_usuarios_service.yaml
           kubectl apply -f ../../k8s/gestor_ventas_deployment.yaml
           kubectl apply -f ../../k8s/gestor_ventas_service.yaml
           kubectl apply -f ../../k8s/procesador_pedidos_deployment.yaml
