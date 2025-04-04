@@ -1,11 +1,11 @@
 from flask import Flask
 from flask_cors import CORS
-from seedwork_compartido.aplicacion.lectura.ping import ping_bp
-from aplicacion.lecturas.home import home_bp
-from aplicacion.lecturas.login import login_user_bp
-from aplicacion.escrituras.registrar_user import registrar_user_bp
-from infraestructura.config import Config
-from infraestructura.database import init_db
+from gestor_usuarios.aplicacion.lecturas.ping import ping_bp
+from gestor_usuarios.aplicacion.lecturas.home import home_bp
+from gestor_usuarios.aplicacion.lecturas.login import login_user_bp
+from gestor_usuarios.aplicacion.escrituras.registrar_user import registrar_user_bp
+from gestor_usuarios.infraestructura.config import Config
+from gestor_usuarios.infraestructura.database import init_db
 
 URL_PREFIX = '/api/v1/seguridad/gestor_usuarios'
 URL_SIGNUP = URL_PREFIX+'/w/signup'

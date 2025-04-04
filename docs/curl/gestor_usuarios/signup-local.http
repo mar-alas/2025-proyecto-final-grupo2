@@ -3,8 +3,8 @@ curl --request POST \
   --url http://localhost/api/v1/seguridad/gestor_usuarios/w/signup \
   --header 'content-type: application/json' \
   --data '{
-  "name": "Pepe4",ß
-  "email": "pepe4@gmail.com",
+  "name": "Pepe",
+  "email": "pepe@gmail.com",
   "password": "password",
   "role": "director-compras"
 }'

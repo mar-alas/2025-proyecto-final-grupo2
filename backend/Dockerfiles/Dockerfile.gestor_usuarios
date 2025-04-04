@@ -6,13 +6,13 @@ COPY backend/seguridad_servicio/gestor_usuarios/requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY backend/seguridad_servicio/gestor_usuarios /app/
-COPY backend/seedwork_compartido /app/seedwork_compartido
+#COPY backend/seguridad_servicio/gestor_usuarios /app/
+COPY backend/seguridad_servicio/gestor_usuarios /app/gestor_usuarios
 
-ENV PYTHONPATH="/app/seedwork_compartido:${PYTHONPATH}"
+ENV PYTHONPATH="/app"
 
 # Expose port 3011
 EXPOSE 3011
 
 # Define the start command
-CMD ["python", "app.py"]
+CMD ["python", "gestor_usuarios/app.py"]

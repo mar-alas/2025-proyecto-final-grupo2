@@ -1,15 +1,18 @@
 import pytest
-from unittest.mock import MagicMock
+from flask import Flask
+from gestor_usuarios.aplicacion.lecturas.ping import ping_bp
 
-def ping(api_client):
-    return api_client.get("/ping")
+@pytest.fixture
+def app():
+    app = Flask(__name__)
+    app.register_blueprint(ping_bp, url_prefix='/api/v1/seguridad/gestor_usuarios')
+    return app
 
+@pytest.fixture
+def client(app):
+    return app.test_client()
 
-def test_ping():
-    mock_api_client = MagicMock()
-    mock_api_client.get.return_value = {"message": "Success"}
-
-    response = ping(mock_api_client)
-
-    assert response == {"message": "Success"}
-    mock_api_client.get.assert_called_once_with("/ping")
+def test_ping_endpoint(client):
+    response = client.get('/api/v1/seguridad/gestor_usuarios/ping')
+    assert response.status_code == 200
+    assert response.json == {"message": "pong"}

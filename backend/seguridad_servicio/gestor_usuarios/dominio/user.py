@@ -1,10 +1,10 @@
 import uuid
-from infraestructura.database import db
+from gestor_usuarios.infraestructura.database import db
 
 class User(db.Model):
     __tablename__ = "users"
 
-    uuid = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    uuid = db.Column(db.String(36), primary_key=False, default=lambda: str(uuid.uuid4()))
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)

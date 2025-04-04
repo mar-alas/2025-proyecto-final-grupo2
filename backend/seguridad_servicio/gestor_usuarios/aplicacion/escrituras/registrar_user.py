@@ -1,15 +1,17 @@
 from flask import Blueprint, jsonify, request
 import logging
-from dominio.reglas_negocio import ( 
+from werkzeug.security import generate_password_hash
+from gestor_usuarios.dominio.reglas_negocio import ( 
     role_esta_presente,
     country_esta_presente, 
     city_esta_presente, 
     address_esta_presente
 )
-from dominio.user_mapper import UserDTO
-from dominio.reglas_negocio import validar_datos_usuario
-from dominio.user_repository import UserRepository
-from infraestructura.database import db
+from gestor_usuarios.dominio.user_mapper import UserDTO
+from gestor_usuarios.dominio.reglas_negocio import validar_datos_usuario
+from gestor_usuarios.dominio.user import User
+from gestor_usuarios.dominio.user_repository import UserRepository
+from gestor_usuarios.infraestructura.database import db
 
 registrar_user_bp = Blueprint('registrar_user_bp', __name__)
 
@@ -25,7 +27,7 @@ def registrar_user():
             return jsonify({"message": error_msg}), 400
 
         # Inyectamos la sesión al repositorio
-        user_repo = UserRepository(db.session)
+        user_repo = UserRepository(db.session, User)
 
         if user_repo.get_by_email(data.get('email')):
             return jsonify({"message": "El usuario ya se encuentra registrado."}), 409
@@ -34,7 +36,7 @@ def registrar_user():
         user_dto = UserDTO(
             name = data.get('name'),
             email = data.get('email'),
-            password = data.get('password'),
+            password = generate_password_hash(data.get('password')),
             role = data.get("role") if role_esta_presente(data) else None,
             country = data.get("country") if country_esta_presente(data) else None,
             city = data.get("city") if city_esta_presente(data) else None,
