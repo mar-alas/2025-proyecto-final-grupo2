@@ -143,12 +143,12 @@ class TestProveedoresEscrituras(unittest.TestCase):
 
         # Mock Pulsar behavior
         self.mock_despachador.publicar_evento.return_value = None
-        self.mock_consumidor.esperar_evento.return_value = {"evento": "ProveedorRegistrado"}
+        # self.mock_consumidor.esperar_evento.return_value = {"evento": "ProveedorRegistrado"}
 
         response = self.client.post('/proveedores', json=data)
         self.assertEqual(response.status_code, 201)
         self.assertIn("message", response.get_json())
-        self.assertEqual(response.get_json()["message"], "Proveedor registrado exitosamente")
+        self.assertEqual(response.get_json()["message"], "Proveedor enviado a registrar exitosamente")
 
         # Verify Pulsar interactions
         expected_data = data.copy()
@@ -157,9 +157,9 @@ class TestProveedoresEscrituras(unittest.TestCase):
             "comando": "RegistrarProveedor",
             "data": expected_data
         })
-        self.mock_consumidor.esperar_evento.assert_called_once_with(
-            "ProveedorRegistrado", timeout=20, correlation_id=unittest.mock.ANY
-        )
+        # self.mock_consumidor.esperar_evento.assert_called_once_with(
+        #     "ProveedorRegistrado", timeout=20, correlation_id=unittest.mock.ANY
+        # )
 
     def test_registrar_proveedor_datos_invalidos(self):
         # Simulate a POST request with invalid data (missing required fields)
