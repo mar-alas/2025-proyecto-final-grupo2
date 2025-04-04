@@ -63,15 +63,13 @@ def registrar_proveedor():
     # Generate a unique correlation ID
     correlation_id = str(uuid.uuid4())
     data["correlation_id"] = correlation_id
-
-    logger.info(f"Publicando el comando en la cola de comandos con ID: {correlation_id}")
-    # Publicar el comando en la cola de comandos
-    comando = {"comando": "RegistrarProveedor", "data": data}
-    despachador_comandos.publicar_evento(comando)
-
-    # Esperar a que el consumidor procese el comando y genere un evento
-    evento = consumidor.esperar_evento("ProveedorRegistrado", timeout=20, correlation_id=correlation_id)
-    if evento:
-        return jsonify({"message": "Proveedor registrado exitosamente"}), 201
-    else:
+    try:
+        logger.info(f"Publicando el comando en la cola de comandos con ID: {correlation_id}")
+        # Publicar el comando en la cola de comandos
+        comando = {"comando": "RegistrarProveedor", "data": data}
+        despachador_comandos.publicar_evento(comando)
+    except Exception as e:
+        logger.error(f"Error al publicar el comando: {str(e)}")
         return jsonify({"error": "Error al procesar el comando"}), 500
+    else:
+        return jsonify({"message": "Proveedor enviado a registrar exitosamente"}), 201
