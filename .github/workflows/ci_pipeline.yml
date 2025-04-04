@@ -303,12 +303,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Remove cache files
-        working-directory: ./2025-proyecto-final-grupo2/backend/seguridad_servicio
-        run: |
-          rm -rf .pytest_cache
-          find . -type d -name "__pycache__" -exec rm -r {} +
-
       - name: Create virtual environment
         working-directory: ./2025-proyecto-final-grupo2/backend/seguridad_servicio
         run: python3 -m venv venv
