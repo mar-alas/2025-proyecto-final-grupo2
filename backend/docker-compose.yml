@@ -350,7 +350,7 @@ services:
         - DB_PASSWORD=postgres
         - DB_PORT=5432
         - DB_NAME=seguridad_servicio_db
-        - DB_HOSTNAME=seguridad_servicio_db
+        - DB_HOST=seguridad_servicio_db
     networks:
       - seguridad_servicio_net
 
