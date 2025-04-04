@@ -1,0 +1,78 @@
+name: Deploy Backend
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/seguridad_servicio/**'
+      - '.github/workflows/cd_gestor_usaurios.yml'
+  workflow_dispatch:
+jobs:
+   deploy_to_gke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Revisando si el mensaje del commit dice 'CD'
+        if: contains(github.event.head_commit.message, 'CD')
+        run: echo "El mensaje del commit contiene CD, iniciando el despliegue."
+
+      - name: Autenticacion a GCP
+        if: contains(github.event.head_commit.message, 'CD')
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Configurar Cloud SDK
+        if: contains(github.event.head_commit.message, 'CD')
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: proyecto-final-2-454403
+
+      - name: Configurar Docker para usar gcloud credential helper
+        if: contains(github.event.head_commit.message, 'CD')
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+
+      - name: Configurar GKE Credentials
+        if: contains(github.event.head_commit.message, 'CD')
+        uses: google-github-actions/get-gke-credentials@v1
+        with:
+          cluster_name: prod-cluster-cpp-api
+          location: us-central1-f
+          project_id: proyecto-final-2-454403
+
+      - name: Build y Push de las imagenes de Docker
+        if: contains(github.event.head_commit.message, 'CD')
+        working-directory: backend
+        run: |
+            docker-compose build --no-cache gestor_usuarios
+
+      - name: Tag y Push de la imagen a Artifact Registry
+        if: contains(github.event.head_commit.message, 'CD')
+        run: |
+          docker tag backend-gestor_usuarios:latest us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/seguridad_servicio/gestor_usuarios:latest
+          docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/seguridad_servicio/gestor_usuarios:latest
+
+      - name: Desplegar en GKE
+        if: contains(github.event.head_commit.message, 'CD')
+        run: |
+          kubectl apply -f ../../k8s/gestor_usuarios_deployment.yaml
+          kubectl apply -f ../../k8s/gestor_usuarios_service.yaml
+
+      - name: Verificar rollout exitoso
+        if: contains(github.event.head_commit.message, 'CD')
+        run: |
+          kubectl rollout status deployment/gestor-usuarios
+            - name: Verificar rollout del deployment
+        if: contains(github.event.head_commit.message, 'CD')
+        run: |
+          set -e
+          echo "Verificando estado del rollout..."
+          if kubectl rollout status deployment/gestor-usuarios --timeout=120s; then
+            echo "Rollout exitoso"
+          else
+            echo "Falló el rollout, iniciando rollback..."
+            kubectl rollout undo deployment/gestor-usuarios
+            exit 1
+          fi
+
+
