@@ -44,3 +44,19 @@ def city_esta_presente(data):
 def address_esta_presente(data):
     return bool(data.get('address'))
 
+def validar_datos_usuario(data):
+    """Valida los datos de un usuario antes de registrarlo."""
+    
+    validation_result = validar_campos_requeridos(data)
+    if validation_result:
+        return validation_result
+
+    validation_result = validar_formato_email(data.get('email'))
+    if validation_result:
+        return validation_result
+
+    validation_result = validar_tamanio_name(data.get('name'))
+    if validation_result:
+        return validation_result
+
+    return None 

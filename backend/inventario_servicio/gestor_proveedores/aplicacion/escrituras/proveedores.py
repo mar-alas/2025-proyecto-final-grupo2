@@ -63,7 +63,6 @@ def registrar_proveedor():
     # Generate a unique correlation ID
     correlation_id = str(uuid.uuid4())
     data["correlation_id"] = correlation_id
-
     try:
         logger.info(f"Publicando el comando en la cola de comandos con ID: {correlation_id}")
         # Publicar el comando en la cola de comandos
