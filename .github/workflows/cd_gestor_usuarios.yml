@@ -62,8 +62,8 @@ jobs:
         if: contains(github.event.head_commit.message, 'CD')
         run: |
           kubectl rollout status deployment/gestor-usuarios
-            - name: Verificar rollout del deployment
-        if: contains(github.event.head_commit.message, 'CD')
+      
+      - name: Verificar rollout del deployment
         run: |
           set -e
           echo "Verificando estado del rollout..."
