@@ -1,19 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -f ../docker-compose.yml
-    kompose.version: 1.35.0 (HEAD)
-  labels:
-    io.kompose.service: pulsar
   name: pulsar
 spec:
-  ports:
-    - name: "6650"
-      port: 6650
-      targetPort: 6650
-    - name: "8080"
-      port: 8080
-      targetPort: 8080
+  type: ClusterIP
   selector:
-    io.kompose.service: pulsar
+    app: pulsar
+  ports:
+    - name: broker
+      port: 6650
+      targetPort: broker
+    - name: admin
+      port: 8080
+      targetPort: admin

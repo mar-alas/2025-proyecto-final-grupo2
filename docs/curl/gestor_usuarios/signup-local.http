@@ -1,4 +1,3 @@
-
 curl --request POST \
   --url http://localhost/api/v1/seguridad/gestor_usuarios/w/signup \
   --header 'content-type: application/json' \

@@ -41,4 +41,3 @@ def login_user():
         "userId": user.id,
         "accessToken": access_token
     }), 200
-
