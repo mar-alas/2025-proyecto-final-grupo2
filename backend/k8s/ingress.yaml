@@ -4,8 +4,10 @@ metadata:
   name: cpp-ingress
   annotations:
     kubernetes.io/ingress.class: "gce"  # Usamos el Ingress de Google
+    networking.gke.io/managed-certificates: "api-cert"
 spec:
   rules:
+  - host: api.ccpapp.xyz
   - http:
       paths:
       - path: /api/v1/compras/gestor_compras

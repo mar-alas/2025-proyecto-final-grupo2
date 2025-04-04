@@ -38,3 +38,29 @@ def validar_tamanio_password(password):
          return "Campo password es muy largo."
     return None
 
+
+@staticmethod
+def validar_login_data(data):
+    validation_result = validar_data_presente(data)
+    if validation_result:
+        return validation_result
+
+    validation_result = validar_campos_requeridos(data)
+    if validation_result:
+        return validation_result
+
+    email = data.get('email')
+    validation_result = validar_formato_email(email)
+    if validation_result:
+        return validation_result
+
+    validation_result = validar_tamanio_email(email)
+    if validation_result:
+        return validation_result
+
+    password = data.get('password')
+    validation_result = validar_tamanio_password(password)
+    if validation_result:
+        return validation_result
+
+    return None

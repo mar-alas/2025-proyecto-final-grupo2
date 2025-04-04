@@ -1,8 +1,12 @@
 from flask import Blueprint, jsonify, request
 import logging
-import random
-from dominio.reglas_negocio_login import validar_data_presente, validar_campos_requeridos, validar_formato_email, validar_tamanio_email, validar_tamanio_password
-from seedwork_compartido.dominio.seguridad.access_token_manager import generar_token
+# import random
+from werkzeug.security import check_password_hash
+from gestor_usuarios.infraestructura.database import db
+from gestor_usuarios.dominio.user import User
+from gestor_usuarios.dominio.reglas_negocio_login import validar_login_data
+from gestor_usuarios.dominio.user_repository import UserRepository
+from gestor_usuarios.dominio.access_token_manager import generar_token
 
 login_user_bp = Blueprint('login_user_bp', __name__)
 
@@ -12,42 +16,28 @@ def login_user():
 
     data = request.get_json()
 
-    validation_result = validar_data_presente(data)
+    validation_result = validar_login_data(data)
     if validation_result:
         return jsonify({"message": validation_result}), 400
     
-    validation_result = validar_campos_requeridos(data)
-    if validation_result:
-        return jsonify({"message": validation_result}), 400
-    
-    email = data.get('email')
-    validation_result = validar_formato_email(email)
-    if validation_result:
-        return jsonify({"message": validation_result}), 400
-    
+    user_repo = UserRepository(db.session, User)
+    user = user_repo.get_by_email(data.get('email'))
+    if not user:
+        return jsonify({"message": "Usuario no encontrado."}), 404
 
-    validation_result = validar_tamanio_email(email)
-    if validation_result:
-        return jsonify({"message": validation_result}), 400
-    
-    password = data.get('password')
-    validation_result = validar_tamanio_password(password)
-    if validation_result:
-        return jsonify({"message": validation_result}), 400
+    if not check_password_hash(user.password, data.get('password')):
+        return jsonify({"message": "Contrasena incorrecta."}), 400
 
-    # TODO: Validar contra BD si existe usuario y traer los datos.
-    roles = ['cliente', 'vendedor', 'proveedor', 'director-ventas', 'encargado-logistica', 'director-compras']
-
-    role = random.choice(roles)
-    userId =  random.randint(1, 5000)
     payload = {
-        'userId': userId,
-        'role': 'admin'
+        'userId': user.id,
+        'role': user.role if user.role else 'cliente'
     }
 
+    access_token = generar_token(payload)
+
     return jsonify({
-        "message": "Inicio de sesión exitoso.",
-        "role": role,
-        "userId": userId,
-        "accessToken": generar_token(payload)
+        "message": "Inicio de sesion exitoso.",
+        "role": user.role if user.role else 'cliente',
+        "userId": user.id,
+        "accessToken": access_token
     }), 200

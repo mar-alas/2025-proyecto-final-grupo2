@@ -1,17 +1,18 @@
-import unittest
+import pytest
 from flask import Flask
-from seedwork_compartido.aplicacion.lectura.ping import ping_bp
+from gestor_usuarios.aplicacion.lecturas.ping import ping_bp
 
-class AppTestCase(unittest.TestCase):
-    def setUp(self):
-        self.app = Flask(__name__)
-        self.app.register_blueprint(ping_bp, url_prefix='/api/v1/seguridad/gestor_usuarios')
-        self.client = self.app.test_client()
+@pytest.fixture
+def app():
+    app = Flask(__name__)
+    app.register_blueprint(ping_bp, url_prefix='/api/v1/seguridad/gestor_usuarios')
+    return app
 
-    def test_ping(self):
-        response = self.client.get('/api/v1/seguridad/gestor_usuarios/ping')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json, {"message": "pong"})
+@pytest.fixture
+def client(app):
+    return app.test_client()
 
-if __name__ == '__main__':
-    unittest.main()
+def test_ping_endpoint(client):
+    response = client.get('/api/v1/seguridad/gestor_usuarios/ping')
+    assert response.status_code == 200
+    assert response.json == {"message": "pong"}
