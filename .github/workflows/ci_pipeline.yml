@@ -304,17 +304,17 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Create virtual environment
-        working-directory: ./2025-proyecto-final-grupo2/backend/seguridad_servicio
+        working-directory: ./backend/seguridad_servicio
         run: python3 -m venv venv
 
       - name: Activate virtual environment and install dependencies
-        working-directory: ./2025-proyecto-final-grupo2/backend/seguridad_servicio
+        working-directory: ./backend/seguridad_servicio
         run: |
           source venv/bin/activate
           pip install -r requirements-test-gestor-usuarios.txt
 
       - name: Run unit tests with coverage
-        working-directory: ./2025-proyecto-final-grupo2/backend/seguridad_servicio
+        working-directory: ./backend/seguridad_servicio
         run: |
           source venv/bin/activate
           coverage run --source=gestor_usuarios -m pytest
