@@ -1,0 +1,2 @@
+@baseUrl = http://34.8.66.38
+curl --location '{{baseUrl}}/api/v1/inventario/gestor_productos/productos'
