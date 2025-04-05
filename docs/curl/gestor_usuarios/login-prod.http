@@ -5,5 +5,5 @@ curl --request POST \
   --header 'content-type: application/json' \
   --data '{
   "email": "pepe@gmail.com",
-  "password": "123abc"
+  "password": "password"
 }'
