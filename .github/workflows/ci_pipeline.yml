@@ -266,10 +266,10 @@ jobs:
         env:
           PYTHONPATH: ${{ env.PYTHONPATH }}
           UTEST: "True"
-        run: coverage run --source=ventas_servicio --omit="*/tests/*,*/__init__.py,/usr/lib/python*,/usr/local/lib/python*" -m unittest discover -s ventas_servicio/procesador_pedidos/tests
+        run: coverage run --omit="*/tests/*,*/__init__.py,/usr/lib/python*,/usr/local/lib/python*" -m unittest discover -s ventas_servicio/procesador_pedidos
       - name: Run coverage report
         working-directory: ./backend
-        run: coverage report --source=ventas_servicio --omit="*/tests/*,*/__init__.py,/usr/lib/python*,/usr/local/lib/python*" --fail-under=80
+        run: coverage report --omit="*/tests/*,*/__init__.py,/usr/lib/python*,/usr/local/lib/python*" --fail-under=80
 
   test_procesador_video:
     runs-on: ubuntu-latest
