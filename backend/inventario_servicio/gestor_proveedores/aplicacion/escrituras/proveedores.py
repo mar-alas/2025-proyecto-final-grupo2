@@ -9,6 +9,7 @@ import uuid  # Import the UUID module
 import os
 import logging
 from dominio.reglas_negocio import validar_datos_no_vacios
+from seedwork_compartido.dominio.seguridad.access_token_manager import validar_token
 
 proveedores_escritura = Blueprint('home_escritura', __name__)
 
@@ -45,6 +46,16 @@ consumidor = ConsumidorProveedores(
 @proveedores_escritura.route('/proveedores', methods=['POST'])
 def registrar_proveedor():
     data = request.json
+
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({"error": "No se proporcionó un token"}), 401
+
+    token = auth_header.split(" ")[1]
+    validation_result = validar_token(token=token)
+
+    if not validation_result:
+         return jsonify({"message": "forbidden"}), 403
 
     # Validate that data is not empty
     errores = validar_datos_no_vacios(data)

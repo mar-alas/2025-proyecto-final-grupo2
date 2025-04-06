@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from infraestructura.repositorio import RepositorioProveedores
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from seedwork_compartido.dominio.seguridad.access_token_manager import validar_token
 
 proveedores_lectura = Blueprint('proveedores_lectura', __name__)
 
@@ -12,6 +13,16 @@ def obtener_proveedores():
     """
     Obtiene todos los proveedores o un proveedor específico por ID.
     """
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({"error": "No se proporcionó un token"}), 401
+
+    token = auth_header.split(" ")[1]
+    validation_result = validar_token(token=token)
+
+    if not validation_result:
+         return jsonify({"message": "forbidden"}), 403
+
     proveedor_id = request.args.get('id')  # Obtener el parámetro 'id' de la URL
     if proveedor_id:
         # Buscar un proveedor específico por ID
