@@ -22,8 +22,8 @@ spec:
     spec:
       containers:
         - env:
-            - name: DB_HOST
-              value: ventas_servicio_db
+            - name: DB_HOSTNAME
+              value: ventas-servicio-db
             - name: DB_NAME
               value: ventas_servicio_db
             - name: DB_PASSWORD
@@ -32,6 +32,10 @@ spec:
               value: "5432"
             - name: DB_USER
               value: postgres
+            - name: PRODUCTOS_HOSTNAME
+              value: gestor-productos
+            - name: PRODUCTOS_PORT
+              value: "3001"
           image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/procesador_pedidos:latest
           name: procesador-pedidos
           ports:
