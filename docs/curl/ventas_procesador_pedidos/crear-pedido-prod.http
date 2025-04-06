@@ -1,26 +1,16 @@
-
 @baseUrl = http://34.8.66.38
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInJvbGUiOiJjbGllbnRlIiwiZXhwIjoxNzQ0MTUzODE5fQ.hqMr3QixrvC6ZocJ6BpqatycDiqaDSo__B2nXBHzScA
 curl --location '{{baseUrl}}/api/v1/ventas/procesador_pedidos/pedidos' \
 --header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {{token}}' \
 --data '{
-  "cliente_id": 123456,
-  "vendedor_id": 987654,
+  "cliente_id": 3,
+   "vendedor_id":null,
   "productos": [
     {
-      "id": 10,
-      "cantidad": 10,
+      "id": 1,
+      "cantidad": 1,
       "precio_unitario": 50.0
-    },
-    {
-      "id": 2,
-      "cantidad": 5,
-      "precio_unitario": 120.0
-    },
-    {
-      "id": 3,
-      "cantidad": 8,
-      "precio_unitario": 80.0
     }
   ]
-}
-'
+}'
