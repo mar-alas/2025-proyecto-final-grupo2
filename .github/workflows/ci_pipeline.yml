@@ -269,7 +269,7 @@ jobs:
         run: coverage run --omit="*/tests/*,*/__init__.py,/usr/lib/python*,/usr/local/lib/python*" -m unittest discover -s ventas_servicio/procesador_pedidos/tests
       - name: Run coverage report
         working-directory: ./backend
-        run: coverage report --fail-under=80
+        run: coverage report --omit="*/tests/*,*/__init__.py,/usr/lib/python*,/usr/local/lib/python*" --fail-under=80
 
   test_procesador_video:
     runs-on: ubuntu-latest
