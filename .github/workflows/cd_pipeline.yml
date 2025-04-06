@@ -50,7 +50,6 @@ jobs:
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/logistica_servicio/gestor_entregas:latest
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/generador_reportes:latest
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/gestor_ventas:latest
-          docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/procesador_pedidos:latest
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/procesador_video:latest
       - name: Despliegue a GKE
         if: contains(github.event.head_commit.message, 'CD')
@@ -82,8 +81,6 @@ jobs:
           kubectl apply -f ../../k8s/gestor_entregas_service.yaml
           kubectl apply -f ../../k8s/gestor_ventas_deployment.yaml
           kubectl apply -f ../../k8s/gestor_ventas_service.yaml
-          kubectl apply -f ../../k8s/procesador_pedidos_deployment.yaml
-          kubectl apply -f ../../k8s/procesador_pedidos_service.yaml
           kubectl apply -f ../../k8s/procesador_video_deployment.yaml
           kubectl apply -f ../../k8s/procesador_video_service.yaml
           kubectl apply -f ../../k8s/ingress.yaml

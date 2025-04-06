@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - 'backend/inventario_servicio/**'
+      - 'backend/inventario_servicio/gestor_proveedores/**'
       - '.github/workflows/cd_gestor_proveedores.yml'
   workflow_dispatch:
 jobs:
@@ -54,30 +54,44 @@ jobs:
         working-directory: backend
         run: |
             docker compose build --no-cache gestor_proveedores
+            docker compose build --no-cache gestor_proveedores_worker
 
-      - name: Tag y Push de la imagen a Artifact Registry
+      - name: Tag y Push de la imagen a Artifact Registry gestor_proveedores
         if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
         run: |
           docker tag backend-gestor_proveedores:latest us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/inventario_servicio/gestor_proveedores:$TAG
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/inventario_servicio/gestor_proveedores:$TAG
 
-      - name: Reemplazar TAG inmutable en el deployment
+      - name: Tag y Push de la imagen a Artifact Registry gestor_proveedores_worker
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
+        run: |
+          docker tag backend-worker_gestor_proveedores:latest us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/inventario_servicio/worker_gestor_proveedores:$TAG
+          docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/inventario_servicio/worker_gestor_proveedores:$TAG
+
+      - name: Reemplazar TAG inmutable en el deployment gestor_proveedores_deployment
         if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
         run: |
           sed -i "s|\${TAG}|${TAG}|g" backend/k8s/gestor_proveedores_deployment.yaml
+
+      - name: Reemplazar TAG inmutable en el deployment gestor_proveedores_worker_deployment
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
+        run: |
+          sed -i "s|\${TAG}|${TAG}|g" backend/k8s/gestor_proveedores_worker_deployment.yaml
 
       - name: Desplegar en GKE
         if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
         run: |
           kubectl apply -f backend/k8s/gestor_proveedores_deployment.yaml
           kubectl apply -f backend/k8s/gestor_proveedores_service.yaml
+          kubectl apply -f backend/k8s/gestor_proveedores_worker_deployment.yaml
+          kubectl apply -f backend/k8s/gestor_proveedores_service_worker.yaml
 
-      - name: Verificar rollout exitoso
+      - name: Verificar rollout exitoso gestor-proveedores
         if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
         run: |
           kubectl rollout status deployment/gestor-proveedores
       
-      - name: Verificar rollout del deployment
+      - name: Verificar rollout del deployment gestor-proveedores
         if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
         run: |
           set -e
@@ -94,5 +108,30 @@ jobs:
           else
             echo "❌ Falló el rollout, iniciando rollback..."
             kubectl rollout undo deployment/gestor-proveedores
+            exit 1
+          fi
+
+      - name: Verificar rollout exitoso gestor-proveedores-worker
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
+        run: |
+          kubectl rollout status deployment/gestor-proveedores-worker
+      
+      - name: Verificar rollout del deployment gestor-proveedores-worker
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
+        run: |
+          set -e
+          echo "Verificando estado del rollout..."
+
+          echo "Contexto actual de kubectl:"
+          kubectl config current-context
+
+          echo "Listando nodos para validar conexión al clúster:"
+          kubectl get nodes
+
+          if kubectl rollout status deployment/gestor-proveedores-worker --timeout=120s; then
+            echo "✅ Rollout exitoso"
+          else
+            echo "❌ Falló el rollout, iniciando rollback..."
+            kubectl rollout undo deployment/gestor-proveedores-worker
             exit 1
           fi

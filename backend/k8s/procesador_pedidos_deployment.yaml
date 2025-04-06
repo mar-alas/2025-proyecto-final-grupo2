@@ -36,8 +36,9 @@ spec:
               value: gestor-productos
             - name: PRODUCTOS_PORT
               value: "3001"
-          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/procesador_pedidos:latest
+          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/procesador_pedidos:${TAG}
           name: procesador-pedidos
+          imagePullPolicy: Always
           ports:
             - containerPort: 3009
               protocol: TCP
