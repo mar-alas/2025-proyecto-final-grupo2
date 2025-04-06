@@ -55,8 +55,8 @@ jobs:
       - name: Desplegar en GKE
         if: contains(github.event.head_commit.message, 'CD')
         run: |
-          kubectl apply -f ../../k8s/gestor_usuarios_deployment.yaml
-          kubectl apply -f ../../k8s/gestor_usuarios_service.yaml
+          kubectl apply -f backend/k8s/gestor_usuarios_deployment.yaml
+          kubectl apply -f backend/k8s/gestor_usuarios_service.yaml
 
       - name: Verificar rollout exitoso
         if: contains(github.event.head_commit.message, 'CD')
