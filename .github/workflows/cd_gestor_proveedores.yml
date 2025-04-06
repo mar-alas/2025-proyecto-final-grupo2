@@ -96,5 +96,3 @@ jobs:
             kubectl rollout undo deployment/gestor-proveedores
             exit 1
           fi
-
-
