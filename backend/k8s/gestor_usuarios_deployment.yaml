@@ -32,7 +32,7 @@ spec:
               value: "5432"
             - name: DB_USER
               value: postgres
-          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/seguridad_servicio/gestor_usuarios:latest
+          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/seguridad_servicio/gestor_usuarios:${TAG}
           name: gestor-usuarios
           imagePullPolicy: Always 
           ports:

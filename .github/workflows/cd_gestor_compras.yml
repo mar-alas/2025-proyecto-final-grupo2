@@ -1,11 +1,11 @@
-name: Deploy Gestor de Usuarios
+name: Deploy Gestor de Compras
 on:
   push:
     branches:
       - main
     paths:
-      - 'backend/seguridad_servicio/**'
-      - '.github/workflows/cd_gestor_usuarios.yml'
+      - 'backend/compras_servicio/**'
+      - '.github/workflows/cd_gestor_compras.yml'
   workflow_dispatch:
 jobs:
    deploy_to_gke:
@@ -53,29 +53,29 @@ jobs:
         if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
         working-directory: backend
         run: |
-            docker compose build --no-cache gestor_usuarios
+            docker compose build --no-cache gestor_compras
 
       - name: Tag y Push de la imagen a Artifact Registry
         if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
         run: |
-          docker tag backend-gestor_usuarios:latest us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/seguridad_servicio/gestor_usuarios:$TAG
-          docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/seguridad_servicio/gestor_usuarios:$TAG
+          docker tag backend-gestor_compras:latest us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/compras_servicio/gestor_compras:$TAG
+          docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/compras_servicio/gestor_compras:$TAG
 
       - name: Reemplazar TAG inmutable en el deployment
         if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
         run: |
-          sed -i "s|\${TAG}|${TAG}|g" backend/k8s/gestor_usuarios_deployment.yaml
+          sed -i "s|\${TAG}|${TAG}|g" backend/k8s/gestor_compras_deployment.yaml
 
       - name: Desplegar en GKE
         if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
         run: |
-          kubectl apply -f backend/k8s/gestor_usuarios_deployment.yaml
-          kubectl apply -f backend/k8s/gestor_usuarios_service.yaml
+          kubectl apply -f backend/k8s/gestor_compras_deployment.yaml
+          kubectl apply -f backend/k8s/gestor_compras_service.yaml
 
       - name: Verificar rollout exitoso
         if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
         run: |
-          kubectl rollout status deployment/gestor-usuarios
+          kubectl rollout status deployment/gestor-proveedores
       
       - name: Verificar rollout del deployment
         if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
@@ -89,12 +89,10 @@ jobs:
           echo "Listando nodos para validar conexión al clúster:"
           kubectl get nodes
 
-          if kubectl rollout status deployment/gestor-usuarios --timeout=120s; then
+          if kubectl rollout status deployment/gestor-proveedores --timeout=120s; then
             echo "✅ Rollout exitoso"
           else
             echo "❌ Falló el rollout, iniciando rollback..."
-            kubectl rollout undo deployment/gestor-usuarios
+            kubectl rollout undo deployment/gestor-proveedores
             exit 1
           fi
-
-

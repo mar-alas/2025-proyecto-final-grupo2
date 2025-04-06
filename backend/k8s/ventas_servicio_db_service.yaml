@@ -9,8 +9,8 @@ metadata:
   name: ventas-servicio-db
 spec:
   ports:
-    - name: "5435"
-      port: 5435
+    - name: "5432"
+      port: 5432
       targetPort: 5432
   selector:
     io.kompose.service: ventas-servicio-db
