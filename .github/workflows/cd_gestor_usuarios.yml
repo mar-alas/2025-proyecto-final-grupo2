@@ -44,7 +44,7 @@ jobs:
         if: contains(github.event.head_commit.message, 'CD')
         working-directory: backend
         run: |
-            docker-compose build --no-cache gestor_usuarios
+            docker compose build --no-cache gestor_usuarios
 
       - name: Tag y Push de la imagen a Artifact Registry
         if: contains(github.event.head_commit.message, 'CD')
