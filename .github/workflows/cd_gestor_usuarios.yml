@@ -16,6 +16,15 @@ jobs:
         if: contains(github.event.head_commit.message, 'CD')
         run: echo "El mensaje del commit contiene CD, iniciando el despliegue."
 
+      - name: Definir TAG de imagen con hora UTC-5 (Colombia)
+        if: contains(github.event.head_commit.message, 'CD')
+        id: vars
+        run: |
+          TZ="America/Bogota"
+          export TAG=$(TZ=$TZ date +'%Y%m%d-%H%M%S')-${GITHUB_SHA::7}
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "Tag generado: $TAG"
+
       - name: Autenticacion a GCP
         if: contains(github.event.head_commit.message, 'CD')
         uses: google-github-actions/auth@v1
@@ -49,8 +58,8 @@ jobs:
       - name: Tag y Push de la imagen a Artifact Registry
         if: contains(github.event.head_commit.message, 'CD')
         run: |
-          docker tag backend-gestor_usuarios:latest us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/seguridad_servicio/gestor_usuarios:latest
-          docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/seguridad_servicio/gestor_usuarios:latest
+          docker tag backend-gestor_usuarios:latest us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/seguridad_servicio/gestor_usuarios:$TAG
+          docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/seguridad_servicio/gestor_usuarios:$TAG
 
       - name: Desplegar en GKE
         if: contains(github.event.head_commit.message, 'CD')
