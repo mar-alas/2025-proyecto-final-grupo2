@@ -45,7 +45,6 @@ jobs:
         run: |-
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/compras_servicio/gestor_compras:latest
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/inventario_servicio/gestor_productos:latest
-          docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/inventario_servicio/gestor_proveedores:latest
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/inventario_servicio/gestor_stock:latest
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/logistica_servicio/generador_reportes:latest
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/logistica_servicio/generador_rutas_entrega:latest
@@ -74,8 +73,6 @@ jobs:
           kubectl apply -f ../../k8s/gestor_compras_service.yaml
           kubectl apply -f ../../k8s/gestor_productos_deployment.yaml
           kubectl apply -f ../../k8s/gestor_productos_service.yaml
-          kubectl apply -f ../../k8s/gestor_proveedores_deployment.yaml
-          kubectl apply -f ../../k8s/gestor_proveedores_service.yaml
           kubectl apply -f ../../k8s/gestor_stock_deployment.yaml
           kubectl apply -f ../../k8s/gestor_stock_service.yaml
           kubectl apply -f ../../k8s/generador_reportes_logistica_deployment.yaml
