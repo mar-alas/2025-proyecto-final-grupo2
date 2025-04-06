@@ -1,4 +1,6 @@
 @baseUrl = http://34.8.66.38
 @token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInJvbGUiOiJjbGllbnRlIiwiZXhwIjoxNzQ0MTUzODE5fQ.hqMr3QixrvC6ZocJ6BpqatycDiqaDSo__B2nXBHzScA
 
-curl --location --header "Authorization: Bearer {{token}}" {{baseUrl}}/api/v1/ventas/procesador_pedidos/pedidos?cliente_id=3'
+curl --location \
+  --header "Authorization: Bearer {{token}}" \
+  {{baseUrl}}/api/v1/ventas/procesador_pedidos/pedidos?cliente_id=3

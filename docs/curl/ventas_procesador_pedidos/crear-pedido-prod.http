@@ -5,7 +5,7 @@ curl --location '{{baseUrl}}/api/v1/ventas/procesador_pedidos/pedidos' \
 --header 'Authorization: Bearer {{token}}' \
 --data '{
   "cliente_id": 3,
-   "vendedor_id":null,
+  "vendedor_id":0,
   "productos": [
     {
       "id": 1,
