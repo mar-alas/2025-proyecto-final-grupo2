@@ -10,6 +10,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 import datetime
+from unittest.mock import patch
 
 # Define a mock Pedido and Producto models for testing
 Base = declarative_base()
@@ -64,7 +65,14 @@ class TestPedidos(unittest.TestCase):
         Base.metadata.drop_all(cls.engine)
         cls.engine.dispose()
 
-    def test_registrar_pedido_exitoso(self):
+    @patch('aplicacion.escrituras.pedidos.obtener_stock_disponible')
+    def test_registrar_pedido_exitoso(self, mock_obtener_stock_disponible):
+        # Mock the response of obtener_stock_disponible
+        mock_obtener_stock_disponible.return_value = [
+            {"id": 1, "inventario_inicial": 100, "precio": 50},
+            {"id": 2, "inventario_inicial": 50, "precio": 120}
+        ]
+
         # Test the POST /pedidos endpoint
         payload = {
             "cliente_id": 123456,
