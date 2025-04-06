@@ -5,7 +5,7 @@ on:
       - main
     paths:
       - 'backend/seguridad_servicio/**'
-      - '.github/workflows/cd_gestor_usaurios.yml'
+      - '.github/workflows/cd_gestor_usuarios.yml'
   workflow_dispatch:
 jobs:
    deploy_to_gke:
