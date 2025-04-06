@@ -61,7 +61,7 @@ jobs:
           docker tag backend-gestor_usuarios:latest us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/seguridad_servicio/gestor_usuarios:$TAG
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/seguridad_servicio/gestor_usuarios:$TAG
 
-      - name: Reemplazar TAG en el deployment
+      - name: Reemplazar TAG inmutable en el deployment
         if: contains(github.event.head_commit.message, 'CD')
         run: |
           sed -i "s|\${TAG}|${TAG}|g" backend/k8s/gestor_usuarios_deployment.yaml
