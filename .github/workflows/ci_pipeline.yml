@@ -238,7 +238,7 @@ jobs:
         working-directory: ./backend
         env:
           PYTHONPATH: ${{ env.PYTHONPATH }}
-        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s ventas_servicio/gestor_ventas/tests
+        run: coverage run --omit="*/tests/*,*/__init__.py,/usr/lib/python*,/usr/local/lib/python*" -m unittest discover -s ventas_servicio/procesador_pedidos/tests
       - name: Run coverage report
         working-directory: ./backend
         run: coverage report --fail-under=80
