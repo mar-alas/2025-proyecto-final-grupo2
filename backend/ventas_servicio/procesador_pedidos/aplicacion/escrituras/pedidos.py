@@ -3,11 +3,11 @@ from infraestructura.schema import PedidoInputSchema
 from infraestructura.repositorio import RepositorioPedidos
 from infraestructura.mappers import to_infraestructura_pedido
 from dominio.reglas_negocio import validar_stock_disponible, obtener_stock_disponible, validar_vendedor, validar_cliente
+from seedwork_compartido.dominio.seguridad.access_token_manager import validar_token
 from dominio.modelo import Pedido
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 import os
-import requests
 import logging
 
 # Configure logging
@@ -39,6 +39,16 @@ def registrar_pedido():
     logger.info("Inicio del proceso de registro de pedido")
     data = request.json
     logger.debug(f"Datos recibidos: {data}")
+
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({"error": "No se proporcionó un token"}), 401
+
+    token = auth_header.split(" ")[1]
+    validation_result = validar_token(token=token)
+
+    if not validation_result:
+         return jsonify({"message": "forbidden"}), 403
 
     # Validate input schema
     errores = PedidoInputSchema().validate(data)

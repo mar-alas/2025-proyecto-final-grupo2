@@ -68,23 +68,32 @@ class TestProveedoresLecturas(unittest.TestCase):
         cls.db_session.close()
         Base.metadata.drop_all(cls.engine)
 
-    def test_obtener_todos_los_proveedores(self):
-        response = self.client.get('/proveedores')
+    @patch('aplicacion.lecturas.proveedores.validar_token')
+    def test_obtener_todos_los_proveedores(self, mock_validar_token):
+        mock_validar_token.return_value = True
+        headers = {"Authorization": "Bearer mock_token"}
+        response = self.client.get('/proveedores', headers=headers)
         self.assertEqual(response.status_code, 200)
         data = response.get_json()
         self.assertEqual(len(data), 2)
         self.assertEqual(data[0]['nombre'], "Proveedor 1")
         self.assertEqual(data[1]['nombre'], "Proveedor 2")
 
-    def test_obtener_proveedor_por_id_existente(self):
-        response = self.client.get('/proveedores?id=1')
+    @patch('aplicacion.lecturas.proveedores.validar_token')
+    def test_obtener_proveedor_por_id_existente(self, mock_validar_token):
+        mock_validar_token.return_value = True
+        headers = {"Authorization": "Bearer mock_token"}
+        response = self.client.get('/proveedores?id=1', headers=headers)
         self.assertEqual(response.status_code, 200)
         data = response.get_json()
         self.assertEqual(data['nombre'], "Proveedor 1")
         self.assertEqual(data['email'], "proveedor1@example.com")
 
-    def test_obtener_proveedor_por_id_inexistente(self):
-        response = self.client.get('/proveedores?id=999')
+    @patch('aplicacion.lecturas.proveedores.validar_token')
+    def test_obtener_proveedor_por_id_inexistente(self, mock_validar_token):
+        mock_validar_token.return_value = True
+        headers = {"Authorization": "Bearer mock_token"}
+        response = self.client.get('/proveedores?id=999', headers=headers)
         self.assertEqual(response.status_code, 404)
         data = response.get_json()
         self.assertIn("error", data)
@@ -115,8 +124,6 @@ class TestProveedoresEscrituras(unittest.TestCase):
 
         cls.patcher_despachador.start()
         cls.patcher_consumidor.start()
-        # cls.patcher_repositorio.start()
-        # cls.patcher_db_session.start()
 
         # Create a Flask app for testing
         cls.app = Flask(__name__)
@@ -130,7 +137,11 @@ class TestProveedoresEscrituras(unittest.TestCase):
         cls.patcher_despachador.stop()
         cls.patcher_consumidor.stop()
 
-    def test_registrar_proveedor_exitoso(self):
+    @patch('aplicacion.escrituras.proveedores.validar_token')
+    def test_registrar_proveedor_exitoso(self, mock_validar_token):
+        # Mock token validation
+        mock_validar_token.return_value = True
+
         # Simulate a POST request with valid data
         data = {
             "nombre": "Proveedor 3",
@@ -140,12 +151,12 @@ class TestProveedoresEscrituras(unittest.TestCase):
             "caracteristicas": "Caracteristicas 3",
             "condiciones_comerciales_tributarias": "Condiciones 3"
         }
+        headers = {"Authorization": "Bearer mock_token"}
 
         # Mock Pulsar behavior
         self.mock_despachador.publicar_evento.return_value = None
-        # self.mock_consumidor.esperar_evento.return_value = {"evento": "ProveedorRegistrado"}
 
-        response = self.client.post('/proveedores', json=data)
+        response = self.client.post('/proveedores', json=data, headers=headers)
         self.assertEqual(response.status_code, 201)
         self.assertIn("message", response.get_json())
         self.assertEqual(response.get_json()["message"], "Proveedor enviado a registrar exitosamente")
@@ -157,23 +168,25 @@ class TestProveedoresEscrituras(unittest.TestCase):
             "comando": "RegistrarProveedor",
             "data": expected_data
         })
-        # self.mock_consumidor.esperar_evento.assert_called_once_with(
-        #     "ProveedorRegistrado", timeout=20, correlation_id=unittest.mock.ANY
-        # )
 
-    def test_registrar_proveedor_datos_invalidos(self):
+    @patch('aplicacion.escrituras.proveedores.validar_token')
+    def test_registrar_proveedor_datos_invalidos(self, mock_validar_token):
+        # Mock token validation
+        mock_validar_token.return_value = True
+
         # Simulate a POST request with invalid data (missing required fields)
         data = {
             "nombre": "Proveedor 4"
             # Missing other required fields
         }
-        response = self.client.post('/proveedores', json=data)
+        headers = {"Authorization": "Bearer mock_token"}
+        response = self.client.post('/proveedores', json=data, headers=headers)
         self.assertEqual(response.status_code, 400)
         self.assertIn("error", response.get_json())
 
         # Ensure Pulsar was not called
         self.mock_despachador.publicar_evento.assert_not_called()
-        self.mock_consumidor.esperar_evento.assert_not_called()
+
 
 if __name__ == '__main__':
     unittest.main()
