@@ -22,7 +22,7 @@ def obtener_pedidos():
         pedidos = repositorio.obtener_por_cliente(cliente_id)
         if not pedidos:
             return jsonify({
-                "error": "Cliente no encontrado",
+                "error": "El cliente no tiene pedidos",
                 "mensaje": f"No se encontraron pedidos para el cliente con ID {cliente_id}"
             }), 404
 

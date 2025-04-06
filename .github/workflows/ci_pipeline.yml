@@ -32,7 +32,7 @@ jobs:
         run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s compras_servicio/gestor_compras/tests
       - name: Run coverage report
         working-directory: ./backend
-        run: coverage report --fail-under=70
+        run: coverage report --fail-under=80
 
   test_gestor_productos:
     runs-on: ubuntu-latest
@@ -58,7 +58,7 @@ jobs:
         run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s inventario_servicio/gestor_productos/tests
       - name: Run coverage report
         working-directory: ./backend
-        run: coverage report --fail-under=70
+        run: coverage report --fail-under=80
 
   test_gestor_stock:
     runs-on: ubuntu-latest
@@ -84,7 +84,7 @@ jobs:
         run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s inventario_servicio/gestor_stock/tests
       - name: Run coverage report
         working-directory: ./backend
-        run: coverage report --fail-under=70
+        run: coverage report --fail-under=80
 
   test_gestor_proveedores:
     runs-on: ubuntu-latest
@@ -111,7 +111,7 @@ jobs:
         run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s inventario_servicio/gestor_proveedores
       - name: Run coverage report
         working-directory: ./backend
-        run: coverage report --fail-under=70
+        run: coverage report --fail-under=80
 
   test_generador_reportes_logistica:
     runs-on: ubuntu-latest
@@ -137,7 +137,7 @@ jobs:
         run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s logistica_servicio/generador_reportes/tests
       - name: Run coverage report
         working-directory: ./backend
-        run: coverage report --fail-under=70
+        run: coverage report --fail-under=80
 
   test_gestor_rutas_entrega:
     runs-on: ubuntu-latest
@@ -163,7 +163,7 @@ jobs:
         run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s logistica_servicio/generador_rutas_entrega/tests
       - name: Run coverage report
         working-directory: ./backend
-        run: coverage report --fail-under=70
+        run: coverage report --fail-under=80
 
   test_gestor_entregas:
     runs-on: ubuntu-latest
@@ -189,7 +189,7 @@ jobs:
         run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s logistica_servicio/gestor_entregas/tests
       - name: Run coverage report
         working-directory: ./backend
-        run: coverage report --fail-under=70
+        run: coverage report --fail-under=80
 
   test_generador_reportes_ventas:
     runs-on: ubuntu-latest
@@ -215,7 +215,7 @@ jobs:
         run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s ventas_servicio/generador_reportes/tests
       - name: Run coverage report
         working-directory: ./backend
-        run: coverage report --fail-under=70
+        run: coverage report --fail-under=80
 
   test_gestor_ventas:
     runs-on: ubuntu-latest
@@ -241,7 +241,7 @@ jobs:
         run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s ventas_servicio/gestor_ventas/tests
       - name: Run coverage report
         working-directory: ./backend
-        run: coverage report --fail-under=70
+        run: coverage report --fail-under=80
 
   test_procesador_pedidos:
     runs-on: ubuntu-latest
@@ -257,17 +257,19 @@ jobs:
         working-directory: ./backend/ventas_servicio/procesador_pedidos
         run: pip install -r requirements.txt
       - name: Set PYTHONPATH
-        run: echo "PYTHONPATH=$PWD/backend/seedwork_compartido:$PWD/backend/ventas_servicio/procesador_pedidos" >> $GITHUB_ENV
+        working-directory: ./backend
+        run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
       - name: Print PYTHONPATH
         run: echo $PYTHONPATH
       - name: Run unit tests
         working-directory: ./backend
         env:
           PYTHONPATH: ${{ env.PYTHONPATH }}
-        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s ventas_servicio/procesador_pedidos/tests
+          UTEST: "True"
+        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s ventas_servicio/procesador_pedidos
       - name: Run coverage report
         working-directory: ./backend
-        run: coverage report --fail-under=70
+        run: coverage report --fail-under=80
 
   test_procesador_video:
     runs-on: ubuntu-latest
@@ -293,7 +295,7 @@ jobs:
         run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s ventas_servicio/procesador_video/tests
       - name: Run coverage report
         working-directory: ./backend
-        run: coverage report --fail-under=70
+        run: coverage report --fail-under=80
 
   test_gestor_usuarios:
     runs-on: ubuntu-latest
