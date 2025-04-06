@@ -65,7 +65,7 @@ jobs:
       - name: Tag y Push de la imagen a Artifact Registry gestor_proveedores_worker
         if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
         run: |
-          docker tag backend-worker_gestor_proveedores:latest us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/inventario_servicio/worker_gestor_proveedores:$TAG
+          docker tag backend-gestor_proveedores_worker:latest us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/inventario_servicio/worker_gestor_proveedores:$TAG
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/inventario_servicio/worker_gestor_proveedores:$TAG
 
       - name: Reemplazar TAG inmutable en el deployment gestor_proveedores_deployment

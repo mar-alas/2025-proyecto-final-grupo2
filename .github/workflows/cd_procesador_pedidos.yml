@@ -58,7 +58,7 @@ jobs:
       - name: Tag y Push de la imagen a Artifact Registry
         if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
         run: |
-          docker tag backend-procesador-pedidos:latest us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/procesador-pedidos:$TAG
+          docker tag backend-procesador_pedidos:latest us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/procesador-pedidos:$TAG
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/procesador-pedidos:$TAG
 
       - name: Reemplazar TAG inmutable en el deployment
