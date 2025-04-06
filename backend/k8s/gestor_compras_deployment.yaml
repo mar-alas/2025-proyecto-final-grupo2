@@ -32,7 +32,7 @@ spec:
               value: "5432"
             - name: DB_USER
               value: postgres
-          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/compras_servicio/gestor_compras:latest
+          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/compras_servicio/gestor_compras:$TAG
           name: gestor-compras
           ports:
             - containerPort: 3000
