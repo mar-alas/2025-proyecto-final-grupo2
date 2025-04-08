@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 @dataclass
 class UserDTO:
@@ -10,3 +11,4 @@ class UserDTO:
     country: str = None
     city: str = None
     address: str = None
+    id: Optional[int] = None
