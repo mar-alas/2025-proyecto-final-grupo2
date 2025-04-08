@@ -22,16 +22,18 @@ spec:
     spec:
       containers:
         - env:
-            - name: DB_HOST
-              value: inventario_servicio_db
+            - name: DB_HOSTNAME
+              value: inventario-servicio-db
             - name: DB_NAME
-              value: inventario_servicio_db
+              value: inventario-servicio-db
             - name: DB_PASSWORD
               value: postgres
             - name: DB_PORT
               value: "5432"
             - name: DB_USER
               value: postgres
+            - name: PULSAR_HOST
+              value: pulsar
           image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/inventario_servicio/gestor_stock:latest
           name: gestor-stock
           ports:
