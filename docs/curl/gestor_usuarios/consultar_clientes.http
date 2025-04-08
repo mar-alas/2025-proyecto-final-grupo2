@@ -1,0 +1,5 @@
+@baseUrl = http://34.8.66.38
+
+curl --request GET \
+  --url {{baseUrl}}/api/v1/seguridad/gestor_usuarios/r/clientes \
+  --header 'content-type: application/json' \
