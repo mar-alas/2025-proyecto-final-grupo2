@@ -1,5 +1,6 @@
 import json
 import pulsar
+import _pulsar
 from seedwork_compartido.infraestructura.broker_utils import ConexionPulsar
 from infraestructura.repositorio import RepositorioStock
 import logging
@@ -41,37 +42,44 @@ class ConsumidorStock:
         except Exception as e:
             self.logger.error(f"Error procesando mensaje de pedido: {e}")
 
-    def escuchar(self):
+    def escuchar(self, max_iterations=None):
         self.logger.info("Iniciando escucha de tópicos")
         consumidor_producto = self.conexion.cliente.subscribe(
             self.topico_producto,
             subscription_name="gestor_stock_producto_sub",
-            consumer_type=pulsar.ConsumerType.Shared
+            consumer_type=_pulsar.ConsumerType.Shared
         )
         consumidor_pedido = self.conexion.cliente.subscribe(
             self.topico_pedido,
             subscription_name="gestor_stock_pedido_sub",
-            consumer_type=pulsar.ConsumerType.Shared
+            consumer_type=_pulsar.ConsumerType.Shared
         )
 
+        iteration = 0
         while True:
+            if max_iterations is not None and iteration >= max_iterations:
+                break
+            iteration += 1
+
             try:
                 try:
                     mensaje_producto = consumidor_producto.receive(timeout_millis=100)
                     self.logger.info("Mensaje recibido en tópico de producto")
                     self.procesar_registro_producto(mensaje_producto.data().decode("utf-8"))
                     consumidor_producto.acknowledge(mensaje_producto)
-                except pulsar.Timeout:
+                except _pulsar.Timeout:
                     pass  # No hay mensajes en el tópico de producto, continuar escuchando
 
-                # Procesar mensajes del tópico de pedido
                 try:
                     mensaje_pedido = consumidor_pedido.receive(timeout_millis=100)
                     self.logger.info("Mensaje recibido en tópico de pedido")
                     self.procesar_registro_pedido(mensaje_pedido.data().decode("utf-8"))
                     consumidor_pedido.acknowledge(mensaje_pedido)
-                except pulsar.Timeout:
+                except _pulsar.Timeout:
                     pass  # No hay mensajes en el tópico de pedido, continuar escuchando
 
             except Exception as e:
-                self.logger.error(f"Error en el proceso de escucha: {e}")
+                self.logger.error(f"Error en el proceso de escucha: {type(e).__name__}: {e}")
+                break
+        self.conexion.cliente.close()
+        self.logger.info("Escucha de tópicos finalizada")

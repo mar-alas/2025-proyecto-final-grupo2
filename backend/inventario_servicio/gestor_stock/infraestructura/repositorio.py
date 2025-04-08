@@ -4,6 +4,7 @@ import os
 from sqlalchemy import create_engine
 from .modelos import Base
 from .modelos import Producto
+import logging
 
 # Load database configuration from environment variables
 DB_USERNAME = os.getenv('DB_USERNAME', default="postgres")
@@ -15,7 +16,7 @@ DB_NAME = os.getenv('DB_NAME', default="inventario_servicio_db")
 def get_engine():
     """Dynamically determine the engine based on the environment."""
     if os.environ.get('UTEST') == "True":
-        return create_engine("sqlite:///proveedores.db")
+        return create_engine("sqlite:///test_stock.db")
     else:
         return create_engine(
             f'postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOSTNAME}:{DB_PORT}/{DB_NAME}',
@@ -37,29 +38,55 @@ Base.metadata.create_all(engine)
 class RepositorioStock:
     def __init__(self, db_session: Session):
         self.db_session = db_session or Session()
+        self.logger = logging.getLogger(__name__)
 
     def actualizar_inventario_inicial(self, producto_id, cantidad):
-        stock = self.db_session.query(Stock).filter_by(producto_id=producto_id).first()
-        if stock:
-            stock.inventario = cantidad
-        else:
-            stock = Stock(producto_id=producto_id, inventario=cantidad)
-            self.db_session.add(stock)
-        self.db_session.commit()
+        try:
+            self.logger.info(f"Actualizando inventario inicial para producto_id={producto_id} con cantidad={cantidad}")
+            stock = self.db_session.query(Stock).filter_by(producto_id=producto_id).first()
+            if stock:
+                self.logger.debug(f"Producto encontrado en inventario. Actualizando inventario a {cantidad}")
+                stock.inventario = cantidad
+            else:
+                self.logger.debug(f"Producto no encontrado en inventario. Creando nuevo registro con cantidad={cantidad}")
+                stock = Stock(producto_id=producto_id, inventario=cantidad)
+                self.db_session.add(stock)
+            self.db_session.commit()
+            self.logger.info(f"Inventario inicial actualizado para producto_id={producto_id}")
+        except Exception as e:
+            self.db_session.rollback()
+            self.logger.error(f"Error al actualizar inventario inicial para producto_id={producto_id}: {e}")
+            raise
 
     def actualizar_inventario(self, producto_id, cantidad):
-        stock = self.db_session.query(Stock).filter_by(producto_id=producto_id).first()
-        if stock:
-            stock.inventario += cantidad
-        else:
-            stock = Stock(producto_id=producto_id, inventario=cantidad)
-            self.db_session.add(stock)
-        self.db_session.commit()
+        try:
+            self.logger.info(f"Actualizando inventario para producto_id={producto_id} con cantidad={cantidad}")
+            stock = self.db_session.query(Stock).filter_by(producto_id=producto_id).first()
+            if stock:
+                self.logger.debug(f"Producto encontrado en inventario. Incrementando inventario en {cantidad}")
+                stock.inventario += cantidad
+            else:
+                self.logger.debug(f"Producto no encontrado en inventario. Creando nuevo registro con cantidad={cantidad}")
+                stock = Stock(producto_id=producto_id, inventario=cantidad)
+                self.db_session.add(stock)
+            self.db_session.commit()
+            self.logger.info(f"Inventario actualizado para producto_id={producto_id}")
+        except Exception as e:
+            self.db_session.rollback()
+            self.logger.error(f"Error al actualizar inventario para producto_id={producto_id}: {e}")
+            raise
 
     def obtener_inventario(self):
-        query = self.db_session.query(
-            Stock.producto_id,
-            Stock.inventario,
-            Producto.nombre.label("producto_nombre")
-        ).join(Producto, Stock.producto_id == Producto.id)
-        return query.all()
+        try:
+            self.logger.info("Obteniendo inventario completo")
+            query = self.db_session.query(
+                Stock.producto_id,
+                Stock.inventario,
+                Producto.nombre.label("producto_nombre")
+            ).join(Producto, Stock.producto_id == Producto.id)
+            result = query.all()
+            self.logger.debug(f"Inventario obtenido: {result}")
+            return result
+        except Exception as e:
+            self.logger.error(f"Error al obtener inventario: {e}")
+            raise

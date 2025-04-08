@@ -17,7 +17,7 @@ DB_NAME = os.getenv('DB_NAME', default="inventario_servicio_db")
 def get_engine():
     """Dynamically determine the engine based on the environment."""
     if os.environ.get('UTEST') == "True":
-        return create_engine("sqlite:///proveedores.db")
+        return create_engine("sqlite:///test_stock.db")
     else:
         return create_engine(
             f'postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOSTNAME}:{DB_PORT}/{DB_NAME}',
