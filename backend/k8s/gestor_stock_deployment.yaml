@@ -34,7 +34,7 @@ spec:
               value: postgres
             - name: PULSAR_HOST
               value: pulsar
-          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/inventario_servicio/gestor_stock:latest
+          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/inventario_servicio/gestor_stock:${TAG}
           name: gestor-stock
           ports:
             - containerPort: 3002
