@@ -1,0 +1,60 @@
+openapi: 3.0.0
+info:
+  title: API de Consulta de Inventario de Productos
+  description: API para consultar el inventario en tiempo real de los productos
+  version: 1.0.0
+servers:
+  - url: http://RUTA_GCP/api/v1/inventario/gestor_stock
+    description: Servidor de producción
+  - url: http://127.0.0.1:3001/api/v1/inventario/gestor_stock
+    description: Servidor de desarrollo
+paths:
+  /productos:
+    get:
+      tags:
+        - productos
+      summary: Obtener inventario de todos los productos
+      description: Recupera una lista con el innventario de todos los productos disponibles en el sistema.
+      responses:
+        '200':
+          description: Inventario de productos recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InventarioProductoResponse'
+        '400':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+
+components:
+  schemas:    
+    InventarioProductoResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 12345
+          description: ID único del producto
+        nombre:
+          type: string
+          example: "Producto Uno"
+          description: Nombre completo del producto
+        inventario:
+          type: integer
+          example: 100
+          description: Cantidad actual en inventario
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Error en la solicitud"
