@@ -4,8 +4,7 @@ import logging
 from seedwork_compartido.dominio.seguridad.access_token_manager import validar_token
 
 stock_bp = Blueprint('stock', __name__)
-db_session = None
-repositorio = RepositorioStock(db_session)
+repositorio = RepositorioStock()
 
 @stock_bp.route('/productos', methods=['GET'])
 def obtener_inventario():
@@ -20,8 +19,12 @@ def obtener_inventario():
     if not validation_result:
          return jsonify({"message": "forbidden"}), 403
 
-    inventario = repositorio.obtener_inventario()
-    return jsonify([
-        {"producto_id": stock.producto_id, "inventario": stock.inventario, "nombre": stock.producto_nombre}
-        for stock in inventario
-    ])
+    try:
+        inventario = repositorio.obtener_inventario()
+        return jsonify([
+            {"producto_id": stock.producto_id, "inventario": stock.inventario, "nombre": stock.producto_nombre}
+            for stock in inventario
+        ])
+    except Exception as e:
+        logging.error(f"Error al obtener inventario: {str(e)}")
+        return jsonify({"error": "Error interno del servidor al obtener inventario"}), 500

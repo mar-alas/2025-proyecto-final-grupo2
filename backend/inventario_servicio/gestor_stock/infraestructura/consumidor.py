@@ -6,11 +6,11 @@ from infraestructura.repositorio import RepositorioStock
 import logging
 
 class ConsumidorStock:
-    def __init__(self, topico_producto, topico_pedido, db_session):
+    def __init__(self, topico_producto, topico_pedido):
         self.conexion = ConexionPulsar()
         self.topico_producto = topico_producto
         self.topico_pedido = topico_pedido
-        self.repositorio = RepositorioStock(db_session)
+        self.repositorio = RepositorioStock()
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
 

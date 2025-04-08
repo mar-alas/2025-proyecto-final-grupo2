@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import sessionmaker
 from .modelos import Stock
 import os
 from sqlalchemy import create_engine
@@ -36,8 +36,8 @@ Session = sessionmaker(bind=engine)
 Base.metadata.create_all(engine)
 
 class RepositorioStock:
-    def __init__(self, db_session: Session):
-        self.db_session = db_session or Session()
+    def __init__(self):
+        self.db_session = Session()
         self.logger = logging.getLogger(__name__)
 
     def actualizar_inventario_inicial(self, producto_id, cantidad):
@@ -65,16 +65,16 @@ class RepositorioStock:
             if stock:
                 self.logger.debug(f"Producto encontrado en inventario. Incrementando inventario en {cantidad}")
                 stock.inventario += cantidad
-            else:
-                self.logger.debug(f"Producto no encontrado en inventario. Creando nuevo registro con cantidad={cantidad}")
-                stock = Stock(producto_id=producto_id, inventario=cantidad)
-                self.db_session.add(stock)
-            self.db_session.commit()
-            self.logger.info(f"Inventario actualizado para producto_id={producto_id}")
+                if stock.inventario < 0:
+                    self.logger.error(f"Inventario negativo para producto_id={producto_id}.")
+                    raise ValueError(f"No hay suficiente inventario para el producto con el id {producto_id}.")
+                self.db_session.commit()
+                self.logger.info(f"Inventario actualizado para producto_id={producto_id}")
         except Exception as e:
             self.db_session.rollback()
             self.logger.error(f"Error al actualizar inventario para producto_id={producto_id}: {e}")
             raise
+
 
     def obtener_inventario(self):
         try:

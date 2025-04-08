@@ -14,11 +14,9 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def start_consumidor():
-    db_session = Session()  # Initialize the database session
     consumidor = ConsumidorStock(
         topico_producto="ProductoRegistrado",
-        topico_pedido="PedidoProcesado",
-        db_session=db_session
+        topico_pedido="PedidoProcesado"
     )
     consumidor.escuchar()
 

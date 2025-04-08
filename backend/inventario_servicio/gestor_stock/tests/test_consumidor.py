@@ -88,8 +88,7 @@ class TestConsumidorStock(unittest.TestCase):
         # Initialize the consumer
         cls.consumidor = ConsumidorStock(
             topico_producto="ProductoRegistrado",
-            topico_pedido="PedidoProcesado",
-            db_session=cls.db_session
+            topico_pedido="PedidoProcesado"
         )
 
     @classmethod
@@ -102,6 +101,14 @@ class TestConsumidorStock(unittest.TestCase):
         cls.patcher_timeout.stop()
 
     def test_procesar_registro_producto(self):
+        existing_stock = self.db_session.query(Stock).filter_by(producto_id=1).first()
+        if not existing_stock:
+            self.db_session.add(Stock(producto_id=1, inventario=500))
+            self.db_session.commit()
+        else:
+            existing_stock.inventario = 500
+            self.db_session.commit()
+
         # Mock message for ProductoRegistrado
         mensaje_producto = '{"producto_id": 1, "inventario_inicial": 500}'
         self.consumidor.procesar_registro_producto(mensaje_producto)
