@@ -64,3 +64,39 @@ def test_login_datos_invalidos(client):
 
         assert response.status_code == 400
         assert body["message"] == "Datos incompletos"
+
+
+def test_login_password_encriptada(client):
+    data = {"email": "test@example.com", "password": "encrypted-pass", "isEncrypted": True}
+
+    mock_user = MagicMock()
+    mock_user.id = "abc-123"
+    mock_user.role = "admin"
+    mock_user.password = "hashed-password"
+
+    with patch("gestor_usuarios.aplicacion.lecturas.login.UserRepository.get_by_email", return_value=mock_user), \
+         patch("gestor_usuarios.aplicacion.lecturas.login.decrypt_password", return_value="plain-pass"), \
+         patch("gestor_usuarios.aplicacion.lecturas.login.check_password_hash", return_value=True), \
+         patch("gestor_usuarios.aplicacion.lecturas.login.generar_token", return_value="fake-token"):
+        
+        response = client.post("/login", json=data)
+        body = response.get_json()
+
+        assert response.status_code == 200
+        assert body["message"] == "Inicio de sesion exitoso."
+
+
+def test_login_password_encriptada_invalida(client):
+    data = {"email": "test@example.com", "password": "bad-encrypted-pass", "isEncrypted": True}
+
+    mock_user = MagicMock()
+    mock_user.password = "hashed-password"
+
+    with patch("gestor_usuarios.aplicacion.lecturas.login.UserRepository.get_by_email", return_value=mock_user), \
+         patch("gestor_usuarios.aplicacion.lecturas.login.decrypt_password", side_effect=ValueError("error de decrypt")), \
+         patch("gestor_usuarios.aplicacion.lecturas.login.check_password_hash"):
+        response = client.post("/login", json=data)
+        body = response.get_json()
+
+        assert response.status_code == 400
+        assert body["message"] == "Contrasena incorrecta."
