@@ -20,8 +20,8 @@ class TestStockLecturas(unittest.TestCase):
 
         # Mock inventory data
         mock_obtener_inventario.return_value = [
-            MagicMock(producto_id=1, inventario=10, producto_nombre="Producto 1"),
-            MagicMock(producto_id=2, inventario=5, producto_nombre="Producto 2")
+            MagicMock(producto_id=1, inventario=10, producto_nombre="Producto 1", producto_precio=50.0),
+            MagicMock(producto_id=2, inventario=5, producto_nombre="Producto 2", producto_precio=120.0)
         ]
 
         headers = {"Authorization": "Bearer mock_token"}
@@ -33,9 +33,11 @@ class TestStockLecturas(unittest.TestCase):
         self.assertEqual(data[0]['producto_id'], 1)
         self.assertEqual(data[0]['inventario'], 10)
         self.assertEqual(data[0]['nombre'], "Producto 1")
+        self.assertEqual(data[0]['precio'], 50.0)
         self.assertEqual(data[1]['producto_id'], 2)
         self.assertEqual(data[1]['inventario'], 5)
         self.assertEqual(data[1]['nombre'], "Producto 2")
+        self.assertEqual(data[1]['precio'], 120.0)
 
     @patch('aplicacion.lecturas.stock.validar_token')
     def test_obtener_inventario_sin_token(self, mock_validar_token):

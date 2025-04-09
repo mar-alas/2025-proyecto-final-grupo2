@@ -22,7 +22,7 @@ def obtener_inventario():
     try:
         inventario = repositorio.obtener_inventario()
         return jsonify([
-            {"producto_id": stock.producto_id, "inventario": stock.inventario, "nombre": stock.producto_nombre}
+            {"producto_id": stock.producto_id, "inventario": stock.inventario, "nombre": stock.producto_nombre, "precio": stock.producto_precio}
             for stock in inventario
         ])
     except Exception as e:
