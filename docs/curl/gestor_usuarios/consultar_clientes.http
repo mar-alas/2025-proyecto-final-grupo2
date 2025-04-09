@@ -1,5 +1,8 @@
 @baseUrl = http://34.8.66.38
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInJvbGUiOiJjbGllbnRlIiwiZXhwIjoxNzQ0MzgxMDE5fQ.TPXUoFcJ0Znq7xZ7_3Mcf9KcXHWg3B9NQa35Upt0ewg
 
-curl --request GET \
+curl --location \
+  --header "Authorization: Bearer {{token}}" \
+  --request GET \
   --url {{baseUrl}}/api/v1/seguridad/gestor_usuarios/r/clientes \
-  --header 'content-type: application/json' \
+  --header 'content-type: application/json' \ 
