@@ -26,11 +26,14 @@ def test_get_all_customers_success(client):
         FakeUser(2, 'Ana Gómez', 'ana@example.com', 'México', 'CDMX', 'Av Reforma')
     ]
 
-    with patch('gestor_usuarios.aplicacion.lecturas.get_all_customers.UserRepository') as MockRepo:
+    with patch('gestor_usuarios.aplicacion.lecturas.get_all_customers.UserRepository') as MockRepo, \
+         patch('gestor_usuarios.aplicacion.lecturas.get_all_customers.validar_token') as mock_validar_token:
+        
+        mock_validar_token.return_value = True
         instance = MockRepo.return_value
         instance.get_all_customers.return_value = mock_users
 
-        response = client.get('/api/v1/seguridad/gestor_usuarios/r/clientes')
+        response = client.get('/api/v1/seguridad/gestor_usuarios/r/clientes', headers={"Authorization": "Bearer fake-token"})
         data = response.get_json()
         
         assert response.status_code == 200
@@ -41,12 +44,17 @@ def test_get_all_customers_success(client):
         assert data['clientes'][1]['email'] == 'ana@example.com'
 
 def test_get_all_customers_error(client):
-    with patch('gestor_usuarios.aplicacion.lecturas.get_all_customers.UserRepository') as MockRepo:
+    with patch('gestor_usuarios.aplicacion.lecturas.get_all_customers.UserRepository') as MockRepo, \
+         patch('gestor_usuarios.aplicacion.lecturas.get_all_customers.validar_token') as mock_validar_token:
+        
+        mock_validar_token.return_value = True
         instance = MockRepo.return_value
-        # Simula una excepción inesperada al invocar get_all_customers
         instance.get_all_customers.side_effect = Exception("Error inesperado")
 
-        response = client.get('/api/v1/seguridad/gestor_usuarios/r/clientes')
+        response = client.get(
+            '/api/v1/seguridad/gestor_usuarios/r/clientes',
+            headers={"Authorization": "Bearer fake-token"}
+        )
         data = response.get_json()
 
         assert response.status_code == 500
@@ -56,14 +64,44 @@ def test_get_all_customers_error(client):
 
 
 def test_get_all_customers_empty_list(client):
-    with patch('gestor_usuarios.aplicacion.lecturas.get_all_customers.UserRepository') as MockRepo:
+    with patch('gestor_usuarios.aplicacion.lecturas.get_all_customers.UserRepository') as MockRepo, \
+         patch('gestor_usuarios.aplicacion.lecturas.get_all_customers.validar_token') as mock_validar_token:
+        
+        mock_validar_token.return_value = True
         instance = MockRepo.return_value
         instance.get_all_customers.return_value = []
 
-        response = client.get('/api/v1/seguridad/gestor_usuarios/r/clientes')
+        response = client.get(
+            '/api/v1/seguridad/gestor_usuarios/r/clientes',
+            headers={"Authorization": "Bearer fake-token"}
+        )
         data = response.get_json()
 
         assert response.status_code == 200
         assert data['status'] == 'success'
         assert data['message'] == 'No hay clientes registrados.'
         assert data['clientes'] == []
+
+
+def test_get_all_customers_missing_token(client):
+    response = client.get('/api/v1/seguridad/gestor_usuarios/r/clientes')
+    data = response.get_json()
+
+    assert response.status_code == 401
+    assert data['status'] == 'FAILED'
+    assert data['message'] == 'No se proporciono un token'
+
+
+def test_get_all_customers_invalid_token(client):
+    with patch('gestor_usuarios.aplicacion.lecturas.get_all_customers.validar_token') as mock_validar_token:
+        mock_validar_token.return_value = False
+
+        response = client.get(
+            '/api/v1/seguridad/gestor_usuarios/r/clientes',
+            headers={"Authorization": "Bearer token_invalido"}
+        )
+        data = response.get_json()
+
+        assert response.status_code == 403
+        assert data['status'] == 'FAILED'
+        assert data['message'] == 'forbidden'
