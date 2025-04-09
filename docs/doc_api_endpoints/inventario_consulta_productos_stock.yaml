@@ -14,7 +14,7 @@ paths:
       tags:
         - productos
       summary: Obtener inventario de todos los productos
-      description: Recupera una lista con el innventario de todos los productos disponibles en el sistema.
+      description: Recupera una lista con el inventario de todos los productos disponibles en el sistema.
       responses:
         '200':
           description: Inventario de productos recuperado exitosamente
@@ -31,26 +31,28 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-
-
 components:
   schemas:    
     InventarioProductoResponse:
       type: object
       properties:
-        id:
+        producto_id:
           type: integer
           format: int64
-          example: 12345
+          example: 1
           description: ID único del producto
         nombre:
           type: string
-          example: "Producto Uno"
+          example: "Sal"
           description: Nombre completo del producto
         inventario:
           type: integer
-          example: 100
+          example: 500
           description: Cantidad actual en inventario
+      required:
+        - producto_id
+        - nombre
+        - inventario
 
     ErrorResponse:
       type: object
