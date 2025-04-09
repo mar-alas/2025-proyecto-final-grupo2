@@ -27,35 +27,46 @@ components:
   schemas:
     ClientesResponse:
       type: object
-      required:
-        - id
-        - name
-        - email
-        - country
-        - city
-        - address
       properties:
-        id: 
-          type: integer
-          format: int64
-          example: 123456
-        name:
-          type: string
-          example: "John Doe"
-        email:
-          type: string
-          format: email
-          example: "john.doe@example.com"
-
-        country:
-          type: string
-          example: "Colombia"
-        city:
-          type: string
-          example: "Bogota"
-        address:
-          type: string
-          example: "CL 1 # 2 - 3"
+        clientes:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                format: int64
+                example: 123456
+              name:
+                type: string
+                example: "John Doe"
+              email:
+                type: string
+                format: email
+                example: "john.doe@example.com"
+              country:
+                type: string
+                example: "Colombia"
+              city:
+                type: string
+                example: "Bogota"
+              address:
+                type: string
+                example: "CL 1 # 2 - 3"
+      example:
+        clientes:
+          - id: 123456
+            name: "John Doe"
+            email: "john.doe@example.com"
+            country: "Colombia"
+            city: "Bogota"
+            address: "CL 1 # 2 - 3"
+          - id: 789012
+            name: "Jane Smith"
+            email: "jane.smith@example.com"
+            country: "Colombia"
+            city: "Medellin"
+            address: "CL 4 # 5 - 6"
 
     ErrorResponse:
       type: object
