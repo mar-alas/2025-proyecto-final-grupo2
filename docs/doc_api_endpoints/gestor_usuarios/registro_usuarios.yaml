@@ -5,7 +5,7 @@ info:
   description: API para el registro de usuarios en CCP
 
 paths:
-  /signup:
+  /api/v1/seguridad/gestor_usuarios/w/signup:
     post:
       summary: Registra un nuevo usuario
       operationId: registerUser

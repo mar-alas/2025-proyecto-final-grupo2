@@ -1,0 +1,83 @@
+openapi: 3.0.0
+info:
+  title: API de consulta de estados de pedidos
+  description: |
+    API para que clientes de CCP puedan consultar el estado actual de sus pedidos.
+  version: 1.0.0
+servers:
+  - url: http://RUTA_GCP/api/v1/ventas/gestor_planes_venta
+    description: Servidor de producción
+  - url: http://127.0.0.1:3009/api/v1/ventas/gestor_planes_venta
+    description: Servidor de desarrollo
+paths:
+  /ruta_visita:
+    get:
+      tags:
+        - rutas de visita
+      summary: Consultar ruta de visita
+      description: |
+        Obtiene la ruta de visita ordenada en formato lista para un día y vendedor específicos.
+      parameters:
+        - name: vendedor_id
+          in: query
+          required: true
+          description: ID del vendedor asociado a la ruta de visita
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: fecha
+          in: query
+          required: true
+          description: Fecha de la ruta de visita en formato YYYY-MM-DD
+          schema:
+            type: string
+            format: date
+            example: "2025-05-31"
+        
+      responses:
+        '200':
+          description: Lista de rutas de visita
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RutaVisitaResponse'
+        '404':
+          description: Error en ruta de visita
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  
+components:
+  schemas:
+    RutaVisitaResponse:
+      type: object
+      properties:
+        cliente_id:
+          type: integer
+          example: 1
+          description: id del cliente
+        barrio:
+          type: string
+          example: "Chapinero"
+          description: barrio del cliente
+        hora:
+          type: string
+          example: "8:00 AM"
+          description: Hora en formato H:MM AM/PM
+        trayecto:
+          type: number
+          example: 0.5
+          description: Duración del trayecto hacia el cliente en horas
+    
+ 
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Error interno del servidor"
+          description: Descripción general del error

@@ -5,7 +5,7 @@ info:
   description: API para el inicio de sesión de usuarios de CCP
 
 paths:
-  /auth/login:
+  /api/v1/seguridad/gestor_usuarios/r/auth/login:
     post:
       summary: Inicio de sesión
       description: Permite a un usuario autenticarse con su email y contraseña.
