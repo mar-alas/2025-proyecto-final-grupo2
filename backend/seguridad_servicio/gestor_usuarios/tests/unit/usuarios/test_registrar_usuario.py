@@ -69,3 +69,30 @@ def test_datos_invalidos(mock_repo_class, client):
 
     assert response.status_code == 400
     assert "message" in response.get_json()
+
+
+@patch("gestor_usuarios.aplicacion.escrituras.registrar_user.decrypt_password", return_value="secure123")
+@patch("gestor_usuarios.aplicacion.escrituras.registrar_user.UserRepository")
+def test_registro_usuario_con_password_encriptado(mock_repo_class, mock_decrypt, client):
+    mock_repo = MagicMock()
+    mock_repo.get_by_email.side_effect = [None, MagicMock(id="abc-123")]
+    mock_repo_class.return_value = mock_repo
+
+    payload = {
+        "name": "Jhon",
+        "email": "jhon@example.com",
+        "password": "encrypted",
+        "isEncrypted": True,
+        "role": "admin",
+        "country": "Colombia",
+        "city": "Bogotá",
+        "address": "Calle 123"
+    }
+
+    response = client.post("/users", json=payload)
+    body = response.get_json()
+
+    assert response.status_code == 201
+    assert body["message"] == "Usuario registrado exitosamente."
+
+
