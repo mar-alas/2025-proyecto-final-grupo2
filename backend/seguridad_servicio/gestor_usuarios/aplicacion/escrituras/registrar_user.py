@@ -12,6 +12,7 @@ from gestor_usuarios.dominio.reglas_negocio import validar_datos_usuario
 from gestor_usuarios.dominio.user import User
 from gestor_usuarios.dominio.user_repository import UserRepository
 from gestor_usuarios.infraestructura.database import db
+from gestor_usuarios.dominio.password_decryptor import decrypt_password
 
 registrar_user_bp = Blueprint('registrar_user_bp', __name__)
 
@@ -29,14 +30,18 @@ def registrar_user():
         # Inyectamos la sesión al repositorio
         user_repo = UserRepository(db.session, User)
 
-        if user_repo.get_by_email(data.get('email')):
+        if user_repo.get_by_email(data.get('email').strip().lower()):
             return jsonify({"message": "El usuario ya se encuentra registrado."}), 409
 
-
+        password = data.get('password')
+        print(f"password R:{password}")
+        if data.get("isEncrypted", False):
+            password = decrypt_password(password)
+        print(f"password D:{password}")
         user_dto = UserDTO(
             name = data.get('name'),
-            email = data.get('email'),
-            password = generate_password_hash(data.get('password')),
+            email = data.get('email').strip().lower(),
+            password = generate_password_hash(password),
             role = data.get("role") if role_esta_presente(data) else None,
             country = data.get("country") if country_esta_presente(data) else None,
             city = data.get("city") if city_esta_presente(data) else None,

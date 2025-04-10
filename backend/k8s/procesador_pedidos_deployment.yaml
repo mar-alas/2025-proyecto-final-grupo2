@@ -32,12 +32,19 @@ spec:
               value: "5432"
             - name: DB_USER
               value: postgres
-            - name: PRODUCTOS_HOSTNAME
-              value: gestor-productos
-            - name: PRODUCTOS_PORT
-              value: "3001"
-          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/procesador_pedidos:latest
+            - name: STOCK_HOST
+              value: gestor-stock
+            - name: STOCK_PORT
+              value: "3002"
+            - name: USUARIOS_HOST
+              value: gestor-usuarios
+            - name: USUARIOS_PORT
+              value: "3011"
+            - name: PULSAR_HOST
+              value: pulsar
+          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/procesador_pedidos:${TAG}
           name: procesador-pedidos
+          imagePullPolicy: Always
           ports:
             - containerPort: 3009
               protocol: TCP

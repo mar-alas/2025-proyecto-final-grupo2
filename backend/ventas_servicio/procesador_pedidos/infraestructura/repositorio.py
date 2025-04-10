@@ -37,8 +37,12 @@ class RepositorioPedidos:
 
     def guardar(self, pedido: Pedido):
         """Guarda un nuevo pedido en la base de datos."""
-        self.db_session.add(pedido)
-        self.db_session.commit()
+        try:
+            self.db_session.add(pedido)
+            self.db_session.commit()
+        except Exception as e:
+            self.db_session.rollback()
+            raise e
 
     def obtener_por_id(self, pedido_id):
         """Obtiene un pedido por su ID."""

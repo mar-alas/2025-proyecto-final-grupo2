@@ -3,11 +3,12 @@ from infraestructura.schema import PedidoInputSchema
 from infraestructura.repositorio import RepositorioPedidos
 from infraestructura.mappers import to_infraestructura_pedido
 from dominio.reglas_negocio import validar_stock_disponible, obtener_stock_disponible, validar_vendedor, validar_cliente
+from seedwork_compartido.dominio.seguridad.access_token_manager import validar_token
+from infraestructura.despachador import Despachador
 from dominio.modelo import Pedido
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 import os
-import requests
 import logging
 
 # Configure logging
@@ -40,13 +41,24 @@ def registrar_pedido():
     data = request.json
     logger.debug(f"Datos recibidos: {data}")
 
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({"error": "No se proporcionó un token"}), 401
+
+    token = auth_header.split(" ")[1]
+    validation_result = validar_token(token=token)
+
+    if not validation_result:
+         return jsonify({"message": "forbidden"}), 403
+
     # Validate input schema
     errores = PedidoInputSchema().validate(data)
     if errores:
         logger.warning(f"Errores de validación en el esquema de entrada: {errores}")
         return jsonify({"error": errores}), 400
-    stock_disponible = obtener_stock_disponible()
-    errores_stock, productos = validar_stock_disponible(data["productos"], stock_disponible)
+
+    stock_disponible = obtener_stock_disponible(token)
+    errores_stock = validar_stock_disponible(data["productos"], stock_disponible)
     if errores_stock:
         logger.warning(f"Stock insuficiente: {errores_stock}")
         return jsonify({"error": "Stock insuficiente", "detalles": errores_stock}), 409
@@ -57,7 +69,7 @@ def registrar_pedido():
         return error_vendedor
 
     # Validar si el cliente id existe, no puede ser nulo
-    error_cliente = validar_cliente(data["cliente_id"])
+    error_cliente = validar_cliente(data["cliente_id"], token)
     if error_cliente:
         return error_cliente
 
@@ -66,7 +78,7 @@ def registrar_pedido():
     domain_pedido = Pedido(
         cliente_id=data["cliente_id"],
         vendedor_id=data["vendedor_id"],
-        productos=productos
+        productos=data["productos"]
     )
 
     # Translate to infraestructura Pedido and save
@@ -74,6 +86,16 @@ def registrar_pedido():
     infra_pedido = to_infraestructura_pedido(domain_pedido)
     repositorio = RepositorioPedidos(db_session)
     repositorio.guardar(infra_pedido)
+
+    try:
+        despachador = Despachador()
+        for p in infra_pedido.productos:
+            despachador.publicar_mensaje('PedidoProcesado', {"producto_id": p.producto_id, "cantidad": p.cantidad})
+        despachador.cerrar()
+
+    except Exception as e:
+        logger.error(f"Error publicando mensaje en el tópico PedidoProcesado: {e}")
+        return jsonify({"error": "Error al procesar el pedido"}), 500
 
     logger.info("Pedido registrado exitosamente")
     return jsonify({"message": "Pedido registrado exitosamente"}), 201
