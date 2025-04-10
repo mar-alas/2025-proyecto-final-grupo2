@@ -359,6 +359,7 @@ services:
         - DB_PORT=5432
         - DB_NAME=seguridad_servicio_db
         - DB_HOST=seguridad_servicio_db
+        - ENCRYPTION_KEY=CCP_ENCRYPTION_KEY_2025
     networks:
       - seguridad_servicio_net
 

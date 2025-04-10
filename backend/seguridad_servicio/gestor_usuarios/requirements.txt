@@ -11,3 +11,4 @@ Flask
 Flask-SQLAlchemy
 psycopg2-binary
 flask-cors==5.0.1
+pycryptodome
