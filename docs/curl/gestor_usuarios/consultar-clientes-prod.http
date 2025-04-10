@@ -1,4 +1,6 @@
 @baseUrl = http://34.8.66.38
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInJvbGUiOiJjbGllbnRlIiwiZXhwIjoxNzQ0MzgxMDE5fQ.TPXUoFcJ0Znq7xZ7_3Mcf9KcXHWg3B9NQa35Upt0ewg
+# ⚠️ IMPORTANTE: Debes obtener el token desde el endpoint de login: /api/v1/seguridad/gestor_usuarios/r/auth/login (ver login-prod.http)
+@token = Bearer tu.access.token
 
 GET {{baseUrl}}/api/v1/seguridad/gestor_usuarios/r/clientes
+Authorization: {{token}}
