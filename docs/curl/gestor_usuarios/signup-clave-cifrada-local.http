@@ -1,0 +1,13 @@
+POST /api/v1/seguridad/gestor_usuarios/w/signup HTTP/1.1
+Content-Type: application/json
+Host: localhost:3011
+
+{
+  "name": "Pepe",
+  "email": "pepe@gmail.com",
+  "password": "password",
+  "role": "cliente",
+  "country": "Colombia",
+  "city": "Bogota D.C.",
+  "address": "CL 1 # 2 - 3"
+}

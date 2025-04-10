@@ -1,0 +1,9 @@
+POST /api/v1/seguridad/gestor_usuarios/r/auth/login HTTP/1.1
+Content-Type: application/json
+Host: 34.8.66.38
+
+{
+  "email": "pepe002@gmail.com",
+  "password": "U2FsdGVkX19v5r+fc2R/pVo8NQRLAi7nxk2y+GZJuo0=",
+  "isEncrypted": true
+}
