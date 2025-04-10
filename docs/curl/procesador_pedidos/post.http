@@ -1,0 +1,19 @@
+curl --location 'http://34.8.66.38/api/v1/ventas/procesador_pedidos/pedidos' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzQ0MzUwMDAyfQ.N37zn6lyZctrMoH9z9JRXG8BTvPbnSX4_NKu6qH8XOQ' \
+--data '{
+  "cliente_id": 28,
+  "vendedor_id": 987654,
+  "productos": [
+    {
+      "id": 1,
+      "cantidad": 20,
+      "precio_unitario": 50.0
+    },
+    {
+      "id": 2,
+      "cantidad": 20,
+      "precio_unitario": 120.0
+    }
+  ]
+}'

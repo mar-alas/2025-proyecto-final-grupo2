@@ -82,7 +82,8 @@ class RepositorioStock:
             query = self.db_session.query(
                 Stock.producto_id,
                 Stock.inventario,
-                Producto.nombre.label("producto_nombre")
+                Producto.nombre.label("producto_nombre"),
+                Producto.precio.label("producto_precio")
             ).join(Producto, Stock.producto_id == Producto.id)
             result = query.all()
             self.logger.debug(f"Inventario obtenido: {result}")

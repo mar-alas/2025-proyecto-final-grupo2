@@ -295,14 +295,16 @@ services:
         - DB_PORT=5432
         - DB_NAME=ventas_servicio_db
         - DB_HOSTNAME=ventas_servicio_db
-        - PRODUCTOS_HOST=gestor_productos
-        - PRODUCTOS_PORT=3001
-        - USUARIOS=gestor_usuarios
+        - STOCK_HOST=gestor_stock
+        - STOCK_PORT=3002
+        - USUARIOS_HOST=gestor_usuarios
         - USUARIOS_PORT=3011
+        - PULSAR_HOST=pulsar
     networks:
       - ventas_servicio_net
       - inventario_servicio_net
       - seguridad_servicio_net
+      - pulsar_net
   
   procesador_video:
     build:

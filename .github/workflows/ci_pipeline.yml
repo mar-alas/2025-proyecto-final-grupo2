@@ -246,9 +246,8 @@ jobs:
 
   test_procesador_pedidos:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.10]
+    container:
+      image: python:3.10-slim
     steps:
       - uses: actions/checkout@v2
       - name: Install pipenv
