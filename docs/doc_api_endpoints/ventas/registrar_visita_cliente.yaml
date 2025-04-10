@@ -1,0 +1,118 @@
+openapi: 3.0.0
+info:
+  title: API de consulta de registro de planes de venta
+  description: |
+    API para que vendedores de CCP puedan registrar visita a un cliente.
+  version: 1.0.0
+servers:
+  - url: http://RUTA_GCP/api/v1/ventas/gestor_planes_venta
+    description: Servidor de producción
+  - url: http://127.0.0.1:3009/api/v1/ventas/gestor_planes_venta
+    description: Servidor de desarrollo
+paths:
+  /visita_cliente:
+    post:
+      tags:
+        - registrar_visita
+      summary: Registro de visita de cliente
+      description: |
+        Registro de visita de cliente
+      parameters:
+        - name: vendedor_id
+          in: query
+          required: true
+          description: ID del vendedor asociado a la ruta de visita
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: fecha
+          in: query
+          required: true
+          description: Fecha de la ruta de visita en formato YYYY-MM-DDTHH:MM:SS.SSSZ
+          schema:
+            type: string
+            format: date
+            example: "2025-05-31-T00:00:00.000Z"
+        - name: ubicacion_productos_ccp
+          in: query
+          required: true
+          description: Ubicación de los productos CCP en la ruta de visita
+          schema:
+            type: array
+            items:
+              type: object
+              required:
+                - id_producto
+                - ubicacion
+              properties:
+                id_producto:
+                  type: integer
+                  example: 1
+                  description: ID del producto CCP
+                ubicacion:
+                  type: string
+                  example: "Estante 1"
+                  description: Ubicacion del producto
+                  enum:
+                    - "caja"
+                    - "pasillo_principal"
+                    - "pasillo_secundario"
+                    - "neveras"
+        - name: ubicacion_productos_compentencia
+          in: query
+          required: true
+          description: Ubicación de los productos la compentencia en la ruta de visita
+          schema:
+            type: array
+            items:
+              type: object
+              required:
+                - id_producto
+                - ubicacion
+              properties:
+                id_producto:
+                  type: integer
+                  example: 1
+                  description: ID del producto CCP
+                ubicacion:
+                  type: string
+                  example: "Estante 1"
+                  description: Ubicacion del producto
+                  enum:
+                    - "caja"
+                    - "pasillo_principal"
+                    - "pasillo_secundario"
+                    - "neveras"
+      responses:
+        '200':
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccesfulResponse'
+        '404':
+          description: Error en ruta de visita
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  
+components:
+  schemas:
+    SuccesfulResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Visita registrada exitosamente"
+          description: Mensaje de Exito
+    
+ 
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Error interno del servidor"
+          description: Descripción general del error
