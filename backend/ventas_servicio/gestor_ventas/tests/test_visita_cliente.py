@@ -28,7 +28,7 @@ class TestVisitaCliente(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # Set up a testing database
-        cls.engine = create_engine("sqlite:///ventas_servicio_test.db")
+        cls.engine = create_engine("sqlite:///ventas_servicio.db")
         cls.Session = sessionmaker(bind=cls.engine)
 
         # Create a Flask app for testing

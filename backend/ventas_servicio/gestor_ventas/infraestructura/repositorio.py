@@ -18,7 +18,11 @@ DB_NAME = os.getenv('DB_NAME', default="ventas_servicio_db")
 DATABASE_URL = f'postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOSTNAME}:{DB_PORT}/{DB_NAME}'
 
 # Initialize the database engine
-engine = create_engine(DATABASE_URL)
+engine = None
+if os.environ.get('UTEST') == "True":
+    engine = create_engine("sqlite:///ventas_servicio.db")
+else:
+    engine = create_engine(DATABASE_URL)
 Session = sessionmaker(bind=engine)
 
 # Ensure all tables are created in the database
