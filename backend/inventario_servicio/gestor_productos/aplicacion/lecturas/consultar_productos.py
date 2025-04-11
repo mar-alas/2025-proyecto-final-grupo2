@@ -1,13 +1,14 @@
 from flask import Blueprint, jsonify
+import logging
 
-crear_producto_bp = Blueprint('crear_producto_bp', __name__)
+logging.basicConfig(level=logging.INFO)
+consultar_productos_bp = Blueprint('consultar_productos_bp', __name__)
 
-@crear_producto_bp.route('', methods=['POST'])
-def crear_producto():
+@consultar_productos_bp.route('', methods=['GET'])
+def consultar_productos():
     try:
-        return jsonify({
-            "message": "Producto(es) registrado(s) exitosamente",
-            "data": {
+        productos = [
+                {
                 "id": 1,
                 "nombre": "Sal",
                 "descripcion": "Sal refinada para consumo diario",
@@ -20,6 +21,11 @@ def crear_producto():
                 "imagenes_productos": ["sal1.jpg", "sal2.jpg"],
                 "proveedor": "Proveedor Salinas S.A."
             }
-        }), 201
+        ]
+        return jsonify({
+            "message": "Lista de productos recuperada exitosamente",
+            "data": productos
+        }), 200
     except Exception as e:
-        return jsonify({"message": f"Error en registro. Intentre mas tarde. Error:{str(e)}"}), 500
+        logging.error(f"Error al consultar productos: {str(e)}")
+        return jsonify({"message": f"Error al consultar la lista de productos. Intente mas tarde."}), 500
