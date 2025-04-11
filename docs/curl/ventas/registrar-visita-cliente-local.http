@@ -8,7 +8,7 @@ curl -X POST "http://127.0.0.1:5000/api/v1/ventas/gestor_planes_venta/visita_cli
   "ubicacion_productos_ccp": [
     {"id_producto": 1, "ubicacion": "caja"}
   ],
-  "ubicacion_productos_compentencia": [
+  "ubicacion_productos_competencia": [
     {"id_producto": 1, "ubicacion":"pasillo_principal"}
   ]
 }'

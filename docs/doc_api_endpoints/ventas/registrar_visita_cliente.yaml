@@ -61,7 +61,7 @@ paths:
                           - "pasillo_principal"
                           - "pasillo_secundario"
                           - "neveras"
-                ubicacion_productos_compentencia:
+                ubicacion_productos_competencia:
                   type: array
                   description: Ubicación de los productos la competencia en la ruta de visita
                   items:
