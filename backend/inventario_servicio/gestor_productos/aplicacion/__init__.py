@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from aplicacion.lecturas.ping import ping_bp
 from aplicacion.lecturas.home import home_bp
 from aplicacion.lecturas.productos import productos_lectura
@@ -8,6 +9,7 @@ URL_HOME = "/"
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)
     app.register_blueprint(ping_bp, url_prefix=URL_PREFIX)
     app.register_blueprint(home_bp, url_prefix=URL_HOME)
     app.register_blueprint(productos_lectura, url_prefix=URL_PREFIX)
