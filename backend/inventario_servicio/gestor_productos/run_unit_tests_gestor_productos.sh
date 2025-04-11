@@ -12,4 +12,4 @@ source venv/bin/activate
 pip3 install -r requirements-test-gestor-productos.txt
 
 coverage run --source=. -m pytest tests
-coverage report -m
+coverage report --fail-under=80

@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 
 crear_producto_bp = Blueprint('crear_producto_bp', __name__)
 
