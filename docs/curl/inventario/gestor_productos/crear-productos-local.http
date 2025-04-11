@@ -1,0 +1,2 @@
+GET /api/v1/inventario/gestor_productos/productos HTTP/1.1
+Host: localhost:3001
