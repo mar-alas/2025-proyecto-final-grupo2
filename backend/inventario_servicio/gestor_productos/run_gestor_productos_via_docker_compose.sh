@@ -1,6 +1,14 @@
 #!/bin/bash
+set -e
 
-# Script to start Gestor Productos with its required services
-# Usage: ./run_gestor_productos_via_docker_compose.sh
+# Opcional: Mostrar información de los contenedores actuales
+echo "Deteniendo servicios existentes (gestor_productos, inventario_servicio_db, pulsar)..."
 
+# Detiene los servicios indicados si están en ejecución.
+docker-compose stop gestor_productos inventario_servicio_db pulsar
+
+# Elimina de forma forzada los contenedores detenidos (opcional)
+docker-compose rm -f gestor_productos inventario_servicio_db pulsar
+
+echo "Iniciando servicios..."
 docker-compose up --build gestor_productos inventario_servicio_db pulsar
