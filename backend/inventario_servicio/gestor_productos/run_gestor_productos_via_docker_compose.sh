@@ -1,0 +1,1 @@
+sudo docker-compose up --build gestor_productos inventario_servicio_db pulsar
