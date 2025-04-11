@@ -17,81 +17,73 @@ paths:
       summary: Registro de visita de cliente
       description: |
         Registro de visita de cliente
-      parameters:
-        - name: cliente_id
-          in: query
-          required: true
-          description: ID del cliente asociado a la visita
-          schema:
-            type: integer
-            format: int64
-            example: 1
-        - name: vendedor_id
-          in: query
-          required: true
-          description: ID del vendedor asociado a la visita
-          schema:
-            type: integer
-            format: int64
-            example: 1
-        - name: fecha
-          in: query
-          required: true
-          description: Fecha de la ruta de visita en formato YYYY-MM-DDTHH:MM:SS.SSSZ
-          schema:
-            type: string
-            format: date
-            example: "2025-05-31-T00:00:00.000Z"
-        - name: ubicacion_productos_ccp
-          in: query
-          required: true
-          description: Ubicación de los productos CCP en la ruta de visita
-          schema:
-            type: array
-            items:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
               type: object
-              required:
-                - id_producto
-                - ubicacion
               properties:
-                id_producto:
+                cliente_id:
                   type: integer
+                  format: int64
                   example: 1
-                  description: ID del producto CCP
-                ubicacion:
-                  type: string
-                  example: "Estante 1"
-                  description: Ubicacion del producto
-                  enum:
-                    - "caja"
-                    - "pasillo_principal"
-                    - "pasillo_secundario"
-                    - "neveras"
-        - name: ubicacion_productos_compentencia
-          in: query
-          required: true
-          description: Ubicación de los productos la compentencia en la ruta de visita
-          schema:
-            type: array
-            items:
-              type: object
-              required:
-                - id_producto
-                - ubicacion
-              properties:
-                id_producto:
+                  description: ID del cliente asociado a la visita
+                vendedor_id:
                   type: integer
+                  format: int64
                   example: 1
-                  description: ID del producto CCP
-                ubicacion:
+                  description: ID del vendedor asociado a la visita
+                fecha:
                   type: string
-                  example: "Estante 1"
-                  description: Ubicacion del producto
-                  enum:
-                    - "caja"
-                    - "pasillo_principal"
-                    - "pasillo_secundario"
-                    - "neveras"
+                  format: date-time
+                  example: "2025-05-31T00:00:00.000Z"
+                  description: Fecha de la ruta de visita en formato YYYY-MM-DDTHH:MM:SS.SSSZ
+                ubicacion_productos_ccp:
+                  type: array
+                  description: Ubicación de los productos CCP en la ruta de visita
+                  items:
+                    type: object
+                    required:
+                      - id_producto
+                      - ubicacion
+                    properties:
+                      id_producto:
+                        type: integer
+                        example: 1
+                        description: ID del producto CCP
+                      ubicacion:
+                        type: string
+                        example: "Estante 1"
+                        description: Ubicacion del producto
+                        enum:
+                          - "caja"
+                          - "pasillo_principal"
+                          - "pasillo_secundario"
+                          - "neveras"
+                ubicacion_productos_compentencia:
+                  type: array
+                  description: Ubicación de los productos la competencia en la ruta de visita
+                  items:
+                    type: object
+                    required:
+                      - id_producto
+                      - ubicacion
+                    properties:
+                      id_producto:
+                        type: integer
+                        example: 1
+                        description: ID del producto CCP
+                      ubicacion:
+                        type: string
+                        example: "Estante 1"
+                        description: Ubicacion del producto
+                        enum:
+                          - "caja"
+                          - "pasillo_principal"
+                          - "pasillo_secundario"
+                          - "neveras"
+      parameters: []
       responses:
         '200':
           description: Respuesta exitosa
