@@ -1,0 +1,37 @@
+name: Integracion Continua gestor de productos
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/inventario_servicio/gestor_productos/**'
+      - '.github/workflows/ci_gestor_productos.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'backend/inventario_servicio/gestor_productos/**'
+      - '.github/workflows/ci_gestor_productos.yml'
+  workflow_dispatch:
+jobs:
+    test_gestor_productos:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.10]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run unit tests with coverage
+        working-directory: ./backend/inventario_servicio/gestor_productos
+        run: |
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install -r requirements-test-gestor-productos.txt
+          coverage run --source=. -m pytest tests
+          coverage report -m
+          coverage_percentage=$(coverage report | grep TOTAL | awk '{print $4}' | sed 's/%//')
+          if (( $(echo "$coverage_percentage < 80" | bc -l) )); then
+            echo -e "\033[0;31mERROR: La cobertura de pruebas es menor al 80% ($coverage_percentage%)\033[0m"
+            exit 1
+          fi
