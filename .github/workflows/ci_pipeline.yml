@@ -41,24 +41,27 @@ jobs:
         python-version: [3.10]
     steps:
       - uses: actions/checkout@v2
-      - name: Install pipenv
+
+      - name: Create virtual environment
         working-directory: ./backend/inventario_servicio/gestor_productos
-        run: pip install pipenv
-      - name: Install dependencies
+        run: python3 -m venv venv
+
+      - name: Activate virtual environment and install dependencies
         working-directory: ./backend/inventario_servicio/gestor_productos
-        run: pip install -r requirements.txt
-      - name: Set PYTHONPATH
-        run: echo "PYTHONPATH=$PWD/backend/seedwork_compartido:$PWD/backend/inventario_servicio/gestor_productos" >> $GITHUB_ENV
-      - name: Print PYTHONPATH
-        run: echo $PYTHONPATH
-      - name: Run unit tests
-        working-directory: ./backend
-        env:
-          PYTHONPATH: ${{ env.PYTHONPATH }}
-        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s inventario_servicio/gestor_productos/tests
-      - name: Run coverage report
-        working-directory: ./backend
-        run: coverage report --fail-under=80
+        run: |
+          source venv/bin/activate
+          pip install -r requirements-test-gestor-productos.txt
+
+      - name: Run unit tests with coverage
+        working-directory: ./backend/inventario_servicio/gestor_productos
+        run: |
+          coverage run --source=. -m pytest tests
+          coverage report -m
+          coverage_percentage=$(coverage report | grep TOTAL | awk '{print $4}' | sed 's/%//')
+          if (( $(echo "$coverage_percentage < 80" | bc -l) )); then
+            echo "ERROR: La cobertura de pruebas es menor al 80% ($coverage_percentage%)"
+            exit 1
+          fi
 
   test_gestor_stock:
     runs-on: ubuntu-latest
