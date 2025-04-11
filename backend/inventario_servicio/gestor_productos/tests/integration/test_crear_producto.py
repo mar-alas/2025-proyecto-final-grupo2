@@ -1,0 +1,75 @@
+import pytest
+import jwt
+from datetime import datetime, timedelta, timezone
+from app import create_app
+from unittest.mock import patch
+
+SECRET = "clave_secreta_para_firmar_token"
+URL_CREATE_PRODUCTS = "/api/v1/inventario/gestor_productos/productos"
+
+
+@pytest.fixture
+def client():
+    app = create_app()
+    app.testing = True
+    return app.test_client()
+
+
+def generar_token_con_rol(rol: str, exp: datetime = None):
+    payload = {"role": rol}
+    if exp:
+        payload["exp"] = exp
+    return jwt.encode(payload, SECRET, algorithm="HS256")
+
+
+class TestCrearProductoAutenticacion:
+
+    def test_deberia_devolver_401_si_no_se_envia_token(self, client):
+        response = client.post(URL_CREATE_PRODUCTS)
+        assert response.status_code == 401
+        assert "No se proporciono un token" in response.json["message"]
+
+    def test_deberia_devolver_401_si_el_token_esta_mal_formado(self, client):
+        response = client.post(URL_CREATE_PRODUCTS, headers={"Authorization": "Bearer"})
+        assert response.status_code == 401
+        assert "Formato del token invalido" in response.json["message"]
+
+    def test_deberia_devolver_403_si_el_token_es_invalido(self, client):
+        response = client.post(URL_CREATE_PRODUCTS, headers={"Authorization": "Bearer token_falso"})
+        assert response.status_code == 403
+        assert "Token invalido" in response.json["message"]
+
+    def test_deberia_devolver_403_si_el_token_es_valido_pero_el_rol_no_tiene_permisos(self, client):
+        token = generar_token_con_rol("bodeguero")
+        response = client.post(URL_CREATE_PRODUCTS, headers={"Authorization": f"Bearer {token}"})
+        assert response.status_code == 403
+        assert "Permisos insuficientes" in response.json["message"]
+
+    def test_deberia_devolver_403_si_el_token_esta_expirado(self, client):
+        expirado = datetime.now(tz=timezone.utc) - timedelta(seconds=10)
+        token = generar_token_con_rol("director-compras", expirado)
+        response = client.post(URL_CREATE_PRODUCTS, headers={"Authorization": f"Bearer {token}"})
+        assert response.status_code == 403
+        assert "Token expirado" in response.json["message"]
+
+
+class TestCrearProductoExitoso:
+
+    def test_deberia_registrar_producto_exitosamente_con_token_valido(self, client):
+        token = generar_token_con_rol("director-compras")
+        response = client.post(URL_CREATE_PRODUCTS, headers={"Authorization": f"Bearer {token}"})
+        assert response.status_code == 201
+        assert "Producto(es) registrado(s) exitosamente" in response.json["message"]
+
+
+class TestCrearProductoErroresInternos:
+
+    def test_deberia_devolver_500_si_el_validador_lanza_excepcion(self, client):
+        with patch(
+            "aplicacion.escrituras.crear_producto.AccessTokenValidator.validate",
+            side_effect=Exception("Falla interna")
+        ):
+            token = generar_token_con_rol("director-compras")
+            response = client.post(URL_CREATE_PRODUCTS, headers={"Authorization": f"Bearer {token}"})
+            assert response.status_code == 500
+            assert "Error en registro. Intentre mas tarde." in response.json["message"]
