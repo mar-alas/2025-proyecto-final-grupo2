@@ -18,10 +18,18 @@ paths:
       description: |
         Registro de visita de cliente
       parameters:
+        - name: cliente_id
+          in: query
+          required: true
+          description: ID del cliente asociado a la visita
+          schema:
+            type: integer
+            format: int64
+            example: 1
         - name: vendedor_id
           in: query
           required: true
-          description: ID del vendedor asociado a la ruta de visita
+          description: ID del vendedor asociado a la visita
           schema:
             type: integer
             format: int64
