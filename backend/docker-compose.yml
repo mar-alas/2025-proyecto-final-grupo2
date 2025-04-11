@@ -1,7 +1,9 @@
 services:
   pulsar:
-    image: apachepulsar/pulsar:2.10.2
+    image: apachepulsar/pulsar:2.10.4
     container_name: pulsar
+    environment:
+      - JAVA_TOOL_OPTIONS=-Djdk.disableLinuxCgroupV2=true
     command: bin/pulsar standalone
     ports:
       - "6650:6650"
