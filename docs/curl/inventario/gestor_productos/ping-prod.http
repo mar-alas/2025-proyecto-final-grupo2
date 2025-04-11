@@ -1,2 +1,2 @@
 GET /api/v1/inventario/gestor_productos/ping HTTP/1.1
-Host: localhost:3001
+Host: 34.8.66.38
