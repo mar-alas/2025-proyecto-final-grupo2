@@ -1,0 +1,168 @@
+openapi: 3.0.0
+info:
+  title: Product Location API
+  description: API para localizar productos en el almacén y gestionar eficientemente el inventario
+  version: 1.0.0
+servers:
+  - url: http://RUTA_GCP/api/v1/inventario/gestor_productos
+    description: Servidor de producción
+  - url: http://127.0.0.1:3001/api/v1/inventario/gestor_productos
+    description: Servidor de desarrollo
+paths:
+  /productos:
+    get:
+      tags:
+        - productos
+      summary: Localizar productos en bodega
+      description: |
+        Recupera lista de productos en bodega con su información de ubicación y stock.
+        Permite filtrar por código, nombre y estado del producto de manera opcional.
+        Los filtros se pueden combinar para búsquedas más específicas.
+        Si no se especifica ningún filtro, se traen los últimos productos ordenados por fecha de creación.
+      parameters:
+        - name: code
+          in: query
+          required: false
+          description: Filtrar por código o parte del código del producto
+          schema:
+            type: string
+            example: "123"
+        - name: name
+          in: query
+          required: false
+          description: Filtrar por nombre o parte del nombre del producto
+          schema:
+            type: string
+            example: "Producto"
+        - name: status
+          in: query
+          required: false
+          description: Filtrar por estado del producto
+          schema:
+            type: string
+            enum: ["in_stock", "out_of_stock", "in_production"]
+            example: "in_stock"
+        - name: page
+          in: query
+          required: false
+          description: Número de página para la paginación
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+            example: 1
+        - name: limit
+          in: query
+          required: false
+          description: Cantidad de elementos por página
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+            example: 20
+      responses:
+        '200':
+          description: Lista de productos recuperada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    description: Total de productos encontrados
+                    example: 25
+                  page:
+                    type: integer
+                    description: Número de página actual
+                    example: 1
+                  total_pages:
+                    type: integer
+                    description: Número total de páginas disponibles
+                    example: 3
+                  limit:
+                    type: integer
+                    description: Cantidad de elementos por página
+                    example: 10
+                  products:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProductLocation'
+        '400':
+          description: Error en la validación de parámetros
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+
+components:
+  schemas:
+    ProductLocation:
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          example: "2023-10-15T14:30:00Z"
+          description: Fecha de creación del registro del producto
+        code:
+          type: string
+          example: "PRD-12345"
+          description: Código único del producto
+        name:
+          type: string
+          example: "Producto Uno"
+          description: Nombre completo del producto
+        unit_price:
+          type: number
+          format: float
+          example: 100
+          description: Precio unitario del producto
+        expiration_date:
+          type: string
+          format: date
+          example: "2023-12-31"
+          description: Fecha de vencimiento del producto
+        quantity:
+          type: integer
+          example: 75
+          description: Cantidad disponible en inventario actual
+        status:
+          type: string
+          enum: ["in_stock", "out_of_stock", "in_production"]
+          example: "in_stock"
+          description: Estado actual del producto
+        location:
+          type: string
+          example: "Bodega Central, Sector Norte"
+          description: Dirección o ubicación física del producto en la bodega
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Parámetros inválidos"
+        detalles:
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            estado: "El estado proporcionado no es válido"
+    
+    ServerErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Error interno del servidor"
+        message:
+          type: string
+          example: "Ocurrió un error al procesar la solicitud"
