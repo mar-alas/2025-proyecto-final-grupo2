@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from dominio.access_token_manager import AccessTokenValidator
+from dominio.reglas_negocio_crear_producto import validar_datos_producto
 import logging
 
 
@@ -25,6 +26,19 @@ def crear_producto():
         if not es_valido:
             return jsonify({"status": "FAILED", "message": mensaje}), 403
         
+        if not request.is_json:
+            return jsonify({"status": "FAILED", "message": "Se requiere un cuerpo con formato JSON"}), 400
+
+        data = request.get_json()
+
+        mensaje_validacion = validar_datos_producto(data)
+        if mensaje_validacion:
+            return jsonify({"status": "FAILED", "message": mensaje_validacion}), 403
+
+        # TODO validar producto en BD por nombre y proveedor.
+        # TODO crear DTO
+        # TODO Guardar en BD
+    
         
         return jsonify({
             "message": "Producto(es) registrado(s) exitosamente",
@@ -44,4 +58,5 @@ def crear_producto():
         }), 201
     except Exception as e:
         logging.error("Excepcion ocurrida al crear prodcuto. method: crear_producto()")
+        print(e)
         return jsonify({"message": f"Error en registro. Intentre mas tarde. Error:{str(e)}"}), 500

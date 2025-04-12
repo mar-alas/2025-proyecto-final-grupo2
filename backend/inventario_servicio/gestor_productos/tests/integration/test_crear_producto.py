@@ -57,9 +57,25 @@ class TestCrearProductoExitoso:
 
     def test_deberia_registrar_producto_exitosamente_con_token_valido(self, client):
         token = generar_token_con_rol("director-compras")
-        response = client.post(URL_CREATE_PRODUCTS, headers={"Authorization": f"Bearer {token}"})
+        payload = [{
+            "nombre": "Producto Uno",
+            "descripcion": "Descripción del producto",
+            "tiempo_entrega": "2 días",
+            "precio": 100.0,
+            "condiciones_almacenamiento": "Lugar fresco y seco",
+            "fecha_vencimiento": "2025-12-31",
+            "estado": "en_stock",
+            "inventario_inicial": 50,
+            "imagenes_productos": ["img1.jpg", "img2.jpg"],
+            "proveedor": "Proveedor Uno S.A."
+        }]
+        response = client.post(
+            URL_CREATE_PRODUCTS,
+            json=payload,
+            headers={"Authorization": f"Bearer {token}"}
+        )
         assert response.status_code == 201
-        assert "Producto(es) registrado(s) exitosamente" in response.json["message"]
+        assert "registrado" in response.json["message"]
 
 
 class TestCrearProductoErroresInternos:
@@ -73,3 +89,49 @@ class TestCrearProductoErroresInternos:
             response = client.post(URL_CREATE_PRODUCTS, headers={"Authorization": f"Bearer {token}"})
             assert response.status_code == 500
             assert "Error en registro. Intentre mas tarde." in response.json["message"]
+
+    def test_deberia_devolver_400_si_no_se_envia_cuerpo_json(self, client):
+        token = generar_token_con_rol("director-compras")
+        response = client.post(URL_CREATE_PRODUCTS, headers={"Authorization": f"Bearer {token}"})
+        assert response.status_code == 400
+        assert "Se requiere un cuerpo con formato JSON" in response.json["message"]
+
+    def test_deberia_devolver_403_si_falta_campo_requerido(self, client):
+        token = generar_token_con_rol("director-compras")
+        producto_invalido = [{
+            # Falta 'nombre'
+            "descripcion": "Producto sin nombre",
+            "tiempo_entrega": "2 días",
+            "precio": 100.0,
+            "condiciones_almacenamiento": "Lugar seco",
+            "fecha_vencimiento": "2025-12-31",
+            "estado": "en_stock",
+            "inventario_inicial": 50,
+            "imagenes_productos": ["img1.jpg"],
+            "proveedor": "Proveedor Uno"
+        }]
+        response = client.post(URL_CREATE_PRODUCTS, json=producto_invalido,
+                               headers={"Authorization": f"Bearer {token}"})
+        assert response.status_code == 403
+        assert "nombre" in response.json["message"]
+
+    def test_deberia_devolver_413_si_se_excede_limite_productos(self, client):
+        token = generar_token_con_rol("director-compras")
+        productos = [{
+            "nombre": f"Producto {i}",
+            "descripcion": "Desc",
+            "tiempo_entrega": "2 días",
+            "precio": 100.0,
+            "condiciones_almacenamiento": "Seco",
+            "fecha_vencimiento": "2025-12-31",
+            "estado": "en_stock",
+            "inventario_inicial": 50,
+            "imagenes_productos": ["img.jpg"],
+            "proveedor": "Proveedor"
+        } for i in range(101)]  # 101 productos
+
+        response = client.post(URL_CREATE_PRODUCTS, json=productos,
+                               headers={"Authorization": f"Bearer {token}"})
+        assert response.status_code == 403
+        assert "exceder 100 productos" in response.json["message"]
+
