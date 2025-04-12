@@ -277,8 +277,14 @@ services:
         - DB_PORT=5432
         - DB_NAME=ventas_servicio_db
         - DB_HOSTNAME=ventas_servicio_db
+        - STOCK_HOST=gestor_stock
+        - STOCK_PORT=3002
+        - USUARIOS_HOST=gestor_usuarios
+        - USUARIOS_PORT=3011
     networks:
       - ventas_servicio_net
+      - inventario_servicio_net
+      - seguridad_servicio_net
   
   procesador_pedidos:
     build:
