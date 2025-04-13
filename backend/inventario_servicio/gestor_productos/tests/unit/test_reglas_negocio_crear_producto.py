@@ -1,97 +1,77 @@
+import pytest
 from dominio.reglas_negocio_crear_producto import (
+    validar_datos_producto,
     _validar_campos_requeridos_producto,
-    _validar_limite_productos,
-    validar_datos_producto
+    _validar_campo_imagenes_como_lista
 )
 
-class TestReglasNegocioProducto:
+# Producto base válido
+producto_valido = {
+    "nombre": "Sal",
+    "descripcion": "Sal fina",
+    "tiempo_entrega": "2 días",
+    "precio": 50.0,
+    "condiciones_almacenamiento": "Lugar seco",
+    "fecha_vencimiento": "2025-12-31",
+    "estado": "en_stock",
+    "inventario_inicial": 100,
+    "imagenes_productos": ["img1.jpg", "img2.jpg"],
+    "proveedor": "Proveedor X"
+}
 
-    def test_deberia_validar_campos_correctamente(self):
-        producto = {
-            "nombre": "Producto Test",
-            "descripcion": "Desc",
-            "tiempo_entrega": "1 día",
-            "precio": 100.0,
-            "condiciones_almacenamiento": "Fresco",
-            "fecha_vencimiento": "2025-01-01",
-            "estado": "en_stock",
-            "inventario_inicial": 10,
-            "imagenes_productos": ["img.jpg"],
-            "proveedor": "Proveedor S.A."
-        }
-        assert _validar_campos_requeridos_producto(producto) is None
+def test_validar_producto_valido():
+    assert validar_datos_producto(producto_valido) is None
 
-    def test_deberia_fallar_si_falta_campo(self):
-        producto = {
-            # Falta 'nombre'
-            "descripcion": "Desc",
-            "tiempo_entrega": "1 día",
-            "precio": 100.0,
-            "condiciones_almacenamiento": "Fresco",
-            "fecha_vencimiento": "2025-01-01",
-            "estado": "en_stock",
-            "inventario_inicial": 10,
-            "imagenes_productos": ["img.jpg"],
-            "proveedor": "Proveedor S.A."
-        }
-        msg = _validar_campos_requeridos_producto(producto)
-        assert "nombre" in msg
+@pytest.mark.parametrize("campo", [
+    "nombre",
+    "descripcion",
+    "tiempo_entrega",
+    "precio",
+    "condiciones_almacenamiento",
+    "fecha_vencimiento",
+    "estado",
+    "inventario_inicial",
+    "imagenes_productos",
+    "proveedor"
+])
+def test_validar_producto_faltan_campos(campo):
+    producto = producto_valido.copy()
+    producto.pop(campo)
+    mensaje = validar_datos_producto(producto)
+    assert mensaje == f"El campo '{campo}' es requerido y no puede estar vacio."
 
-    def test_deberia_fallar_si_excede_limite(self):
-        productos = [{}] * 101  # Productos vacíos
-        msg = _validar_limite_productos(productos)
-        assert "El registro masivo no puede exceder 100 productos por solicitud" in msg
+@pytest.mark.parametrize("campo", [
+    "nombre",
+    "descripcion",
+    "tiempo_entrega",
+    "precio",
+    "condiciones_almacenamiento",
+    "fecha_vencimiento",
+    "estado",
+    "inventario_inicial",
+    "imagenes_productos",
+    "proveedor"
+])
+def test_validar_producto_campos_vacios(campo):
+    producto = producto_valido.copy()
+    producto[campo] = "" if campo != "imagenes_productos" else []
+    mensaje = validar_datos_producto(producto)
+    assert mensaje == f"El campo '{campo}' es requerido y no puede estar vacio."
 
-    def test_deberia_validar_lista_correcta_de_productos(self):
-        productos = [{
-            "nombre": "Prod",
-            "descripcion": "Desc",
-            "tiempo_entrega": "2 días",
-            "precio": 10.0,
-            "condiciones_almacenamiento": "Seco",
-            "fecha_vencimiento": "2025-01-01",
-            "estado": "en_stock",
-            "inventario_inicial": 10,
-            "imagenes_productos": ["img.jpg"],
-            "proveedor": "Proveedor"
-        }]
-        assert validar_datos_producto(productos) is None
+def test_validar_imagenes_no_lista():
+    producto = producto_valido.copy()
+    producto["imagenes_productos"] = "no-es-una-lista"
+    mensaje = validar_datos_producto(producto)
+    assert mensaje == "El campo 'imagenes_productos' debe ser una lista."
 
+# Tests directos a funciones internas (opcionales pero útiles)
+def test__validar_campos_requeridos_producto_ok():
+    assert _validar_campos_requeridos_producto(producto_valido) is None
 
-    def test_deberia_fallar_si_no_es_lista(self):
-        assert validar_datos_producto({"nombre": "Producto"}) == "Se esperaba una lista de productos."
+def test__validar_campo_imagenes_como_lista_valido():
+    assert _validar_campo_imagenes_como_lista(producto_valido) is None
 
-
-    def test_deberia_validar_lista_de_multiples_productos_correctos(self):
-        productos = [{
-            "nombre": f"Prod {i}",
-            "descripcion": "Desc",
-            "tiempo_entrega": "2 días",
-            "precio": 10.0,
-            "condiciones_almacenamiento": "Seco",
-            "fecha_vencimiento": "2025-01-01",
-            "estado": "en_stock",
-            "inventario_inicial": 10,
-            "imagenes_productos": ["img.jpg"],
-            "proveedor": "Proveedor"
-        } for i in range(5)]  # Menos de 100
-
-        assert validar_datos_producto(productos) is None
-
-
-    def test_deberia_fallar_si_lista_correcta_supera_limite(self):
-        productos = [{
-            "nombre": f"Prod {i}",
-            "descripcion": "Desc",
-            "tiempo_entrega": "2 días",
-            "precio": 10.0,
-            "condiciones_almacenamiento": "Seco",
-            "fecha_vencimiento": "2025-01-01",
-            "estado": "en_stock",
-            "inventario_inicial": 10,
-            "imagenes_productos": ["img.jpg"],
-            "proveedor": "Proveedor"
-        } for i in range(101)]
-
-        msg = validar_datos_producto(productos)
-        assert msg == "El registro masivo no puede exceder 100 productos por solicitud"
+def test__validar_campo_imagenes_como_lista_invalido():
+    producto = producto_valido.copy()
+    producto["imagenes_productos"] = "imagen.jpg"
+    assert _validar_campo_imagenes_como_lista(producto) == "El campo 'imagenes_productos' debe ser una lista."

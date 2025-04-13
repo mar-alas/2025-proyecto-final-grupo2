@@ -17,23 +17,18 @@ def _validar_campos_requeridos_producto(producto):
     return None
 
 
-def _validar_limite_productos(data):
-    if len(data) > 100:
-        return  f"El registro masivo no puede exceder 100 productos por solicitud"
+def _validar_campo_imagenes_como_lista(data):
+    if not isinstance(data.get("imagenes_productos", []), list):
+        return "El campo 'imagenes_productos' debe ser una lista."
     return None
 
+def validar_datos_producto(producto):
+    error = _validar_campos_requeridos_producto(producto)
+    if error:
+        return error
 
-def validar_datos_producto(data):
-    if not isinstance(data, list):
-        return "Se esperaba una lista de productos."
-
-    limit_validation = _validar_limite_productos(data)
-    if limit_validation:
-        return limit_validation
-
-    for i, producto in enumerate(data):
-        error = _validar_campos_requeridos_producto(producto)
-        if error:
-            return f"Error en el producto #{i+1}: {error}"
+    tipo_dato_imagenes_validation = _validar_campo_imagenes_como_lista(producto)
+    if tipo_dato_imagenes_validation:
+        return tipo_dato_imagenes_validation
 
     return None
