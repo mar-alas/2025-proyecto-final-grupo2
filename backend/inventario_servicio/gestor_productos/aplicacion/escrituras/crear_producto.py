@@ -39,6 +39,7 @@ def crear_producto():
         product_repo = ProductRepository(db.session, Product, ProductImage)
        
         productos = data if isinstance(data, list) else [data]
+        productos = productos[:100]
         resultados = []
         exitosos = 0
 
