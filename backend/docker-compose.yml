@@ -71,8 +71,10 @@ services:
         - DB_PORT=5432
         - DB_NAME=inventario_servicio_db
         - DB_HOSTNAME=inventario_servicio_db
+        - PULSAR_HOST=pulsar
     networks:
       - inventario_servicio_net
+      - pulsar_net
     
   gestor_stock:
     build:
