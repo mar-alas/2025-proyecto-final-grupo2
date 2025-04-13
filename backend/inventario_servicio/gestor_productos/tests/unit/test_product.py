@@ -39,7 +39,7 @@ class TestProduct(unittest.TestCase):
             "estado": "en_stock",
             "inventario_inicial": 100,
             "proveedor": "Proveedor X",
-            "imagenes": [{"id": 1, "imagen_url": "http://img.com/1.jpg"}]
+            "imagenes_productos": [{"id": 1, "imagen_url": "http://img.com/1.jpg"}]
         }
 
         self.assertEqual(producto.to_dict(), expected_dict)
@@ -62,6 +62,6 @@ class TestProduct(unittest.TestCase):
         result = producto.to_dict()
 
         self.assertEqual(result["fecha_vencimiento"], None)
-        self.assertEqual(result["imagenes"], [])
+        self.assertEqual(result["imagenes_productos"], [])
         self.assertEqual(result["id"], 456)
         self.assertEqual(result["estado"], "agotado")

@@ -62,5 +62,5 @@ class Product(db.Model):
             "estado": self.estado,
             "inventario_inicial": self.inventario_inicial,
             "proveedor": self.proveedor,
-            "imagenes": [img.to_dict() for img in self.imagenes] if self.imagenes else []
+            "imagenes_productos": [img.to_dict() for img in self.imagenes] if self.imagenes else []
         }
