@@ -23,9 +23,9 @@ spec:
       containers:
         - env:
             - name: DB_HOST
-              value: inventario_servicio_db
+              value: inventario-servicio-db.default.svc.cluster.local
             - name: DB_NAME
-              value: inventario_servicio_db
+              value: inventario-servicio-db
             - name: DB_PASSWORD
               value: postgres
             - name: DB_PORT
