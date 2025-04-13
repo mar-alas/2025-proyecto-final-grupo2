@@ -5,7 +5,7 @@ from aplicacion.lecturas.home import home_bp
 from aplicacion.lecturas.productos import productos_lectura
 from aplicacion.escrituras.crear_producto import crear_producto_bp
 from aplicacion.lecturas.consultar_productos import consultar_productos_bp
-
+from infraestructura.config import Config
 
 URL_PREFIX = '/api/v1/inventario/gestor_productos'
 URL_HOME = "/"
@@ -17,7 +17,11 @@ URL_GET_PRODUCTS_V2 = URL_PREFIX_V2 + "/productos"
 
 def create_app():
     app = Flask(__name__)
+    
+    app.config.from_object(Config)
+    
     CORS(app)
+
     app.register_blueprint(ping_bp, url_prefix=URL_PREFIX)
     app.register_blueprint(home_bp, url_prefix=URL_HOME)
     app.register_blueprint(productos_lectura, url_prefix=URL_PREFIX)

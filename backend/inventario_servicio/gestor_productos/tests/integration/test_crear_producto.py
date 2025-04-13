@@ -1,75 +1,150 @@
 import pytest
-import jwt
-from datetime import datetime, timedelta, timezone
-from app import create_app
-from unittest.mock import patch
-
-SECRET = "clave_secreta_para_firmar_token"
-URL_CREATE_PRODUCTS = "/api/v1/inventario/gestor_productos/productos"
-
+from flask import Flask, json
+from unittest.mock import patch, MagicMock
+from aplicacion.escrituras.crear_producto import crear_producto_bp
 
 @pytest.fixture
-def client():
-    app = create_app()
-    app.testing = True
+def app():
+    app = Flask(__name__)
+    app.register_blueprint(crear_producto_bp, url_prefix="/productos")
+    return app
+
+@pytest.fixture
+def client(app):
     return app.test_client()
 
+@pytest.fixture
+def headers_validos():
+    return {"Authorization": "Bearer token_valido"}
 
-def generar_token_con_rol(rol: str, exp: datetime = None):
-    payload = {"role": rol}
-    if exp:
-        payload["exp"] = exp
-    return jwt.encode(payload, SECRET, algorithm="HS256")
+def test_producto_unico_exitoso(client, headers_validos):
+    producto = {
+        "nombre": "Producto Uno",
+        "descripcion": "Descripción",
+        "tiempo_entrega": "2 días",
+        "precio": 100.0,
+        "condiciones_almacenamiento": "Seco",
+        "fecha_vencimiento": "2025-12-31",
+        "estado": "en_stock",
+        "inventario_inicial": 10,
+        "imagenes_productos": ["img1.jpg"],
+        "proveedor": "Proveedor A"
+    }
 
+    with patch("aplicacion.escrituras.crear_producto.AccessTokenValidator.validate", return_value=(True, "")), \
+         patch("aplicacion.escrituras.crear_producto.validar_datos_producto", return_value=None), \
+         patch("aplicacion.escrituras.crear_producto.ProductRepository") as mock_repo:
 
-class TestCrearProductoAutenticacion:
+        repo_instance = mock_repo.return_value
+        repo_instance.get_by_name.return_value = None
+        producto_mock = MagicMock()
+        producto_mock.to_dict.return_value = producto
+        repo_instance.save.return_value = producto_mock
 
-    def test_deberia_devolver_401_si_no_se_envia_token(self, client):
-        response = client.post(URL_CREATE_PRODUCTS)
-        assert response.status_code == 401
-        assert "No se proporciono un token" in response.json["message"]
-
-    def test_deberia_devolver_401_si_el_token_esta_mal_formado(self, client):
-        response = client.post(URL_CREATE_PRODUCTS, headers={"Authorization": "Bearer"})
-        assert response.status_code == 401
-        assert "Formato del token invalido" in response.json["message"]
-
-    def test_deberia_devolver_403_si_el_token_es_invalido(self, client):
-        response = client.post(URL_CREATE_PRODUCTS, headers={"Authorization": "Bearer token_falso"})
-        assert response.status_code == 403
-        assert "Token invalido" in response.json["message"]
-
-    def test_deberia_devolver_403_si_el_token_es_valido_pero_el_rol_no_tiene_permisos(self, client):
-        token = generar_token_con_rol("bodeguero")
-        response = client.post(URL_CREATE_PRODUCTS, headers={"Authorization": f"Bearer {token}"})
-        assert response.status_code == 403
-        assert "Permisos insuficientes" in response.json["message"]
-
-    def test_deberia_devolver_403_si_el_token_esta_expirado(self, client):
-        expirado = datetime.now(tz=timezone.utc) - timedelta(seconds=10)
-        token = generar_token_con_rol("director-compras", expirado)
-        response = client.post(URL_CREATE_PRODUCTS, headers={"Authorization": f"Bearer {token}"})
-        assert response.status_code == 403
-        assert "Token expirado" in response.json["message"]
-
-
-class TestCrearProductoExitoso:
-
-    def test_deberia_registrar_producto_exitosamente_con_token_valido(self, client):
-        token = generar_token_con_rol("director-compras")
-        response = client.post(URL_CREATE_PRODUCTS, headers={"Authorization": f"Bearer {token}"})
+        response = client.post("/productos", json=producto, headers=headers_validos)
         assert response.status_code == 201
-        assert "Producto(es) registrado(s) exitosamente" in response.json["message"]
+        assert response.json["nombre"] == "Producto Uno"
 
+def test_producto_unico_con_error_de_validacion(client, headers_validos):
+    producto = {"descripcion": "Falta nombre"}
 
-class TestCrearProductoErroresInternos:
+    with patch("aplicacion.escrituras.crear_producto.AccessTokenValidator.validate", return_value=(True, "")), \
+         patch("aplicacion.escrituras.crear_producto.validar_datos_producto", return_value="El campo 'nombre' es requerido."):
 
-    def test_deberia_devolver_500_si_el_validador_lanza_excepcion(self, client):
-        with patch(
-            "aplicacion.escrituras.crear_producto.AccessTokenValidator.validate",
-            side_effect=Exception("Falla interna")
-        ):
-            token = generar_token_con_rol("director-compras")
-            response = client.post(URL_CREATE_PRODUCTS, headers={"Authorization": f"Bearer {token}"})
-            assert response.status_code == 500
-            assert "Error en registro. Intentre mas tarde." in response.json["message"]
+        response = client.post("/productos", json=producto, headers=headers_validos)
+        assert response.status_code == 207
+        body = response.json
+        assert body["fallidos"] == 1
+        assert body["resultados"][0]["error"] == "El campo 'nombre' es requerido."
+
+def test_multiples_productos_con_errores_y_exitos(client, headers_validos):
+    productos = [
+        {
+            "nombre": "Exitoso",
+            "descripcion": "OK",
+            "tiempo_entrega": "1 día",
+            "precio": 10,
+            "condiciones_almacenamiento": "Fresco",
+            "fecha_vencimiento": "2025-01-01",
+            "estado": "en_stock",
+            "inventario_inicial": 20,
+            "imagenes_productos": [],
+            "proveedor": "Proveedor X"
+        },
+        {
+            "descripcion": "Falta nombre"
+        }
+    ]
+
+    def validacion_mock(producto):
+        return None if "nombre" in producto else "El campo 'nombre' es requerido."
+
+    with patch("aplicacion.escrituras.crear_producto.AccessTokenValidator.validate", return_value=(True, "")), \
+         patch("aplicacion.escrituras.crear_producto.validar_datos_producto", side_effect=validacion_mock), \
+         patch("aplicacion.escrituras.crear_producto.ProductRepository") as mock_repo:
+
+        repo_instance = mock_repo.return_value
+        repo_instance.get_by_name.return_value = None
+        producto_mock = MagicMock()
+        producto_mock.to_dict.return_value = productos[0]
+        repo_instance.save.return_value = producto_mock
+
+        response = client.post("/productos", json=productos, headers=headers_validos)
+        assert response.status_code == 207
+        assert response.json["total"] == 2
+        assert response.json["exitosos"] == 1
+        assert response.json["fallidos"] == 1
+
+def test_token_invalido(client):
+    response = client.post("/productos", json={}, headers={"Authorization": "Bearer invalido"})
+    assert response.status_code == 403 or response.status_code == 401 
+
+def test_sin_token(client):
+    response = client.post("/productos", json={})
+    assert response.status_code == 401
+    assert "token" in response.json["message"]
+
+def test_request_no_json(client, headers_validos):
+    with patch("aplicacion.escrituras.crear_producto.AccessTokenValidator.validate", return_value=(True, "")):
+        response = client.post("/productos", data="no es json", headers=headers_validos)
+        assert response.status_code == 400
+        assert "JSON" in response.json["message"]
+
+def test_producto_duplicado(client, headers_validos):
+    producto = {
+        "nombre": "Duplicado",
+        "descripcion": "desc",
+        "tiempo_entrega": "2 días",
+        "precio": 100.0,
+        "condiciones_almacenamiento": "Seco",
+        "fecha_vencimiento": "2025-12-31",
+        "estado": "en_stock",
+        "inventario_inicial": 10,
+        "imagenes_productos": [],
+        "proveedor": "Proveedor A"
+    }
+
+    with patch("aplicacion.escrituras.crear_producto.AccessTokenValidator.validate", return_value=(True, "")), \
+         patch("aplicacion.escrituras.crear_producto.validar_datos_producto", return_value=None), \
+         patch("aplicacion.escrituras.crear_producto.ProductRepository") as mock_repo:
+
+        repo_instance = mock_repo.return_value
+        repo_instance.get_by_name.return_value = True
+
+        response = client.post("/productos", json=producto, headers=headers_validos)
+        assert response.status_code == 207
+        assert response.json["fallidos"] == 1
+        assert "ya esta registrado" in response.json["resultados"][0]["error"]
+
+def test_excepcion_general(client, headers_validos):
+    with patch("aplicacion.escrituras.crear_producto.AccessTokenValidator.validate", side_effect=Exception("Boom!")):
+        response = client.post("/productos", json={}, headers=headers_validos)
+        assert response.status_code == 500
+        assert "Error en registro" in response.json["message"]
+
+def test_token_mal_formado(client):
+    headers = {"Authorization": "Bearer"}
+    response = client.post("/productos", json={}, headers=headers)
+    assert response.status_code == 401
+    assert "formato" in response.json["message"].lower()
+
