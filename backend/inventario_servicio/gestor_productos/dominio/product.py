@@ -10,7 +10,7 @@ from infraestructura.database import db
 class Product(db.Model):
     __tablename__ = "productos"
 
-    uuid = db.Column(db.String(36), primary_key=False, default=lambda: str(uuid.uuid4()))
+    # uuid = db.Column(db.String(36), primary_key=False, default=lambda: str(uuid.uuid4()))
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre = db.Column(db.String(100), nullable=False)
     descripcion = db.Column(db.String(255), nullable=True)
