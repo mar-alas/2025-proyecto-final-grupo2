@@ -21,6 +21,8 @@ class FakeDTO:
         self.data = data
     def to_dict(self):
         return self.data
+    def created_product_event(self):
+        return {"product_id": 1, "inventario_inicial": 10} 
 
 @pytest.fixture
 def repositorio_mock():
@@ -45,7 +47,7 @@ def test_deberia_crear_producto_correctamente(service, repositorio_mock, publish
     assert resultado["fallidos"] == 0
     assert resultado["resultados"][0]["status"] == "success"
     repositorio_mock.get_by_name.assert_called_once_with("Nuevo Producto")
-    publisher_mock.publicar_evento.assert_called_once()
+    publisher_mock.publicar_mensaje.assert_called_once()
 
 def test_deberia_fallar_por_datos_invalidos(service):
     producto = {"descripcion": "Falta nombre"}

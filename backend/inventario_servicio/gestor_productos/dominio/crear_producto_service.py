@@ -1,10 +1,14 @@
 from dominio.product_mapper import crear_product_dto_desde_dict
 from dominio.reglas_negocio_crear_producto import validar_datos_producto
+import json
+import logging
 
 class CrearProductoService:
     def __init__(self, repositorio_productos, event_publisher=None):
         self.repositorio = repositorio_productos
         self.event_publisher = event_publisher
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.INFO)
 
     def crear(self, productos_input):
         productos = productos_input if isinstance(productos_input, list) else [productos_input]
@@ -44,11 +48,9 @@ class CrearProductoService:
             exitosos += 1
 
             if self.event_publisher:
-                evento = {
-                    "evento": "ProductoRegistrado",
-                    "producto": creado.to_dict()
-                }
-                self.event_publisher.publicar_mensaje("productos", evento)
+                mensaje = creado.created_product_event().to_dict()
+                logging.info(f"Mensaje enviado a la cola: {mensaje}")
+                self.event_publisher.publicar_mensaje("ProductoRegistrado", mensaje)
 
         return {
             "total": len(productos),

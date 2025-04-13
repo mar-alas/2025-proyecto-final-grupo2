@@ -6,6 +6,9 @@ from datetime import date
 from sqlalchemy.orm import relationship
 from infraestructura.database import db
 
+# internas
+from dominio.eventos.producto_creado import ProductoCreado
+
 
 class Product(db.Model):
     __tablename__ = "productos"
@@ -52,7 +55,6 @@ class Product(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
-            # "uuid": self.uuid,
             "nombre": self.nombre,
             "descripcion": self.descripcion,
             "tiempo_entrega": self.tiempo_entrega,
@@ -64,3 +66,9 @@ class Product(db.Model):
             "proveedor": self.proveedor,
             "imagenes_productos": [img.to_dict() for img in self.imagenes] if self.imagenes else []
         }
+    
+    def created_product_event(self) -> ProductoCreado:
+        return ProductoCreado(
+            producto_id=self.id,
+            inventario_inicial=self.inventario_inicial
+        )
