@@ -1,0 +1,20 @@
+POST /api/v1/inventario/gestor_productos/productos HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJkaXJlY3Rvci1jb21wcmFzIiwiZXhwIjoxNzQ0NjU2OTM4fQ.qvqYcL4SjT9qdWlK53uTMFmd3xnQgJBUH-jh1HdItB0
+Content-Type: application/json
+Host: localhost:3001
+
+{
+  "nombre": "Producto Tre",
+  "descripcion": "Este producto es el segundo",
+  "tiempo_entrega": "3 días",
+  "precio": 100,
+  "condiciones_almacenamiento": "Almacenar en lugar fresco y seco",
+  "fecha_vencimiento": "2023-12-31",
+  "estado": "en_stock",
+  "inventario_inicial": 100,
+  "imagenes_productos": [
+    "imagen1.jpg",
+    "imagen2.jpg"
+  ],
+  "proveedor": "Proveedor Dos S.A."
+}
