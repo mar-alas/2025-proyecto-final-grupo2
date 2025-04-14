@@ -32,6 +32,8 @@ spec:
               value: "5432"
             - name: DB_USER
               value: postgres
+            - name: PULSAR_HOST
+              value: pulsar
           image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/inventario_servicio/gestor_productos:${TAG}
           name: gestor-productos
           imagePullPolicy: Always 
