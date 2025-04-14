@@ -22,8 +22,8 @@ spec:
     spec:
       containers:
         - env:
-            - name: DB_HOST
-              value: ventas_servicio_db
+            - name: DB_HOSTNAME
+              value: ventas-servicio-db
             - name: DB_NAME
               value: ventas_servicio_db
             - name: DB_PASSWORD
