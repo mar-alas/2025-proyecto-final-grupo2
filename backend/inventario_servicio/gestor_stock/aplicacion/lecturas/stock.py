@@ -20,9 +20,14 @@ def obtener_inventario():
          return jsonify({"message": "forbidden"}), 403
 
     try:
-        inventario = repositorio.obtener_inventario()
+        inventario = repositorio.obtener_inventario_v2()
         return jsonify([
-            {"producto_id": stock.producto_id, "inventario": stock.inventario, "nombre": stock.producto_nombre, "precio": stock.producto_precio}
+            {
+                "producto_id": stock["producto_id"],
+                "inventario": stock["inventario"],
+                "nombre": stock["producto_nombre"],
+                "precio": stock["producto_precio"]
+            }
             for stock in inventario
         ])
     except Exception as e:

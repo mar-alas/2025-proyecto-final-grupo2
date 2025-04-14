@@ -3,8 +3,9 @@ from .modelos import Stock
 import os
 from sqlalchemy import create_engine
 from .modelos import Base
-from .modelos import Producto
 import logging
+from sqlalchemy import text
+from sqlalchemy.engine import Result
 
 # Load database configuration from environment variables
 DB_USERNAME = os.getenv('DB_USERNAME', default="postgres")
@@ -76,18 +77,34 @@ class RepositorioStock:
             raise
 
 
-    def obtener_inventario(self):
+    def obtener_inventario_v2(self):
         try:
-            self.logger.info("Obteniendo inventario completo")
-            query = self.db_session.query(
-                Stock.producto_id,
-                Stock.inventario,
-                Producto.nombre.label("producto_nombre"),
-                Producto.precio.label("producto_precio")
-            ).join(Producto, Stock.producto_id == Producto.id)
-            result = query.all()
-            self.logger.debug(f"Inventario obtenido: {result}")
-            return result
+            self.logger.info("Obteniendo inventario completo via SQL nativo")
+            sql = text("""
+                SELECT 
+                    stock.producto_id,
+                    stock.inventario,
+                    productos.nombre AS producto_nombre,
+                    productos.precio AS producto_precio
+                FROM stock
+                JOIN productos ON stock.producto_id = productos.id
+            """)
+            
+            result: Result = self.db_session.execute(sql).mappings().all()
+            
+            self.logger.debug(f"Result: {result}")
+            inventario = [
+                {
+                    "producto_id": row["producto_id"],
+                    "inventario": row["inventario"],
+                    "producto_nombre": row["producto_nombre"],
+                    "producto_precio": row["producto_precio"]
+                }
+                for row in result
+            ]
+
+            self.logger.debug(f"Inventario obtenido: {inventario}")
+            return inventario
         except Exception as e:
             self.logger.error(f"Error al obtener inventario: {e}")
             raise

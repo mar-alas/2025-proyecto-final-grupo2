@@ -3,6 +3,7 @@ from datetime import date
 from unittest.mock import MagicMock
 
 from dominio.product import Product
+from dominio.eventos.producto_creado import ProductoCreado
 
 
 class TestProduct(unittest.TestCase):
@@ -39,7 +40,7 @@ class TestProduct(unittest.TestCase):
             "estado": "en_stock",
             "inventario_inicial": 100,
             "proveedor": "Proveedor X",
-            "imagenes": [{"id": 1, "imagen_url": "http://img.com/1.jpg"}]
+            "imagenes_productos": [{"id": 1, "imagen_url": "http://img.com/1.jpg"}]
         }
 
         self.assertEqual(producto.to_dict(), expected_dict)
@@ -62,6 +63,50 @@ class TestProduct(unittest.TestCase):
         result = producto.to_dict()
 
         self.assertEqual(result["fecha_vencimiento"], None)
-        self.assertEqual(result["imagenes"], [])
+        self.assertEqual(result["imagenes_productos"], [])
         self.assertEqual(result["id"], 456)
         self.assertEqual(result["estado"], "agotado")
+
+    def test_created_product_event_returns_expected_event_without_db_dependency(self):
+        class DummyProduct:
+            id = 789
+            inventario_inicial = 50
+
+            def created_product_event(self):
+                return ProductoCreado(
+                    producto_id=self.id,
+                    inventario_inicial=self.inventario_inicial
+                )
+
+        dummy = DummyProduct()
+        evento = dummy.created_product_event()
+
+        self.assertIsInstance(evento, ProductoCreado)
+        self.assertEqual(evento.producto_id, 789)
+        self.assertEqual(evento.inventario_inicial, 50)
+
+
+    def test_created_product_event_returns_expected_event(self):
+        # Creamos un producto simulando la mínima estructura sin usar la BD real
+        producto = Product(
+            nombre="Producto X",
+            descripcion="Desc",
+            tiempo_entrega="5 días",
+            precio=100.0,
+            condiciones_almacenamiento="Fresco",
+            fecha_vencimiento=None,
+            estado="disponible",
+            inventario_inicial=20,
+            proveedor="Proveedor Y",
+            imagenes_productos=[]
+        )
+        producto.id = 99  # Simulamos ID manualmente
+
+        evento = producto.created_product_event()
+
+        self.assertEqual(evento.producto_id, 99)
+        self.assertEqual(evento.inventario_inicial, 20)
+        self.assertEqual(evento.to_dict(), {
+            "producto_id": 99,
+            "inventario_inicial": 20
+        })

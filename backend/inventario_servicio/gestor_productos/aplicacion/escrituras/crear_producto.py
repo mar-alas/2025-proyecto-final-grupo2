@@ -1,11 +1,11 @@
 from flask import Blueprint, jsonify, request
 from dominio.access_token_manager import AccessTokenValidator
-from dominio.reglas_negocio_crear_producto import validar_datos_producto
 from dominio.product_repository import ProductRepository
 from infraestructura.database import db
 from dominio.product import Product
 from dominio.product_image import ProductImage
-from dominio.product_mapper import crear_product_dto_desde_dict
+from infraestructura.pulsar.publisher import PulsarPublisher
+from dominio.crear_producto_service import CrearProductoService
 import logging
 
 
@@ -36,58 +36,17 @@ def crear_producto():
         
 
         data = request.get_json()
+        
         product_repo = ProductRepository(db.session, Product, ProductImage)
-       
-        productos = data if isinstance(data, list) else [data]
-        productos = productos[:100]
-        resultados = []
-        exitosos = 0
+        publicador_eventos = PulsarPublisher()
+        servicio = CrearProductoService(product_repo, publicador_eventos)
+        
+        resultado = servicio.crear(data)
 
-        for idx, producto in enumerate(productos):
-            mensaje_validacion = validar_datos_producto(producto)
-            if mensaje_validacion:
-                resultados.append({
-                    "indice": idx,
-                    "status": "error",
-                    "producto": producto,
-                    "error": mensaje_validacion
-                })
-                continue
+        if resultado["total"] == 1 and resultado["exitosos"] == 1:
+            return jsonify(resultado["resultados"][0]["producto"]), 201
 
-            if product_repo.get_by_name(producto.get("nombre")):
-                resultados.append({
-                    "indice": idx,
-                    "status": "error",
-                    "producto": producto,
-                    "error": f"El producto '{producto.get('nombre')}' ya esta registrado"
-                })
-                continue
-
-            
-            product_dto = crear_product_dto_desde_dict(producto)
-            producto_creado = product_repo.save(product_dto)
-
-            resultados.append({
-                "indice": idx,
-                "status": "success",
-                "producto": producto_creado.to_dict(),
-            })
-            exitosos += 1
-
-        total = len(productos)
-        fallidos = total - exitosos
-
-        # Un solo producto y fue exitoso
-        if total == 1 and exitosos == 1:
-            return jsonify(resultados[0]["producto"]), 201
-
-        # Respuesta múltiple
-        return jsonify({
-            "total": total,
-            "exitosos": exitosos,
-            "fallidos": fallidos,
-            "resultados": resultados
-        }), 207
+        return jsonify(resultado), 207
 
     except Exception as e:
         return jsonify({"message": f"Error en registro. Intente mas tarde. Error:{str(e)}"}), 500
