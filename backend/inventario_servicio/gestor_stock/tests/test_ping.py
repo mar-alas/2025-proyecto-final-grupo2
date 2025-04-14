@@ -13,5 +13,10 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json, {"message": "pong"})
 
+    def test_home(self):
+        response = self.client.get('/')
+        assert response.status_code == 200
+        assert response.get_json() == {"message": "success"}
+
 if __name__ == '__main__':
     unittest.main()
