@@ -1,11 +1,13 @@
 import unittest
 from flask import Flask
 from seedwork_compartido.aplicacion.lectura.ping import ping_bp
+from aplicacion.lecturas.home import home_bp
 
 class AppTestCase(unittest.TestCase):
     def setUp(self):
         self.app = Flask(__name__)
         self.app.register_blueprint(ping_bp, url_prefix='/api/v1/inventario/gestor_stock')
+        self.app.register_blueprint(home_bp, url_prefix='/')
         self.client = self.app.test_client()
 
     def test_ping(self):
