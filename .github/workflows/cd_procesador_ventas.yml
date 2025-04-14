@@ -1,4 +1,4 @@
-name: Deploy Procesador Pedidos
+name: Deploy Procesador Ventas
 on:
   push:
     branches:
