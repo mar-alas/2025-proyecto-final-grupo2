@@ -1,0 +1,15 @@
+curl --location 'http://34.49.18.136/api/v1/ventas/gestor_ventas/gestor_planes_venta/visita_cliente' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsInJvbGUiOiJjbGllbnRlIiwiZXhwIjoxNzQ0ODYzNDQzfQ.AnsRMozwCrfxGGhvDuDFA4YjmQIP3_RHEK4CvhM_OMI' \
+--header 'Content-Type: application/json' \
+--data '{
+    "cliente_id": 4,
+    "vendedor_id": 1,
+    "fecha": "2025-05-31T00:00:00.000Z",
+    "ubicacion_productos_ccp": [
+        {"id_producto": 1, "ubicacion": "caja"},
+        {"id_producto": 2, "ubicacion": "pasillo_principal"}
+    ],
+    "ubicacion_productos_competencia": [
+        {"id_producto": 2, "ubicacion": "neveras"}
+    ]
+}'
