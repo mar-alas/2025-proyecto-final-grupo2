@@ -5,7 +5,7 @@ from aplicacion.lecturas.home import home_bp
 from flask_cors import CORS
 
 URL_PREFIX = '/api/v1/ventas/gestor_ventas'
-URL_PREFIX_PLANES = '/api/v1/ventas/gestor_planes_venta'
+URL_PREFIX_PLANES = '/api/v1/ventas/gestor_ventas/gestor_planes_venta'
 URL_HOME = "/"
 
 app = Flask(__name__)
