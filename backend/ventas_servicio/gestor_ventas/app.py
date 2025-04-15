@@ -5,13 +5,13 @@ from aplicacion.lecturas.home import home_bp
 from flask_cors import CORS
 
 URL_PREFIX = '/api/v1/ventas/gestor_ventas'
-URL_PREFIX = '/api/v1/ventas/gestor_planes_venta'
+URL_PREFIX_PLANES = '/api/v1/ventas/gestor_ventas/gestor_planes_venta'
 URL_HOME = "/"
 
 app = Flask(__name__)
 app.register_blueprint(ping_bp, url_prefix=URL_PREFIX)
 app.register_blueprint(home_bp, url_prefix=URL_HOME)
-app.register_blueprint(visita_cliente_bp, url_prefix=URL_PREFIX)
+app.register_blueprint(visita_cliente_bp, url_prefix=URL_PREFIX_PLANES)
 CORS(app)
 
 if __name__ == '__main__':
