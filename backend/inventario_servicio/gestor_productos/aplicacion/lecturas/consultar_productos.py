@@ -6,6 +6,7 @@ from dominio.product_repository import ProductRepository
 from infraestructura.database import db
 from dominio.product import Product
 from dominio.product_image import ProductImage
+from dominio.access_token_manager import AccessTokenValidator
 
 
 logging.basicConfig(level=logging.INFO)
@@ -15,6 +16,22 @@ consultar_productos_bp = Blueprint('consultar_productos_bp', __name__)
 @consultar_productos_bp.route('', methods=['GET'])
 def consultar_productos():
     try:
+
+        auth_header = request.headers.get('Authorization')
+        if not auth_header:
+            return jsonify({"status": "FAILED", "message": "No se proporciono un token"}), 401
+
+        try:
+            token = auth_header.split(" ")[1]
+        except IndexError:
+            return jsonify({"status": "FAILED", "message": "Formato del token invalido"}), 401
+
+        validator = AccessTokenValidator()
+        es_valido, mensaje = validator.validate(token)
+
+        if not es_valido:
+            return jsonify({"status": "FAILED", "message": mensaje}), 403
+
         status = request.args.get("status")
         status_validation = _status_is_valid(status)
         if status_validation:
