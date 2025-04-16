@@ -1,15 +1,8 @@
-from flask import Flask
-from seedwork_compartido.aplicacion.lectura.ping import ping_bp
-from aplicacion.lecturas.home import home_bp
-from aplicacion.lecturas.productos import productos_lectura
+from aplicacion import create_app
+from infraestructura.database import init_db
 
-URL_PREFIX = '/api/v1/inventario/gestor_productos'
-URL_HOME = "/"
+app = create_app()
 
-app = Flask(__name__)
-app.register_blueprint(ping_bp, url_prefix=URL_PREFIX)
-app.register_blueprint(home_bp, url_prefix=URL_HOME)
-app.register_blueprint(productos_lectura, url_prefix=URL_PREFIX)
-
-if __name__ == '__main__':
+if __name__ == '__main__': # pragma: no cover
+    init_db(app)
     app.run(debug=True, host="0.0.0.0", port=3001)

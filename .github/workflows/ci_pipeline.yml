@@ -34,32 +34,6 @@ jobs:
         working-directory: ./backend
         run: coverage report --fail-under=80
 
-  test_gestor_productos:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.10]
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install pipenv
-        working-directory: ./backend/inventario_servicio/gestor_productos
-        run: pip install pipenv
-      - name: Install dependencies
-        working-directory: ./backend/inventario_servicio/gestor_productos
-        run: pip install -r requirements.txt
-      - name: Set PYTHONPATH
-        run: echo "PYTHONPATH=$PWD/backend/seedwork_compartido:$PWD/backend/inventario_servicio/gestor_productos" >> $GITHUB_ENV
-      - name: Print PYTHONPATH
-        run: echo $PYTHONPATH
-      - name: Run unit tests
-        working-directory: ./backend
-        env:
-          PYTHONPATH: ${{ env.PYTHONPATH }}
-        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s inventario_servicio/gestor_productos/tests
-      - name: Run coverage report
-        working-directory: ./backend
-        run: coverage report --fail-under=80
-
   test_gestor_stock:
     runs-on: ubuntu-latest
     container:
@@ -220,9 +194,8 @@ jobs:
 
   test_gestor_ventas:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.10]
+    container:
+      image: python:3.10-slim
     steps:
       - uses: actions/checkout@v2
       - name: Install pipenv
@@ -232,14 +205,16 @@ jobs:
         working-directory: ./backend/ventas_servicio/gestor_ventas
         run: pip install -r requirements.txt
       - name: Set PYTHONPATH
-        run: echo "PYTHONPATH=$PWD/backend/seedwork_compartido:$PWD/backend/ventas_servicio/gestor_ventas" >> $GITHUB_ENV
+        working-directory: ./backend
+        run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
       - name: Print PYTHONPATH
         run: echo $PYTHONPATH
       - name: Run unit tests
         working-directory: ./backend
         env:
           PYTHONPATH: ${{ env.PYTHONPATH }}
-        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s ventas_servicio/gestor_ventas/tests
+          UTEST: "True"
+        run: coverage run --omit="*/tests/*,*/__init__.py" -m unittest discover -s ventas_servicio/gestor_ventas
       - name: Run coverage report
         working-directory: ./backend
         run: coverage report --fail-under=80

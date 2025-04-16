@@ -1,7 +1,9 @@
 services:
   pulsar:
-    image: apachepulsar/pulsar:2.10.2
+    image: apachepulsar/pulsar:2.10.4
     container_name: pulsar
+    environment:
+      - JAVA_TOOL_OPTIONS=-Djdk.disableLinuxCgroupV2=true
     command: bin/pulsar standalone
     ports:
       - "6650:6650"
@@ -69,8 +71,10 @@ services:
         - DB_PORT=5432
         - DB_NAME=inventario_servicio_db
         - DB_HOSTNAME=inventario_servicio_db
+        - PULSAR_HOST=pulsar
     networks:
       - inventario_servicio_net
+      - pulsar_net
     
   gestor_stock:
     build:
@@ -275,8 +279,14 @@ services:
         - DB_PORT=5432
         - DB_NAME=ventas_servicio_db
         - DB_HOSTNAME=ventas_servicio_db
+        - STOCK_HOST=gestor_stock
+        - STOCK_PORT=3002
+        - USUARIOS_HOST=gestor_usuarios
+        - USUARIOS_PORT=3011
     networks:
       - ventas_servicio_net
+      - inventario_servicio_net
+      - seguridad_servicio_net
   
   procesador_pedidos:
     build:
