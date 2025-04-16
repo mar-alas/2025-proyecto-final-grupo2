@@ -31,3 +31,6 @@ class ProductRepository:
         self.db_session.commit()
 
         return product_instance
+    
+    def get_all(self):
+        return self.db_session.query(self.product_model_class).all()

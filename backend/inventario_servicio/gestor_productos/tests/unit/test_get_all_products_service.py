@@ -1,30 +1,33 @@
-from dominio.get_all_products_service import GetAllProductsService
-from unittest.mock import Mock
 import pytest
+from unittest.mock import MagicMock
+from dominio.get_all_products_service import GetAllProductsService
 
-def test_servicio_obtener_productos_exitoso():
-    productos_falsos = [
-        {"id": 1, "nombre": "Producto 1"},
-        {"id": 2, "nombre": "Producto 2"},
-    ]
+def test_ejecutar_retorna_lista_de_productos():
+    # Arrange
+    productos_esperados = [{"id": 1, "nombre": "Producto A"}, {"id": 2, "nombre": "Producto B"}]
 
-    mock_repo = Mock()
-    mock_repo.obtener_todos.return_value = productos_falsos
+    mock_repository = MagicMock()
+    mock_repository.get_all.return_value = productos_esperados
 
-    servicio = GetAllProductsService(mock_repo)
-    resultado = servicio.ejecutar()
+    service = GetAllProductsService(mock_repository)
 
-    assert resultado == productos_falsos
-    mock_repo.obtener_todos.assert_called_once()
+    # Act
+    resultado = service.ejecutar()
+
+    # Assert
+    mock_repository.get_all.assert_called_once()
+    assert resultado == productos_esperados
 
 
-def test_servicio_obtener_productos_error():
-    mock_repo = Mock()
-    mock_repo.obtener_todos.side_effect = Exception("Falla intencional")
+def test_ejecutar_lanza_runtime_error_si_get_all_falla():
+    # Arrange
+    mock_repository = MagicMock()
+    mock_repository.get_all.side_effect = Exception("Falla en base de datos")
 
-    servicio = GetAllProductsService(mock_repo)
+    service = GetAllProductsService(mock_repository)
 
+    # Act & Assert
     with pytest.raises(RuntimeError) as excinfo:
-        servicio.ejecutar()
+        service.ejecutar()
 
     assert "Error al consultar productos" in str(excinfo.value)

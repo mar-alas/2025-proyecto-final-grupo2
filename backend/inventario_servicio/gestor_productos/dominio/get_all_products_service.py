@@ -4,6 +4,6 @@ class GetAllProductsService:
 
     def ejecutar(self):
         try:
-            return self._producto_repository.obtener_todos()
+            return self._producto_repository.get_all()
         except Exception as e:
             raise RuntimeError(f"Error al consultar productos: {str(e)}") from e
