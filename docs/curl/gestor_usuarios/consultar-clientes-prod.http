@@ -1,4 +1,4 @@
-@baseUrl = http://34.8.66.38
+@baseUrl = http://34.49.18.136
 # ⚠️ IMPORTANTE: Debes obtener el token desde el endpoint de login: /api/v1/seguridad/gestor_usuarios/r/auth/login (ver login-prod.http)
 @token = Bearer tu.access.token
 

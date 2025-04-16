@@ -1,5 +1,5 @@
-@baseUrl = http://34.8.66.38
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInJvbGUiOiJjbGllbnRlIiwiZXhwIjoxNzQ0MzgxMDE5fQ.TPXUoFcJ0Znq7xZ7_3Mcf9KcXHWg3B9NQa35Upt0ewg
+@baseUrl = http://34.49.18.136
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjcsInJvbGUiOiJ2ZW5kZWRvciIsImV4cCI6MTc0NDkzNDk0OH0.F_QsMLNGC8DUVggIxkKHbUH-E3yeSOjGBgTKUDISPmA
 
 curl --location \
   --header "Authorization: Bearer {{token}}" \
