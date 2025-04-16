@@ -66,8 +66,8 @@ components:
           description: barrio del cliente
         hora:
           type: string
-          example: "8:00 AM"
-          description: Hora en formato H:MM AM/PM
+          example: "2025-05-31T00:00:00.000Z"
+          description: Fecha de la visita en formato YYYY-MM-DDTHH:MM:SS.SSSZ, importante la hora
         trayecto:
           type: number
           example: 0.5
