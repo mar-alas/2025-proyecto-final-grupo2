@@ -41,9 +41,12 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/RutaVisitaResponse'
+                type: object
+                properties:
+                  ruta_visita:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ParadaClienteResponse'
         '404':
           description: Error en ruta de visita
           content:
@@ -53,7 +56,7 @@ paths:
   
 components:
   schemas:
-    RutaVisitaResponse:
+    ParadaClienteResponse:
       type: object
       properties:
         cliente_id:
