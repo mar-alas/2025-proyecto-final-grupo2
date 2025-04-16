@@ -25,7 +25,7 @@ def crear_producto():
         except IndexError:
             return jsonify({"status": "FAILED", "message": "Formato del token invalido"}), 401
 
-        validator = AccessTokenValidator()
+        validator = AccessTokenValidator(allowed_roles=["director-compras"])
         es_valido, mensaje = validator.validate(token)
 
         if not es_valido:
