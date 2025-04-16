@@ -32,5 +32,23 @@ class ProductRepository:
 
         return product_instance
     
-    def get_all(self):
-        return self.db_session.query(self.product_model_class).all()
+    # def get_all(self):
+    #    return self.db_session.query(self.product_model_class).all()
+    
+    def get_all(self, code=None, name=None, status=None, page=1, limit=20):
+        query = self.db_session.query(self.product_model_class)
+
+        if code:
+            query = query.filter(self.product_model_class.id == code)
+        if name:
+            query = query.filter(self.product_model_class.nombre.ilike(f"%{name}%"))
+        if status:
+            query = query.filter(self.product_model_class.estado == status)
+
+        total = query.count()
+        productos = query.order_by(self.product_model_class.id.desc()) \
+                         .offset((page - 1) * limit) \
+                         .limit(limit) \
+                         .all()
+
+        return productos, total
