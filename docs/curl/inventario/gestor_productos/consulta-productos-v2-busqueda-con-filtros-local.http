@@ -1,2 +1,3 @@
-GET /api/v2/inventario/gestor_productos/productos HTTP/1.1
-Host: 34.49.18.136
+GET /api/v2/inventario/gestor_productos/productos?page=1&limit=1&name=arroz&code=1&status=en_stock HTTP/1.1
+Authorization: Bearer tu_token
+Host: localhost:3001
