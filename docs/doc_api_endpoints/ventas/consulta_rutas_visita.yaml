@@ -63,11 +63,15 @@ components:
           type: integer
           example: 1
           description: id del cliente
+        nombre_cliente:
+          type: string
+          example: "Juan Pérez"
+          description: Nombre del clientes
         barrio:
           type: string
           example: "Chapinero"
           description: barrio del cliente
-        hora:
+        fecha_completa:
           type: string
           example: "2025-05-31T00:00:00.000Z"
           description: Fecha de la visita en formato YYYY-MM-DDTHH:MM:SS.SSSZ, importante la hora
