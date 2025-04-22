@@ -11,3 +11,4 @@ PyJWT==2.6.0
 Flask-SQLAlchemy
 psycopg2-binary
 pulsar-client==3.4.0
+requests==2.32.3
