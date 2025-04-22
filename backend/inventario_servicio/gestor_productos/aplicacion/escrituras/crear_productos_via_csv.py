@@ -39,7 +39,7 @@ def crear_producto_via_csv():
         if validacion_body:
             return jsonify({"status": "FAILED", "message": validacion_body}), 400
         
-        validacion_url_csv = validar_url_csv(body)
+        validacion_url_csv = validar_url_csv(body.get('filepath'))
         if validacion_url_csv:
             return jsonify({"status": "FAILED", "message": validacion_url_csv}), 400
 
