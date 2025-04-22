@@ -6,6 +6,7 @@ from dominio.product import Product
 from dominio.product_image import ProductImage
 from infraestructura.pulsar.publisher import PulsarPublisher
 from dominio.crear_producto_service import CrearProductoService
+from dominio.reglas_negocio_crear_productos_via_csv import validar_body, validar_url_csv
 
 
 crear_producto_via_csv_bp = Blueprint('crear_producto_via_csv_bp', __name__)
@@ -34,10 +35,17 @@ def crear_producto_via_csv():
         
         body = request.get_json()
 
-        # TODO leer ruta, validarla
+        validacion_body = validar_body(body)
+        if validacion_body:
+            return jsonify({"status": "FAILED", "message": validacion_body}), 400
+        
+        validacion_url_csv = validar_url_csv(body)
+        if validacion_url_csv:
+            return jsonify({"status": "FAILED", "message": validacion_url_csv}), 400
+
         # TODO descargar archivo en memoria, validar datos
         # TODO crear objeto data.
-        
+
         data = None
 
         product_repo = ProductRepository(db.session, Product, ProductImage)
