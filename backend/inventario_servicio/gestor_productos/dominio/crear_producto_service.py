@@ -1,6 +1,5 @@
 from dominio.product_mapper import crear_product_dto_desde_dict
 from dominio.reglas_negocio_crear_producto import validar_datos_producto
-import json
 import logging
 
 class CrearProductoService:
