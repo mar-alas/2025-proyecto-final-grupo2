@@ -27,3 +27,15 @@ def test_download_file_failure(mock_get):
         download_file_from_url("https://storage.googleapis.com/ccp-app-images/test.csv")
 
     assert "No se pudo descargar el archivo." in str(exc_info.value)
+
+
+@patch("infraestructura.file_downloader.requests.get")
+def test_download_file_request_exception(mock_get):
+    from requests.exceptions import HTTPError
+
+    mock_get.side_effect = HTTPError("Error HTTP")
+
+    with pytest.raises(Exception) as exc_info:
+        download_file_from_url("https://storage.googleapis.com/ccp-app-images/test.csv")
+
+    assert "No se pudo descargar el archivo." in str(exc_info.value)

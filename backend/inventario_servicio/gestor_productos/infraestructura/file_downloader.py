@@ -11,6 +11,5 @@ def download_file_from_url(url):
         response.raise_for_status()
         return StringIO(response.text)
     except requests.RequestException as e:
-        logger.error(f"Error al descargar el archivo desde {url}: {str(e)}")
         raise Exception(f"No se pudo descargar el archivo.")
 

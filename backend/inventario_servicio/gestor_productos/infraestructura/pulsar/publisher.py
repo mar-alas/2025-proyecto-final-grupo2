@@ -21,6 +21,11 @@ class PulsarPublisher(EventPublisher):
             productor = self.cliente.create_producer(topico)
             productor.send(json.dumps(mensaje).encode("utf-8"))
             logger.info(f"Mensaje publicado en {topico}: {mensaje}")
-            self.cliente.close()
         except Exception as e:
             logger.info(f"Error enviando mensaje a {topico}: {str(e)}")
+
+    def cerrar_mensajeria(self):
+        try:
+            self.cliente.close()
+        except Exception as e:
+            pass

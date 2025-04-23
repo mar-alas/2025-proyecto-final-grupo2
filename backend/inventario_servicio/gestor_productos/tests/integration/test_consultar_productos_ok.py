@@ -2,7 +2,7 @@ from flask import Flask
 from aplicacion.lecturas.consultar_productos import consultar_productos_bp
 from dominio.product_repository import ProductRepository
 import jwt
-import datetime
+from datetime import datetime, UTC, timedelta
 
 # Mock del producto
 class MockProduct:
@@ -13,7 +13,7 @@ class MockProduct:
 def generar_token_valido(secret_key='clave_secreta_para_firmar_token', role='director-compras'):
     payload = {
         "role": role,
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+        "exp": datetime.now(UTC) + timedelta(hours=1)
     }
     return jwt.encode(payload, secret_key, algorithm='HS256')
 
@@ -53,7 +53,7 @@ def test_consultar_productos_ok(monkeypatch):
 def test_consultar_productos_token_expirado(monkeypatch):
     payload = {
         "role": "director-compras",
-        "exp": datetime.datetime.utcnow() - datetime.timedelta(seconds=1)  # ya expirado
+        "exp": datetime.now(UTC) - timedelta(seconds=1)  # ya expirado
     }
     token = jwt.encode(payload, 'clave_secreta_para_firmar_token', algorithm='HS256')
     headers = {"Authorization": f"Bearer {token}"}

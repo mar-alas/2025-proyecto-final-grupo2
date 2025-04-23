@@ -48,8 +48,10 @@ class CrearProductoService:
 
             if self.event_publisher:
                 mensaje = creado.created_product_event().to_dict()
-                logging.info(f"Mensaje enviado a la cola: {mensaje}")
+                self.logger.info(f"Mensaje enviado a la cola: {mensaje}")
                 self.event_publisher.publicar_mensaje("ProductoRegistrado", mensaje)
+            
+        self.event_publisher.cerrar_mensajeria()
 
         return {
             "total": len(productos),

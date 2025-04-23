@@ -32,8 +32,6 @@ class ProductRepository:
 
         return product_instance
     
-    # def get_all(self):
-    #    return self.db_session.query(self.product_model_class).all()
     
     def get_all(self, code=None, name=None, status=None, page=1, limit=20):
         query = self.db_session.query(self.product_model_class)

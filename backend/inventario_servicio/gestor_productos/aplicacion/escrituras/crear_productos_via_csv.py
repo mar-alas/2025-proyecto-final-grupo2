@@ -6,8 +6,9 @@ from dominio.product import Product
 from dominio.product_image import ProductImage
 from infraestructura.pulsar.publisher import PulsarPublisher
 from dominio.crear_producto_service import CrearProductoService
-from dominio.reglas_negocio_crear_productos_via_csv import validar_body, validar_url_csv
-
+from dominio.reglas_negocio_crear_productos_via_csv import validar_body, validar_url_csv, validar_contenido
+from infraestructura.file_downloader import download_file_from_url
+from dominio.csv_to_product_list_mapper import obtener_lista_productos_desde_csv
 
 crear_producto_via_csv_bp = Blueprint('crear_producto_via_csv_bp', __name__)
 
@@ -43,10 +44,21 @@ def crear_producto_via_csv():
         if validacion_url_csv:
             return jsonify({"status": "FAILED", "message": validacion_url_csv}), 400
 
-        # TODO descargar archivo en memoria, validar datos
-        # TODO crear objeto data.
+        csv_content = None
+        try:
+            csv_content = download_file_from_url(body.get('filepath'))
+        except Exception as e:
+            return jsonify({"status": "FAILED", "message": str(e)}), 400
+        
+        validacion_contenido = validar_contenido(csv_content)
+        if validacion_contenido:
+            return jsonify({"status": "FAILED", "message": validacion_contenido}), 400
 
-        data = None
+        data = obtener_lista_productos_desde_csv(csv_content)
+
+        if len(data) == 0:
+            return jsonify({"status": "FAILED", "message": "No se logro obtener la lista de productos del archivo."}), 400
+
 
         product_repo = ProductRepository(db.session, Product, ProductImage)
         publicador_eventos = PulsarPublisher()
