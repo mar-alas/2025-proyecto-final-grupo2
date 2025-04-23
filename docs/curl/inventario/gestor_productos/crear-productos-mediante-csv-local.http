@@ -1,0 +1,8 @@
+POST /api/v1/inventario/gestor_productos/productos/importar-masivamente HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJkaXJlY3Rvci1jb21wcmFzIiwiZXhwIjoxNzQ1NjA5OTMxfQ.kV0FY_f2ncrPUNA9erLf1WEx3hc2-A5EQ2rH8g7JQUk
+Content-Type: application/json
+Host: localhost:3001
+
+{
+  "filepath": "https://storage.googleapis.com/ccp-app-images/productos_OK_3.csv"
+}

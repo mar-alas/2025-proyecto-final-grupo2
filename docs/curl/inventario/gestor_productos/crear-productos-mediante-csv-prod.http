@@ -1,0 +1,8 @@
+POST /api/v1/inventario/gestor_productos/productos/importar-masivamente HTTP/1.1
+Authorization: Bearer tu_token
+Content-Type: application/json
+Host: 34.49.18.136
+
+{
+  "filepath": "https://storage.googleapis.com/ccp-app-images/productos_OK_3.csv"
+}
