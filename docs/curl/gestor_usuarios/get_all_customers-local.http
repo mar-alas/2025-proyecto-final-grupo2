@@ -1,0 +1,2 @@
+curl --request GET \
+  --url http://localhost:3011/api/v1/seguridad/gestor_usuarios/r/clientes

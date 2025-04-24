@@ -22,8 +22,8 @@ spec:
     spec:
       containers:
         - env:
-            - name: DB_HOST
-              value: ventas_servicio_db
+            - name: DB_HOSTNAME
+              value: ventas-servicio-db
             - name: DB_NAME
               value: ventas_servicio_db
             - name: DB_PASSWORD
@@ -32,7 +32,15 @@ spec:
               value: "5432"
             - name: DB_USER
               value: postgres
-          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/gestor_ventas:latest
+            - name: STOCK_HOST
+              value: gestor-stock
+            - name: STOCK_PORT
+              value: "3002"
+            - name: USUARIOS_HOST
+              value: gestor-usuarios
+            - name: USUARIOS_PORT
+              value: "3011"
+          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/gestor_ventas:${TAG}
           name: gestor-ventas
           ports:
             - containerPort: 3008

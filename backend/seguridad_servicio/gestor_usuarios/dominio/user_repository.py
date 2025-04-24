@@ -1,5 +1,3 @@
-# from dominio.user import User
-# from dominio.user_mapper import UserMapper
 from gestor_usuarios.dominio.user_mapper import UserMapper
 from gestor_usuarios.dominio.user_dto import UserDTO
 from typing import Protocol
@@ -29,8 +27,10 @@ class UserRepository:
         self.db_session.add(user_instance)
         self.db_session.commit()
 
+
+    def get_all_customers(self) -> list[UserDTO]:
         """
-        user_model = UserMapper.to_model(user)
-        self.db_session.add(user_model)
-        self.db_session.commit()
+        Retorna todos los usuarios cuyo rol es 'cliente'.
         """
+        client_users = self.db_session.query(self.user_model_class).filter_by(role='cliente').all()
+        return [UserMapper.to_dto(user) for user in client_users]

@@ -34,7 +34,7 @@ spec:
               value: postgres
             - name: PULSAR_HOST
               value: pulsar
-          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/inventario_servicio/worker_gestor_proveedores:latest
+          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/inventario_servicio/worker_gestor_proveedores:${TAG}
           livenessProbe:
             exec:
               command:
@@ -43,4 +43,5 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 5
           name: gestor-proveedores-worker
+          imagePullPolicy: Always
       restartPolicy: Always

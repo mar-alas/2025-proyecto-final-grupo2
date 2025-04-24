@@ -9,3 +9,4 @@ class Config:
         f"{os.getenv('DB_NAME', 'seguridad_servicio_db')}"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY", "CCP_ENCRYPTION_KEY_2025")

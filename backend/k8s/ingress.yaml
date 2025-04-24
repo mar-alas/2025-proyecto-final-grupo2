@@ -26,6 +26,14 @@ spec:
             port:
               number: 3001
 
+      - path: /api/v2/inventario/gestor_productos
+        pathType: Prefix
+        backend:
+          service:
+            name: gestor-productos
+            port:
+              number: 3001
+
       - path: /api/v1/inventario/gestor_stock
         pathType: Prefix
         backend:

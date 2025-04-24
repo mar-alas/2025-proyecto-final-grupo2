@@ -6,13 +6,10 @@ COPY backend/inventario_servicio/gestor_productos/requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY backend/inventario_servicio/gestor_productos /app/
-COPY backend/seedwork_compartido /app/seedwork_compartido
-
-ENV PYTHONPATH="/app/seedwork_compartido:${PYTHONPATH}"
+COPY backend/inventario_servicio/gestor_productos /app/gestor_productos
 
 # Expose port 3001
 EXPOSE 3001
 
 # Define the start command
-CMD ["python", "app.py"]
+CMD ["python", "gestor_productos/app.py"]

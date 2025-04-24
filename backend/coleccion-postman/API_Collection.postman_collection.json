@@ -1,0 +1,299 @@
+{
+  "info": {
+    "name": "Proyecto2",
+    "description": "Postman collection for API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Registrar Usuario",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}{{port_usuarios}}/api/v1/seguridad/gestor_usuarios/w/signup",
+          "protocol": "http",
+          "host": ["{{baseUrl}}"],
+          "port": "{{port_usuarios}}",
+          "path": ["api", "v1", "seguridad", "gestor_usuarios", "w", "signup"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"P@ssw0rd!\",\n  \"role\": \"user\",\n  \"country\": \"Colombia\",\n  \"city\": \"Bogota\",\n  \"address\": \"CL 1 # 2 - 3\",\n  \"acceptPolicy\": true\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Response contains userId and message\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('userId');",
+              "    pm.expect(jsonData).to.have.property('message');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inicio de Sesión",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}{{port_usuarios}}/api/v1/seguridad/gestor_usuarios/r/auth/login",
+          "protocol": "http",
+          "host": ["{{baseUrl}}"],
+          "port": "{{port_usuarios}}",
+          "path": ["api", "v1", "seguridad", "gestor_usuarios", "r", "auth", "login"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"P@ssw0rd!\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains accessToken\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('accessToken');",
+              "    pm.environment.set(\"accessToken\", jsonData.accessToken);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Registrar Proveedor",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}{{port_proveedores}}/api/v1/inventario/gestor_proveedores/proveedores",
+          "protocol": "http",
+          "host": ["{{baseUrl}}"],
+          "port": "{{port_proveedores}}",
+          "path": ["api", "v1", "inventario", "gestor_proveedores", "proveedores"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Proveedor Ejemplo S.A.\",\n  \"email\": \"contacto@proveedorejemplo.com\",\n  \"numero_contacto\": \"+541112345678\",\n  \"pais\": \"Argentina\",\n  \"caracteristicas\": \"Proveedor de materiales eléctricos con 10 años en el mercado\",\n  \"condiciones_comerciales_tributarias\": \"Pago a 30 días, exento de IVA según artículo 123\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Response contains userId and message\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('userId');",
+              "    pm.expect(jsonData).to.have.property('message');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Registrar Pedido",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}{{port_pedidos}}/api/v1/ventas/procesador_pedidos/pedidos",
+          "protocol": "http",
+          "host": ["{{baseUrl}}"],
+          "port": "{{port_pedidos}}",
+          "path": ["api", "v1", "ventas", "procesador_pedidos", "pedidos"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cliente_id\": 123456,\n  \"vendedor_id\": 987654,\n  \"productos\": [\n    {\n      \"id\": 1,\n      \"cantidad\": 10,\n      \"precio_unitario\": 50.0\n    },\n    {\n      \"id\": 2,\n      \"cantidad\": 5,\n      \"precio_unitario\": 120.0\n    }\n  ]\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Response contains userId and message\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('userId');",
+              "    pm.expect(jsonData).to.have.property('message');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Obtener Pedidos",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}{{port_pedidos}}/api/v1/ventas/procesador_pedidos/pedidos?cliente_id={{clienteId}}",
+          "protocol": "http",
+          "host": ["{{baseUrl}}"],
+          "port": "{{port_pedidos}}",
+          "path": ["api", "v1", "ventas", "procesador_pedidos", "pedidos"],
+          "query": [
+            {
+              "key": "cliente_id",
+              "value": "{{clienteId}}",
+              "description": "The ID of the client whose pedidos are being retrieved."
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains expected fields\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('total');",
+              "    pm.expect(jsonData).to.have.property('pages');",
+              "    pm.expect(jsonData).to.have.property('current_page');",
+              "    pm.expect(jsonData).to.have.property('pedidos');",
+              "    if (jsonData.pedidos.length > 0) {",
+              "        pm.expect(jsonData.pedidos[0]).to.have.property('id');",
+              "        pm.expect(jsonData.pedidos[0]).to.have.property('fecha');",
+              "        pm.expect(jsonData.pedidos[0]).to.have.property('cantidad_productos');",
+              "        pm.expect(jsonData.pedidos[0]).to.have.property('estado');",
+              "    }",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Consultar Inventario de Productos",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}{{port_stock}}/api/v1/inventario/gestor_stock/productos",
+          "protocol": "http",
+          "host": ["{{baseUrl}}"],
+          "port": "{{port_stock}}",
+          "path": ["api", "v1", "inventario", "gestor_stock", "productos"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains expected fields\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.be.an('array');",
+              "    if (jsonData.length > 0) {",
+              "        pm.expect(jsonData[0]).to.have.property('id');",
+              "        pm.expect(jsonData[0]).to.have.property('nombre');",
+              "        pm.expect(jsonData[0]).to.have.property('inventario');",
+              "    }",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "127.0.0.1", "enabled": true },
+    { "key": "port_pedidos", "value": ":3009", "enabled": true },
+    { "key": "port_usuarios", "value": ":3011", "enabled": true },
+    { "key": "port_proveedores", "value": ":3003", "enabled": true },
+    { "key": "port_stock", "value": "3002", "enabled": true}
+  ],
+  "values": [
+    {
+      "name": "GCP",
+      "values": [
+        { "key": "baseUrl", "value": "34.8.66.38", "enabled": true },
+        { "key": "port_pedidos", "value": "", "enabled": true },
+        { "key": "port_usuarios", "value": "", "enabled": true },
+        { "key": "port_proveedores", "value": "", "enabled": true },
+        { "key": "port_stock", "value": "", "enabled": true}
+      ]
+    }
+  ]
+}
