@@ -6,15 +6,15 @@ from dominio.product import Product
 from dominio.product_image import ProductImage
 from infraestructura.pulsar.publisher import PulsarPublisher
 from dominio.crear_producto_service import CrearProductoService
-import logging
+from dominio.reglas_negocio_crear_productos_via_csv import validar_body, validar_url_csv, validar_contenido
+from infraestructura.file_downloader import download_file_from_url
+from dominio.csv_to_product_list_mapper import obtener_lista_productos_desde_csv
+
+crear_producto_via_csv_bp = Blueprint('crear_producto_via_csv_bp', __name__)
 
 
-crear_producto_bp = Blueprint('crear_producto_bp', __name__)
-
-logging.basicConfig(level=logging.INFO)
-
-@crear_producto_bp.route('', methods=['POST'])
-def crear_producto():
+@crear_producto_via_csv_bp.route('', methods=['POST'])
+def crear_producto_via_csv():
     try:
         auth_header = request.headers.get('Authorization')
         if not auth_header:
@@ -34,9 +34,32 @@ def crear_producto():
         if not request.is_json:
             return jsonify({"status": "FAILED", "message": "Se requiere un cuerpo con formato JSON"}), 400
         
+        body = request.get_json()
 
-        data = request.get_json()
+        validacion_body = validar_body(body)
+        if validacion_body:
+            return jsonify({"status": "FAILED", "message": validacion_body}), 400
         
+        validacion_url_csv = validar_url_csv(body.get('filepath'))
+        if validacion_url_csv:
+            return jsonify({"status": "FAILED", "message": validacion_url_csv}), 400
+
+        csv_content = None
+        try:
+            csv_content = download_file_from_url(body.get('filepath'))
+        except Exception as e:
+            return jsonify({"status": "FAILED", "message": str(e)}), 400
+        
+        validacion_contenido = validar_contenido(csv_content)
+        if validacion_contenido:
+            return jsonify({"status": "FAILED", "message": validacion_contenido}), 400
+
+        data = obtener_lista_productos_desde_csv(csv_content)
+
+        if len(data) == 0:
+            return jsonify({"status": "FAILED", "message": "No se logro obtener la lista de productos del archivo."}), 400
+
+
         product_repo = ProductRepository(db.session, Product, ProductImage)
         publicador_eventos = PulsarPublisher()
         servicio = CrearProductoService(product_repo, publicador_eventos)
@@ -47,6 +70,6 @@ def crear_producto():
             return jsonify(resultado["resultados"][0]["producto"]), 201
 
         return jsonify(resultado), 207
-
+        
     except Exception as e:
-        return jsonify({"message": f"Error en registro. Intente mas tarde. Error:{str(e)}"}), 500
+        return jsonify({"message": f"Error en el cargue de productos. Intente mas tarde. Error:{str(e)}"}), 500

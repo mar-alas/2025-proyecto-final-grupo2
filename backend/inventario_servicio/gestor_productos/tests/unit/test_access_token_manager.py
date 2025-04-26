@@ -11,7 +11,7 @@ def generar_token(payload):
 
 @pytest.fixture
 def validator():
-    return AccessTokenValidator(secret_key=SECRET)
+    return AccessTokenValidator(secret_key=SECRET, allowed_roles=["director-compras"])
 
 
 def test_token_valido_y_rol_correcto(validator):
