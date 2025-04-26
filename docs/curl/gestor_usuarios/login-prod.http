@@ -1,9 +1,9 @@
-@baseUrl = http://34.49.18.136
+@baseUrl = http://34.8.175.2
 
 curl --request POST \
   --url {{baseUrl}}/api/v1/seguridad/gestor_usuarios/r/auth/login \
   --header 'content-type: application/json' \
   --data '{
-  "email": "pepe@gmail.com",
-  "password": "password"
+  "email": "testv@mail.com",
+  "password": "test_password"
 }'

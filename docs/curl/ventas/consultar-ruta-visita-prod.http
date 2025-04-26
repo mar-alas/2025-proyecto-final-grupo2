@@ -1,0 +1,6 @@
+@baseUrl = http://34.8.175.2
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsInJvbGUiOiJ2ZW5kZWRvciIsImV4cCI6MTc0NTgxMjE3NH0.G60V0Dyrb6yZDtzlEb6iQ-p1PIr5IbsLMzoxez6z0_g
+
+curl --location \
+  --header "Authorization: Bearer {{token}}" \
+  {{baseUrl}}/api/v1/ventas/gestor_ventas/ruta_visita?vendedor_id=1&fecha=2025-04-21
