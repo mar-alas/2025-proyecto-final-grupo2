@@ -1,9 +1,11 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Date
 from sqlalchemy.orm import sessionmaker
 from .modelos import VisitaCliente as InfraVisitaCliente, Base
+from .modelos import RutaVisita as InfraRutaVisita
 import os
 import logging
 from infraestructura.mappers import to_infraestructura_visita
+from datetime import datetime
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -54,3 +56,46 @@ class RepositorioVisitas:
             self.db_session.rollback()
             logger.error(f"Error al guardar la visita: {e}")
             raise e
+
+
+class RutasVisitas:
+    def __init__(self, db_session=None):
+        self.db_session = db_session or Session()
+        self.agregar_datos_por_defecto()
+
+    def obtener_rutas_por_vendedor_y_fecha(self, vendedor_id, fecha):
+        """Retrieve routes for a specific vendor and date."""
+        try:
+            rutas = self.db_session.query(InfraRutaVisita).filter(
+                InfraRutaVisita.vendedor_id == vendedor_id,
+                InfraRutaVisita.fecha.cast(Date) == datetime.strptime(fecha, "%Y-%m-%d").date()
+            ).all()
+            return rutas
+        except Exception as e:
+            logger.error(f"Error al obtener las rutas: {e}")
+            raise e
+
+    # Add default data to the repository
+    def agregar_datos_por_defecto(self):
+        logger.info("Agregando datos por defecto a la base de datos...")
+        session = Session()
+        try:
+            # Check if data already exists
+            if not session.query(InfraRutaVisita).first():
+                rutas_por_defecto = [
+                    InfraRutaVisita(vendedor_id=1, fecha=datetime(2025, 4, 21, 9, 0), cliente_id=1, nombre_cliente="Carlos Gomez", barrio="El Poblado", orden=1, tiempo_estimado="0.5", distancia="5 km"),
+                    InfraRutaVisita(vendedor_id=1, fecha=datetime(2025, 4, 21, 11, 0), cliente_id=2, nombre_cliente="Maria Lopez", barrio="La Floresta", orden=2, tiempo_estimado="1", distancia="10 km"),
+                    InfraRutaVisita(vendedor_id=1, fecha=datetime(2025, 4, 21, 14, 0), cliente_id=3, nombre_cliente="Luis Martinez", barrio="Belén", orden=3, tiempo_estimado="0.25", distancia="2 km"),
+                    InfraRutaVisita(vendedor_id=1, fecha=datetime(2025, 4, 21, 16, 0), cliente_id=4, nombre_cliente="Ana Torres", barrio="Laureles", orden=4, tiempo_estimado="2", distancia="3 km")
+                ]
+                session.add_all(rutas_por_defecto)
+                session.commit()
+                logger.info("Datos por defecto agregados exitosamente.")
+            else:
+                logger.info("Los datos por defecto ya existen en la base de datos.")
+        except Exception as e:
+            session.rollback()
+            logger.error(f"Error al agregar datos por defecto: {e}")
+            raise e
+        finally:
+            session.close()
