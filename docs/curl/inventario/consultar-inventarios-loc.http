@@ -1,6 +1,5 @@
-@baseUrl = http://localhost:5000
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInJvbGUiOiJjbGllbnRlIiwiZXhwIjoxNzQ0MzgxMDE5fQ.TPXUoFcJ0Znq7xZ7_3Mcf9KcXHWg3B9NQa35Upt0ewg
-
+@baseUrl = http://localhost:8000
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInJvbGUiOiJkaXJlY3Rvci1jb21wcmFzIiwiZXhwIjoxNzQ1ODYzMzMwfQ.ieyKo7_bHY78cA1kOVYcRjTaCRimZIGei-0mzrGehEg
 curl --location \
   --header "Authorization: Bearer {{token}}" \
   --request GET '{{baseUrl}}/api/v1/inventario/gestor_stock/productos'

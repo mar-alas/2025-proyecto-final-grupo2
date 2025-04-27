@@ -87,7 +87,7 @@ class RepositorioStock:
                     productos.nombre AS producto_nombre,
                     productos.precio AS producto_precio
                 FROM stock
-                JOIN productos ON stock.producto_id = productos.id
+                JOIN productos ON stock.producto_id = productos.id;
             """)
             
             result: Result = self.db_session.execute(sql).mappings().all()

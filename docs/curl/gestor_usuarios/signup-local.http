@@ -3,7 +3,7 @@ curl --request POST \
   --header 'content-type: application/json' \
   --data '{
   "name": "Pepe",
-  "email": "pepe3@gmail.com",
+  "email": "pepe@gmail.com",
   "password": "password",
   "role": "director-compras"
 }'
