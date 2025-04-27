@@ -46,9 +46,8 @@ def consultar_ruta_visita_optimizada():
     visitas = repo.obtener_rutas_por_vendedor_y_fecha(vendedor_id, fecha)
     if not visitas:
         return jsonify({
-            "error": "Ruta no encontrada",
-            "detalles": f"No se encontró una ruta para el vendedor {vendedor_id} en la fecha {fecha}"
-        }), 404
+           "ruta_visita": []
+        }), 200
 
     ruta_optimizada = optimizar_ruta(visitas)
     # Serialize the data using the schema
