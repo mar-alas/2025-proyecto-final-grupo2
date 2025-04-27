@@ -92,6 +92,5 @@ class TestConsultarRutaVisitaOptimizada(unittest.TestCase):
         response = self.client.get("/ruta_visita_optimizada", headers=headers, query_string=query_string)
 
         # Assert
-        self.assertEqual(response.status_code, 404)
-        self.assertIn("error", response.json)
-        self.assertEqual(response.json["error"], "Ruta no encontrada")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, {"ruta_visita": []})

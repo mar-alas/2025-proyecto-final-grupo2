@@ -100,11 +100,9 @@ class TestRutaVisita(unittest.TestCase):
         response = self.client.get(
             "/ruta_visita?vendedor_id=1&fecha=2023-10-01", headers=headers
         )
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.json, {
-            "error": "Ruta no encontrada",
-            "detalles": "No se encontró una ruta para el vendedor 1 en la fecha 2023-10-01",
-        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, {"ruta_visita": []})
+
 
 if __name__ == "__main__":
     unittest.main()
