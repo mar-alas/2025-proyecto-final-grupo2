@@ -48,6 +48,7 @@ components:
         - city
         - address
         - acceptPolicy
+        - client_type
       properties:
         name:
           type: string
@@ -74,6 +75,9 @@ components:
         address:
           type: string
           example: "CL 1 # 2 - 3"
+        client_type:
+          type: string
+          example: "Supermercado"
 
     SignupResponse:
       type: object
