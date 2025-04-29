@@ -5,10 +5,10 @@ from gestor_usuarios.infraestructura.database import db
 from gestor_usuarios.dominio.access_token_manager import validar_token
 
 
-get_all_customers_bp = Blueprint('get_all_customers_bp', __name__)
+get_all_sellers_bp = Blueprint('get_all_sellers_bp', __name__)
 
-@get_all_customers_bp.route('', methods=['GET'])
-def get_all_customers():
+@get_all_sellers_bp.route('', methods=['GET'])
+def get_all_sellers():
     try:
         auth_header = request.headers.get('Authorization')
         if not auth_header:
@@ -21,39 +21,34 @@ def get_all_customers():
             return jsonify({"status": "FAILED", "message": "forbidden"}), 403
 
         user_repo = UserRepository(db.session, User)
-        all_customers = user_repo.get_all_customers()
+        all_sellers = user_repo.get_all_sellers()
 
-        if not all_customers:
+        if not all_sellers:
             return jsonify({
                 "status": "success",
-                "message": "No hay clientes registrados.",
-                "clientes": []
+                "message": "No hay vendedores registrados.",
+                "vendedores": []
             }), 200
         
-        customers_json = [
+        sellers_json = [
             {
-                "id": int(customer.id),
-                "name": customer.name,
-                "email": customer.email,
-                "country": customer.country,
-                "city": customer.city,
-                "address": customer.address,
-                "client_type": customer.client_type,
-                "geographic_coordinates": customer.geographic_coordinates,
+                "id": int(seller.id),
+                "name": seller.name,
+                "email": seller.email,
             }
-            for customer in all_customers
+            for seller in all_sellers
         ]
 
         return jsonify({
             "status": "success",
             "message": "Usuarios consultados exitosamente.",
-            "clientes": customers_json
+            "vendedores": sellers_json
         }), 200
 
     except Exception as e:
         print(e)
         return jsonify({
             "status": "FAILED",
-            "message": "Ocurrio un error inesperado al recuperar los clientes.",
-            "clientes": []
+            "message": "Ocurrio un error inesperado al recuperar los vendedores.",
+            "vendedores": []
         }), 500

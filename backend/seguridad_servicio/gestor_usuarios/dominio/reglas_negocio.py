@@ -26,7 +26,8 @@ def validar_tamanio_name(name):
 
 
 def validar_role(data):
-    valid_roles = ['user', 'admin', 'cliente', 'vendedor', 'proveedor']
+    valid_roles = ['user', 'admin', 'cliente', 'vendedor', 'proveedor',
+                   "encargado-logistica", "director-compras", "director-ventas"]
     role = data.get('role')
     return role in valid_roles
 
@@ -36,10 +37,11 @@ def role_esta_presente(data):
 def country_esta_presente(data):
     return bool(data.get('country'))
 
-
 def city_esta_presente(data):
     return bool(data.get('city'))
 
+def client_type_esta_presente(data):
+    return bool(data.get('client_type'))
 
 def address_esta_presente(data):
     return bool(data.get('address'))
