@@ -3,7 +3,8 @@ from gestor_usuarios.dominio.user import User
 from gestor_usuarios.dominio.user_repository import UserRepository
 from gestor_usuarios.infraestructura.database import db
 from gestor_usuarios.dominio.access_token_manager import validar_token
-
+import logging
+logger = logging.getLogger(__name__)
 
 get_all_sellers_bp = Blueprint('get_all_sellers_bp', __name__)
 
@@ -46,7 +47,7 @@ def get_all_sellers():
         }), 200
 
     except Exception as e:
-        print(e)
+        logger.error(f"Error retrieving sellers: {str(e)}")
         return jsonify({
             "status": "FAILED",
             "message": "Ocurrio un error inesperado al recuperar los vendedores.",

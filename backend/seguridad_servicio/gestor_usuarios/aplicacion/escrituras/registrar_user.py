@@ -45,10 +45,13 @@ def registrar_user():
             password = decrypt_password(password)
         print(f"password D:{password}")
     
-        gps = None
+        geographic_coordinates = None
         if data.get("role") == "cliente":
-            location = (4.6097100, -74.0817500)  # Coordenadas de Bogotá como ejemplo
-            gps = (location[0] + random.uniform(-0.100, 0.100), location[1] + random.uniform(-0.100, 0.100)) # Coordenadas aleatorias alrededor de Bogotá
+            # Generate coordinates based on user's city if possible, fallback to Bogotá
+            location = (4.6097100, -74.0817500)  # Coordenadas de Bogotá como base
+            lat = location[0] + random.uniform(-0.100, 0.100)
+            lng = location[1] + random.uniform(-0.100, 0.100)
+            geographic_coordinates = f"{lat:.6f},{lng:.6f}"  # Format as string with 6 decimal places
         user_dto = UserDTO(
             name = data.get('name'),
             email = data.get('email').strip().lower(),
@@ -58,7 +61,7 @@ def registrar_user():
             city = data.get("city") if city_esta_presente(data) else None,
             address = data.get("address") if address_esta_presente(data) else None,
             client_type = data.get("client_type") if client_type_esta_presente(data) else None,
-            geographic_coordinates = gps
+            geographic_coordinates = geographic_coordinates
         )
 
         

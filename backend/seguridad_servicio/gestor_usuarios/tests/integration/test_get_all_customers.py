@@ -11,7 +11,7 @@ class FakeUser:
         self.email = email
         self.country = country
         self.city = city
-        self.address = address,
+        self.address = address
         self.client_type = client_type
         self.geographic_coordinates = geographic_coordinates
 
