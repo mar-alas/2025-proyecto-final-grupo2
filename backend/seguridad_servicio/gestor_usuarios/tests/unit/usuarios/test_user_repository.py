@@ -71,7 +71,9 @@ def test_get_all_customers_retorna_lista_de_dtos(user_repo, mock_db):
             role="cliente",
             country="Colombia",
             city="Bogotá",
-            address="Calle 1"
+            address="Calle 1",
+            client_type="premium",
+            geographic_coordinates="4.60971,-74.08175"
         ),
         SimpleNamespace(
             id=2,
@@ -81,7 +83,9 @@ def test_get_all_customers_retorna_lista_de_dtos(user_repo, mock_db):
             role="cliente",
             country="México",
             city="CDMX",
-            address="Calle 2"
+            address="Calle 2",
+            client_type="regular",
+            geographic_coordinates="19.4326,-99.1332"
         )
     ]
 

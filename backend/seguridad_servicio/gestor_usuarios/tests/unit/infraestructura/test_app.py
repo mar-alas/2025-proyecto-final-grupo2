@@ -6,3 +6,5 @@ def test_app_routes_registradas():
     assert '/api/v1/seguridad/gestor_usuarios/w/signup' in rutas
     assert '/api/v1/seguridad/gestor_usuarios/r/auth/login' in rutas
     assert '/' in rutas
+    assert '/api/v1/seguridad/gestor_usuarios/r/clientes' in rutas
+    assert '/api/v1/seguridad/gestor_usuarios/r/vendedores' in rutas

@@ -12,3 +12,5 @@ class UserDTO:
     city: str = None
     address: str = None
     id: Optional[int] = None
+    client_type: str = None
+    geographic_coordinates: str = None

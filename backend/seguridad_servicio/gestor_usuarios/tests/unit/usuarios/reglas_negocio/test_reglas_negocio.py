@@ -8,7 +8,8 @@ from gestor_usuarios.dominio.reglas_negocio import (
     country_esta_presente,
     city_esta_presente,
     address_esta_presente,
-    validar_datos_usuario
+    validar_datos_usuario,
+    client_type_esta_presente
 )
 
 
@@ -39,6 +40,10 @@ def test_role_esta_presente():
 def test_country_esta_presente():
     assert country_esta_presente({"country": "Colombia"}) is True
     assert country_esta_presente({}) is False
+
+def test_client_type_esta_presente():
+    assert client_type_esta_presente({"client_type": "premium"}) is True
+    assert client_type_esta_presente({}) is False
 
 def test_city_esta_presente():
     assert city_esta_presente({"city": "Bogotá"}) is True
