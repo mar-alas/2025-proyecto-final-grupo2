@@ -8,9 +8,10 @@ logger = logging.getLogger(__name__)
 
 generador_rutas_bp = Blueprint('generador_ruta', __name__)
 
-@generador_rutas_bp.route('/generar_ruta', methods=['GET'])
+@generador_rutas_bp.route('/generar_ruta', methods=['POST'])
 def generar_ruta_endpoint():
     data = request.get_json()
+    logger.info('Recibiendo datos: %s', data)
     punto_inicio = data['punto_inicio']  # JSON with lists
     destinos_dict = data['destinos']  # JSON with lists
 

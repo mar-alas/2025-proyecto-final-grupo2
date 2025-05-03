@@ -1,11 +1,11 @@
 import unittest
 from unittest.mock import patch, MagicMock
 from flask import Flask
-from aplicacion.lecturas.generador_rutas import generar_ruta_endpoint
+from aplicacion.escrituras.generador_rutas import generar_ruta_endpoint
 
 class TestGenerarRutaEndpoint(unittest.TestCase):
 
-    @patch('aplicacion.lecturas.generador_rutas.Optimizador')
+    @patch('aplicacion.escrituras.generador_rutas.Optimizador')
     def test_generar_ruta_endpoint(self, mock_optimizador):
         # Arrange
         app = Flask(__name__)
@@ -32,7 +32,7 @@ class TestGenerarRutaEndpoint(unittest.TestCase):
 
         # Act - Use the test client without test_request_context
         # Let the test client handle the request context
-        response = client.get('/generar_ruta', json=test_data)
+        response = client.post('/generar_ruta', json=test_data)
 
         # Assert
         self.assertEqual(response.status_code, 200)
