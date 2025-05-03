@@ -72,12 +72,12 @@ jobs:
           kubectl apply -f backend/k8s/gestor_rutas_entrega_deployment.yaml
           kubectl apply -f backend/k8s/gestor_rutas_entrega_service.yaml
 
-      - name: Verificar rollout exitoso gestor_rutas_entrega
+      - name: Verificar rollout exitoso generador_rutas_entrega
         if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
         run: |
-          kubectl rollout status deployment/gestor_rutas_entrega
+          kubectl rollout status deployment/generador_rutas_entrega
       
-      - name: Verificar rollout del deployment gestor_rutas_entrega
+      - name: Verificar rollout del deployment generador_rutas_entrega
         if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
         run: |
           set -e
@@ -89,10 +89,10 @@ jobs:
           echo "Listando nodos para validar conexión al clúster:"
           kubectl get nodes
 
-          if kubectl rollout status deployment/gestor_rutas_entrega --timeout=120s; then
+          if kubectl rollout status deployment/generador_rutas_entrega --timeout=120s; then
             echo "✅ Rollout exitoso"
           else
             echo "❌ Falló el rollout, iniciando rollback..."
-            kubectl rollout undo deployment/gestor_rutas_entrega
+            kubectl rollout undo deployment/generador_rutas_entrega
             exit 1
           fi
