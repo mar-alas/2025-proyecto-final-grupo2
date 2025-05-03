@@ -44,7 +44,6 @@ jobs:
         if: contains(github.event.head_commit.message, 'CD')
         run: |-
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/logistica_servicio/generador_reportes:latest
-          docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/logistica_servicio/generador_rutas_entrega:latest
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/logistica_servicio/gestor_entregas:latest
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/generador_reportes:latest
           docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/ventas_servicio/procesador_video:latest
