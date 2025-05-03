@@ -1,7 +1,7 @@
 from flask import Flask
 from seedwork_compartido.aplicacion.lectura.ping import ping_bp
 from aplicacion.lecturas.home import home_bp
-from aplicacion.lecturas.generador_rutas import generador_rutas_bp
+from aplicacion.escrituras.generador_rutas import generador_rutas_bp
 
 URL_PREFIX = '/api/v1/logistica/generador_rutas_entrega'
 URL_HOME = "/"
