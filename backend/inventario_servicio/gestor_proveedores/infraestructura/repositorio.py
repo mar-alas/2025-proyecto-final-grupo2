@@ -37,9 +37,10 @@ class RepositorioProveedores:
         self.db_session = db_session or Session()
 
     def guardar(self, proveedor: Proveedor):
-        """Save a new provider to the database."""
-        self.db_session.add(proveedor)
-        self.db_session.commit()
+        """ Save a new provider to the database if not exists already."""
+        if not self.existe_por_nombre(proveedor.nombre):
+            self.db_session.add(proveedor)
+            self.db_session.commit()
 
     def obtener_por_id(self, proveedor_id):
         """Retrieve a provider by its ID."""

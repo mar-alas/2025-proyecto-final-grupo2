@@ -5,16 +5,17 @@ from infraestructura.consumidor import ConsumidorProveedores
 from infraestructura.repositorio import RepositorioProveedores
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import uuid  # Import the UUID module
+import uuid
 import os
 import logging
 from dominio.reglas_negocio import validar_datos_no_vacios
 from seedwork_compartido.dominio.seguridad.access_token_manager import validar_token
+from dominio.comandos import ComandosProveedores
 
 proveedores_escritura = Blueprint('home_escritura', __name__)
 
 # Despachador para publicar comandos en la cola de comandos
-despachador_comandos = DespachadorProveedores(topico_eventos="comandos_proveedores")
+despachador_comandos = DespachadorProveedores(topico_eventos=ComandosProveedores.CREAR_PROVEEDORES)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
