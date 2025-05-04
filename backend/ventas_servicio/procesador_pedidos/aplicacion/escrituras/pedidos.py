@@ -89,8 +89,13 @@ def registrar_pedido():
 
     try:
         despachador = Despachador()
+        productos_pedidos = {}
         for p in infra_pedido.productos:
             despachador.publicar_mensaje('PedidoProcesado', {"producto_id": p.producto_id, "cantidad": p.cantidad})
+            productos_pedidos[p.producto_id] = {"cantidad": p.cantidad, "precio_unitario": p.precio_unitario}
+        despachador.publicar_mensaje('PedidoCreado', {"pedido_id": infra_pedido.id, "cliente_id": infra_pedido.cliente_id, "vendedor_id": infra_pedido.vendedor_id,
+                                                      "productos": productos_pedidos, "estado": infra_pedido.estado, "fecha_creacion": str(infra_pedido.fecha_creacion),
+                                                      "total": infra_pedido.total, "subtotal": infra_pedido.subtotal, "token": token})
         despachador.cerrar()
 
     except Exception as e:
