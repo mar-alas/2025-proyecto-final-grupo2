@@ -64,7 +64,7 @@ def crear_proveedores_via_csv():
         data = obtener_lista_proveedores_desde_csv(csv_content)
 
         if len(data) == 0:
-            return jsonify({"status": "FAILED", "message": "No se logro obtener la lista de productos del archivo."}), 400
+            return jsonify({"status": "FAILED", "message": "No se logro obtener la lista de proveedores del archivo."}), 400
 
         try:
             for proveedor in data:

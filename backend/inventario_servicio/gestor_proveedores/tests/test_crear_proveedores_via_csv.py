@@ -92,7 +92,7 @@ def test_lista_proveedores_vacia(mock_obtener, mock_validar_contenido, mock_desc
     body = {"filepath": "http://valida.com/archivo.csv"}
     response = client.post("/proveedores/csv", json=body, headers={"Authorization": "Bearer valido"})
     assert response.status_code == 400
-    assert "lista de productos" in response.json["message"]
+    assert "lista de proveedores" in response.json["message"]
 
 
 @patch("aplicacion.escrituras.crear_proveedores_via_csv.validar_token", return_value=True)
