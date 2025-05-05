@@ -13,8 +13,10 @@ class User(db.Model):
     country = db.Column(db.String(100), nullable=True)  # Opcional
     city = db.Column(db.String(100), nullable=True)  # Opcional
     address = db.Column(db.String(255), nullable=True)  # Opcional
+    client_type = db.Column(db.String(50), nullable=True)  # Opcional
+    geographic_coordinates = db.Column(db.String(100), nullable=True)  # Opcional
 
-    def __init__(self, name, email, password, role=None, country=None, city=None, address=None):
+    def __init__(self, name, email, password, role=None, country=None, city=None, address=None, client_type=None, geographic_coordinates=None):
         self.name = name
         self.email = email
         self.password = password
@@ -22,3 +24,5 @@ class User(db.Model):
         self.country = country
         self.city = city
         self.address = address
+        self.client_type = client_type
+        self.geographic_coordinates = geographic_coordinates

@@ -14,7 +14,7 @@ def generar_token(payload, expiracion_minutos=2880):
     :param expiracion_minutos: Tiempo de expiración del token en minutos.
     :return: Token JWT como string.
     """
-    expiracion = datetime.datetime.utcnow() + datetime.timedelta(minutes=expiracion_minutos)
+    expiracion = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=expiracion_minutos)
     payload['exp'] = expiracion
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     return token

@@ -34,3 +34,11 @@ class UserRepository:
         """
         client_users = self.db_session.query(self.user_model_class).filter_by(role='cliente').all()
         return [UserMapper.to_dto(user) for user in client_users]
+
+
+    def get_all_sellers(self) -> list[UserDTO]:
+        """
+        Retorna todos los usuarios cuyo rol es 'vendedor'.
+        """
+        seller_users = self.db_session.query(self.user_model_class).filter_by(role='vendedor').all()
+        return [UserMapper.to_dto(user) for user in seller_users]

@@ -13,6 +13,8 @@ class UserMapper:
             "country": user_dto.country,
             "city": user_dto.city,
             "address": user_dto.address,
+            "client_type": user_dto.client_type,
+            "geographic_coordinates": user_dto.geographic_coordinates
         }
     
     @staticmethod
@@ -27,4 +29,6 @@ class UserMapper:
             country=model_instance.country,
             city=model_instance.city,
             address=model_instance.address,
+            client_type=model_instance.client_type,
+            geographic_coordinates=model_instance.geographic_coordinates
         )

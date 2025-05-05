@@ -7,7 +7,8 @@ from aplicacion.lecturas.proveedores import proveedores_lectura
 from aplicacion.escrituras.proveedores import proveedores_escritura
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime
 import datetime
 from unittest.mock import MagicMock, patch
@@ -24,7 +25,7 @@ class Proveedor(Base):
     pais = Column(String)
     caracteristicas = Column(String)
     condiciones_comerciales_tributarias = Column(String)
-    fecha_registro = Column(DateTime, default=datetime.datetime.utcnow)
+    fecha_registro = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
 
 class TestProveedoresLecturas(unittest.TestCase):
     @classmethod

@@ -37,7 +37,9 @@ def get_all_customers():
                 "email": customer.email,
                 "country": customer.country,
                 "city": customer.city,
-                "address": customer.address
+                "address": customer.address,
+                "client_type": customer.client_type,
+                "geographic_coordinates": customer.geographic_coordinates,
             }
             for customer in all_customers
         ]

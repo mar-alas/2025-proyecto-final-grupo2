@@ -46,9 +46,8 @@ def consultar_ruta_visita():
 
     if not visitas:
         return jsonify({
-            "error": "Ruta no encontrada",
-            "detalles": f"No se encontró una ruta para el vendedor {vendedor_id} en la fecha {fecha}"
-        }), 404
+           "ruta_visita": []
+        }), 200
 
     # Serialize the data using the schema
     schema = RutaVisitasInputSchema(many=True)
