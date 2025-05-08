@@ -10,7 +10,7 @@ servers:
   - url: http://127.0.0.1:3009/api/v1/logistica/gestor_entregas
     description: Servidor de desarrollo
 paths:
-  /detalle_entrega:
+  /detalle:
     get:
       tags:
         - entrega
