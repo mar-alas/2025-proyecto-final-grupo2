@@ -61,6 +61,16 @@ components:
     VideoInput:
       type: object
       properties:
+        cliente_id:
+          type: integer
+          format: int64
+          example: 123456
+          description: Identificador único del cliente que realiza el pedido
+        vendedor_id:
+          type: integer
+          format: int64
+          example: 654321
+          description: Identificador único del vendedor que realiza el pedido
         info_video:
           type: array
           items:
@@ -107,11 +117,6 @@ components:
               format: int64
               example: 123456
               description: Identificador único del cliente que realiza el pedido
-            vendedor_id:
-              type: integer
-              format: int64
-              example: 987654
-              description: Identificador único del vendedor que registra el pedido
             productos:
               type: array
               description: Lista de productos incluidos en el pedido
