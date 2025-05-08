@@ -1,0 +1,170 @@
+openapi: 3.0.0
+info:
+  title: API de Procesamiento de la información de los videos de recomendación
+  description: |
+    API de Procesamiento de la información de los videos de recomendación. Se procesa un JSON mas no el video directamente.
+  version: 1.0.0
+servers:
+  - url: http://RUTA_GCP/api/v1/ventas/procesador_video_recomendacion
+    description: Servidor de producción
+  - url: http://127.0.0.1:XXXX/api/v1/ventas/procesador_video_recomendacion
+    description: Servidor de desarrollo
+paths:
+  /:
+    post:
+      tags:
+        - video_recomendacion
+      summary: Procesar la información del video de un cliente.
+      description: |
+        Procesa la información del video de un cliente. Se procesa un JSON mas no el video directamente.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoInput'
+      responses:
+        '201':
+          description: Video procesado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcesamientoVideoResponse'
+        '400':
+          description: Error en la validación de datos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Cliente o producto no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '429':
+          description: Demasiadas solicitudes, se ha superado el límite de procesamiento
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+
+components:
+  schemas:
+    VideoInput:
+      type: object
+      properties:
+        info_video:
+          type: array
+          items:
+            type: object
+            properties:
+              nombre_producto:
+                type: string
+                example: "Arroz"
+              ubicacion:
+                type: string
+                example: "Pasillo 3"
+              cantidad:
+                type: integer
+                example: 10
+              
+          
+
+    ProcesamientoVideoResponse:
+      type: object
+      properties:
+        mensaje:
+          type: string
+          example: "Procesamiento fue exitoso"
+        recomendaciones:
+          type: array
+          items:
+            type: object
+            properties:
+              titulo_recomendacion:
+                type: string
+                example: "Compre mas cerveza"
+              cuerpo_recomendacion:
+                type: string
+                example: "Se le van a acabar las cervezas en 2 días por le recomendamos comprar 100 cervezas."
+        
+        recomendacion_pedido:
+          type: object
+          required:
+            - cliente_id
+            - productos
+          properties:
+            cliente_id:
+              type: integer
+              format: int64
+              example: 123456
+              description: Identificador único del cliente que realiza el pedido
+            vendedor_id:
+              type: integer
+              format: int64
+              example: 987654
+              description: Identificador único del vendedor que registra el pedido
+            productos:
+              type: array
+              description: Lista de productos incluidos en el pedido
+              items:
+                type: object
+                required:
+                  - id
+                  - cantidad
+                properties:
+                  id:
+                    type: integer
+                    example: 12345
+                    description: Identificador único del producto
+                  cantidad:
+                    type: integer
+                    minimum: 1
+                    example: 10
+                    description: Cantidad solicitada del producto
+                  precio_unitario:
+                    type: number
+                    format: float
+                    example: 10000
+                    description: Precio unitario aplicado al producto
+              minItems: 1
+              
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Datos inválidos"
+        detalles:
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            cliente_id: "El cliente no existe"
+            productos: "Se requiere al menos un producto"
+
+
+
+    ServerErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Error interno del servidor"
+        message:
+          type: string
+          example: "Ha ocurrido un error procesando su solicitud. Por favor, inténtelo más tarde."
+        reference_id:
+          type: string
+          format: uuid
+          example: "987a6543-b21c-09d8-e765-432109fedcba"
+          description: Identificador de referencia para el seguimiento del error

@@ -27,18 +27,27 @@ paths:
             format: int64
             example: 123456
         
-        - name: pedido_id
+        - name: entrega_id
           in: query
           required: true
-          description: ID del pedido para el cual se desean consultar las ubicaciones
+          description: ID de la entrega para el cual se desean consultar las ubicaciones
           schema:
             type: integer
             format: int64
             example: 654321
 
+        - name: contador
+          in: query
+          required: false
+          description: Numero de get entre 1 y 30. 
+          schema:
+            type: integer
+            format: int64
+            example: 1
+
       responses:
         '200':
-          description: Ubicaciones con coordenadas del pedido
+          description: Ubicaciones con coordenadas asociadas al pedido
           content:
             application/json:
               schema:
