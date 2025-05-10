@@ -1,0 +1,95 @@
+openapi: 3.0.0
+info:
+  title: API de consulta de camiones
+  description: |
+    API para consultar la lista de camiones disponibles en el sistema.
+  version: 1.0.0
+servers:
+  - url: http://RUTA_GCP/api/v1/logistica/gestor_entregas/camiones
+    description: Servidor de producción
+  - url: http://127.0.0.1:3006/api/v1/logistica/gestor_entregas/camiones
+    description: Servidor de desarrollo
+paths:
+  /:
+    get:
+      tags:
+        - camiones
+      summary: Consultar camiones
+      description: |
+        Obtiene la lista de camiones disponibles en el sistema con sus detalles.
+      responses:
+        '200':
+          description: Lista de camiones obtenida exitosamente (puede estar vacía si no hay camiones disponibles)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CamionesResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+  
+components:
+  schemas:
+    CamionesResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 2
+          description: Número total de camiones
+        camiones:
+          type: array
+          items:
+            $ref: '#/components/schemas/CamionDetalle'
+          description: Lista de camiones
+    
+    CamionDetalle:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+          description: Identificador único del camión
+        placa:
+          type: string
+          example: "ABC123"
+          description: Placa del camión
+        marca:
+          type: string
+          example: "Volvo"
+          description: Marca del camión
+        modelo:
+          type: string
+          example: "FH"
+          description: Modelo del camión
+        capacidad_carga_toneladas:
+          type: number
+          format: float
+          example: 20.0
+          description: Capacidad de carga en toneladas
+        volumen_carga_metros_cubicos:
+          type: number
+          format: float
+          example: 50.0
+          description: Volumen de carga en metros cúbicos
+
+    ServerErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Error interno del servidor"
+          description: Descripción general del error
+        mensaje:
+          type: string
+          example: "Ha ocurrido un error procesando su solicitud. Por favor, inténtelo más tarde."
+          description: Mensaje para el usuario
+        referencia:
+          type: string
+          format: uuid
+          example: "abcde123-f456-789g-hij0-klmno123pqrs"
+          description: Identificador de referencia para seguimiento del error
