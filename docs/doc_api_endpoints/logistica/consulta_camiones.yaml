@@ -17,6 +17,14 @@ paths:
       summary: Consultar camiones
       description: |
         Obtiene la lista de camiones disponibles en el sistema con sus detalles.
+      parameters:
+        - name: fecha
+          in: query
+          description: Fecha para filtrar los camiones disponibles (formato YYYY-MM-DD)
+          required: false
+          schema:
+            type: string
+            format: date
       responses:
         '200':
           description: Lista de camiones obtenida exitosamente (puede estar vacía si no hay camiones disponibles)
@@ -76,6 +84,10 @@ components:
           format: float
           example: 50.0
           description: Volumen de carga en metros cúbicos
+        estado_enrutamiento:
+          type: string
+          example: "Sin ruta"
+          description: "Estado de la ruta"
 
     ServerErrorResponse:
       type: object
