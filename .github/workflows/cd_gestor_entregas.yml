@@ -1,0 +1,98 @@
+name: Deploy Generador de Rutas de Entrega
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/logistica_servicio/gestor_entregas/**'
+      - '.github/workflows/cd_gestor_entregas.yml'
+  workflow_dispatch:
+jobs:
+   deploy_to_gke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Revisando si el mensaje del commit dice 'CD'
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
+        run: echo "El mensaje del commit contiene CD, iniciando el despliegue."
+
+      - name: Definir TAG de imagen con hora UTC-5 (Colombia)
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
+        id: vars
+        run: |
+          TZ="America/Bogota"
+          export TAG=$(TZ=$TZ date +'%Y%m%d-%H%M%S')-${GITHUB_SHA::7}
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "Tag generado: $TAG"
+
+      - name: Autenticacion a GCP
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Configurar Cloud SDK
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: proyecto-final-2-454403
+
+      - name: Configurar Docker para usar gcloud credential helper
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+
+      - name: Configurar GKE Credentials
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
+        uses: google-github-actions/get-gke-credentials@v1
+        with:
+          cluster_name: prod-cluster-cpp-api
+          location: us-central1-f
+          project_id: proyecto-final-2-454403
+
+      - name: Build y Push de las imagenes de Docker
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
+        working-directory: backend
+        run: |
+            docker compose build --no-cache gestor_entregas
+
+      - name: Tag y Push de la imagen a Artifact Registry gestor_entregas
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
+        run: |
+          docker tag backend-gestor_entregas:latest us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/logistica_servicio/gestor_entregas:$TAG
+          docker push us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/logistica_servicio/gestor_entregas:$TAG
+
+      - name: Reemplazar TAG inmutable en el deployment gestor_entregas_deployment
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
+        run: |
+          sed -i "s|\${TAG}|${TAG}|g" backend/k8s/gestor_entregas_deployment.yaml
+
+      - name: Desplegar en GKE
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
+        run: |
+          kubectl apply -f backend/k8s/gestor_entregas_deployment.yaml
+          kubectl apply -f backend/k8s/gestor_entregas_service.yaml
+
+      - name: Verificar rollout exitoso generador-rutas-entrega
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
+        run: |
+          kubectl rollout status deployment/generador-rutas-entrega
+      
+      - name: Verificar rollout del deployment gestor_entregas
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'CD')
+        run: |
+          set -e
+          echo "Verificando estado del rollout..."
+
+          echo "Contexto actual de kubectl:"
+          kubectl config current-context
+
+          echo "Listando nodos para validar conexión al clúster:"
+          kubectl get nodes
+
+          if kubectl rollout status deployment/generador-rutas-entrega --timeout=120s; then
+            echo "✅ Rollout exitoso"
+          else
+            echo "❌ Falló el rollout, iniciando rollback..."
+            kubectl rollout undo deployment/generador-rutas-entrega
+            exit 1
+          fi
