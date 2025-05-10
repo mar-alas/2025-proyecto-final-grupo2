@@ -149,13 +149,9 @@ components:
         error:
           type: string
           example: "Datos inválidos"
-        detalles:
-          type: object
-          additionalProperties:
-            type: string
-          example:
-            cliente_id: "El cliente no existe"
-            productos: "Se requiere al menos un producto"
+        message:
+          type: string
+          example: "El cliente no existe"
 
 
 
