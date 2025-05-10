@@ -34,11 +34,11 @@ spec:
               name: admin
           resources:
             requests:
-              memory: "2Gi"
-              cpu: "500m"
+              memory: "500m"
+              cpu: "1Gi"
             limits:
-              memory: "3Gi" 
-              cpu: "750m"
+              memory: "250m"
+              cpu: "512Mi"
           readinessProbe:
             tcpSocket:
               port: 6650
