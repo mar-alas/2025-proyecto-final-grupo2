@@ -1,5 +1,5 @@
 import pytest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from flask import Flask, json
 from aplicacion.escrituras.procesar_video_tienda import procesar_video_tienda_bp
 
@@ -13,9 +13,11 @@ def client():
         yield client
 
 
-@patch("infraestructura.video_processor")
-def test_procesar_video_exitoso(mock_service, client):
-    mock_service.return_value.procesar.return_value = {
+@patch("aplicacion.escrituras.procesar_video_tienda.AccessTokenValidator.validate")
+@patch("aplicacion.escrituras.procesar_video_tienda.procesador")
+def test_procesar_video_exitoso(mock_procesador, mock_validate, client):
+    mock_validate.return_value = (True, "")
+    mock_procesador.procesar.return_value = {
         "mensaje": "Procesamiento fue exitoso",
         "recomendaciones": [{"producto": "Leche"}],
         "recomendacion_pedido": {
@@ -32,7 +34,8 @@ def test_procesar_video_exitoso(mock_service, client):
         ]
     }
 
-    response = client.post("/procesar", json=payload)
+    headers = {"Authorization": "Bearer fake_token"}
+    response = client.post("/procesar", json=payload, headers=headers)
 
     assert response.status_code == 201
     data = response.get_json()
@@ -41,22 +44,31 @@ def test_procesar_video_exitoso(mock_service, client):
     assert data["recomendacion_pedido"]["cliente_id"] == 123
 
 
-@patch("infraestructura.video_processor")
-def test_procesar_video_error_en_servicio(mock_service, client):
-    mock_service.return_value.procesar.side_effect = Exception("Fallo interno")
+@patch("aplicacion.escrituras.procesar_video_tienda.AccessTokenValidator.validate")
+@patch("aplicacion.escrituras.procesar_video_tienda.procesador")
+def test_procesar_video_error_en_servicio(mock_procesador, mock_validate, client):
+    mock_validate.return_value = (True, "")
+    mock_procesador.procesar.side_effect = Exception("Fallo interno")
 
     payload = {
         "cliente_id": 123,
-        "info_video": []
+        "info_video": [
+            {"nombre_producto": "Algo", "ubicacion": "X", "cantidad": 1}
+        ]
     }
 
-    response = client.post("/procesar", json=payload)
+    headers = {"Authorization": "Bearer fake_token"}
+    response = client.post("/procesar", json=payload, headers=headers)
 
-    assert response.status_code == 400
+    assert response.status_code == 500
+    assert "Error al consultar la lista de productos" in response.get_json()["message"]
 
 
-def test_procesar_video_falla_formato_json(client):
-    response = client.post("/procesar", data="esto no es json", content_type="application/json")
+@patch("aplicacion.escrituras.procesar_video_tienda.AccessTokenValidator.validate")
+def test_procesar_video_falla_formato_json(mock_validate, client):
+    mock_validate.return_value = (True, "")
+    headers = {"Authorization": "Bearer fake_token"}
+    response = client.post("/procesar", data="esto no es json", content_type="application/json", headers=headers)
 
     assert response.status_code == 500
     assert "Error al consultar la lista de productos" in response.get_json()["message"]
