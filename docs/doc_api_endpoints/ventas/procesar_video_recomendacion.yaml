@@ -135,11 +135,6 @@ components:
                     minimum: 1
                     example: 10
                     description: Cantidad solicitada del producto
-                  precio_unitario:
-                    type: number
-                    format: float
-                    example: 10000
-                    description: Precio unitario aplicado al producto
               minItems: 1
               
 
