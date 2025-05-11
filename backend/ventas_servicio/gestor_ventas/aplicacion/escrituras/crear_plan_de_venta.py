@@ -8,6 +8,11 @@ crear_plan_venta_bp = Blueprint('crear_plan_venta_bp', __name__)
 
 @crear_plan_venta_bp.route('', methods=['PUT'])
 def crear_plan_venta():
+    """
+    Handles creation or update of sales plans for one or multiple sellers via a PUT request.
+    
+    Validates the request's authentication token, checks for proper JSON structure, and processes each seller's sales plan data. Returns appropriate HTTP responses for authentication errors, invalid data formats, or processing failures. On success, registers or updates the sales plans and returns a confirmation message.
+    """
     try:
         """ Seguridad """
         auth_header = request.headers.get('Authorization')
