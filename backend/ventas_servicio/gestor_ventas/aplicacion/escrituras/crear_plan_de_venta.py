@@ -19,7 +19,7 @@ def crear_plan_venta():
         except IndexError:
             return jsonify({"status": "FAILED", "message": "Formato del token invalido"}), 401
 
-        validator = AccessTokenValidator(allowed_roles=["director-compras"])
+        validator = AccessTokenValidator()
         es_valido, mensaje = validator.validate(token)
 
         if not es_valido:
