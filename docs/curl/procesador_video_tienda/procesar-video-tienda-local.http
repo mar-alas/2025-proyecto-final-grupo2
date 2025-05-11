@@ -1,0 +1,37 @@
+POST /api/v1/inventario/gestor_productos/productos/procesar-video-recomendacion HTTP/1.1
+Authorization: Bearer token
+Content-Type: application/json
+Host: localhost:3001
+
+[
+  {
+    "nombre": "Producto 4",
+    "descripcion": "Este producto es el primero",
+    "tiempo_entrega": "2 días",
+    "precio": 100,
+    "condiciones_almacenamiento": "Almacenar en lugar fresco y seco",
+    "fecha_vencimiento": "2023-12-31",
+    "estado": "en_stock",
+    "inventario_inicial": 100,
+    "imagenes_productos": [
+      "imagen1.jpg",
+      "imagen2.jpg"
+    ],
+    "proveedor": "Proveedor Uno S.A."
+  },
+  {
+    "nombre": "Producto 5",
+    "descripcion": "Este producto es el segundo",
+    "tiempo_entrega": "3 días",
+    "precio": 100,
+    "condiciones_almacenamiento": "Almacenar en lugar fresco y seco",
+    "fecha_vencimiento": "2023-12-31",
+    "estado": "en_stock",
+    "inventario_inicial": 100,
+    "imagenes_productos": [
+      "imagen1.jpg",
+      "imagen2.jpg"
+    ],
+    "proveedor": "Proveedor Dos S.A."
+  }
+]
