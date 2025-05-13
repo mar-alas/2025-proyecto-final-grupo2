@@ -37,8 +37,8 @@ class EntregasProgramadas(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     fecha_programada = Column(Date, nullable=False)
     camion_id = Column(Integer, ForeignKey('camiones.id'), nullable=False)
-    ruta_calculada = Column(String(255), nullable=False)
-
+    ruta_calculada = Column(String(255), nullable=False),
+    estado = Column(String(50), nullable=False)
 class EntregaProgramadaDetalle(Base):
     __tablename__ = 'entrega_programada_detalles'
 

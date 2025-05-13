@@ -98,7 +98,8 @@ class LogisticaEntregas:
                 entrega_programada = EntregasProgramadas(
                     fecha_programada=fecha,
                     camion_id=camion_id,
-                    ruta_calculada=ruta_json
+                    ruta_calculada=ruta_json,
+                    estado= "Sin ruta"
                 )
                 entrega_programada_id = self.repositorio_entregas_programadas.agregar_entrega_programada(entrega_programada)
                 # guardar la EntregasProgramadasDetalle
