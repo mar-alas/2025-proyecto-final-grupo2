@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, JSON
+from sqlalchemy import Column, Integer, String, DateTime, JSON, Float
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -26,3 +26,12 @@ class RutaVisita(Base):
     orden = Column(Integer, nullable=False)
     tiempo_estimado = Column(String, nullable=True)
     distancia = Column(String, nullable=True)
+
+
+class PlanVentaVendedor(Base):
+    __tablename__ = 'planes_venta_x_vendedor'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    vendedor_id = Column(Integer, nullable=False)
+    fecha = Column(String, nullable=False)
+    valor = Column(Float, nullable=False)

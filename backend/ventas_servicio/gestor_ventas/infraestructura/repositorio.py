@@ -2,9 +2,11 @@ from sqlalchemy import create_engine, Date
 from sqlalchemy.orm import sessionmaker
 from .modelos import VisitaCliente as InfraVisitaCliente, Base
 from .modelos import RutaVisita as InfraRutaVisita
+from .modelos import PlanVentaVendedor
+
 import os
 import logging
-from infraestructura.mappers import to_infraestructura_visita
+from infraestructura.mappers import to_infraestructura_visita, to_plan_venta_entity
 from datetime import datetime
 
 # Configure logging
@@ -39,6 +41,32 @@ def initialize_database():
 
 # Call the database initialization function
 initialize_database()
+
+
+class RepositorioPlanesVenta:
+    def __init__(self, db_session=None):
+        self.db_session = db_session or Session()
+
+    def guardar_o_actualizar(self, plan_venta):
+        try:
+            entity = to_plan_venta_entity(plan_venta)
+
+            existente = self.db_session.query(PlanVentaVendedor).filter_by(
+                vendedor_id=entity.vendedor_id,
+                fecha=entity.fecha
+            ).first()
+
+            if existente:
+                existente.valor = entity.valor
+            else:
+                self.db_session.add(entity)
+
+            self.db_session.commit()
+        except Exception as e:
+            self.db_session.rollback()
+            logger.error(f"Error al guardar el plan de venta: {e}")
+            raise e
+
 
 class RepositorioVisitas:
     def __init__(self, db_session=None):
