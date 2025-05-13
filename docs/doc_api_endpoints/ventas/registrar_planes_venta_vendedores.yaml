@@ -1,0 +1,186 @@
+openapi: 3.0.3
+info:
+  title: Registrar planes de venta para vendedores
+  version: 1.0.0
+  description: API para registrar y actualizar los planes de venta mensuales de los vendedores
+paths:
+  /api/v1/vendedores/planes-venta:
+    put:
+      summary: Actualiza planes de venta para un vendedor específico
+      operationId: updateVendedorPlanesVenta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendedorPlanVentaRequest'
+      responses:
+        "200":
+          description: Planes de venta actualizados exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        "400":
+          description: Error en la solicitud debido a datos inválidos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        "401":
+          description: No autorizado. El usuario no tiene permisos para acceder a este recurso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        "403":
+          description: Prohibido. El usuario no tiene los roles necesarios para esta operación.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenError'
+        "404":
+          description: No se encontró el vendedor especificado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+        "500":
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    post:
+      summary: Registra planes de venta para múltiples vendedores
+      operationId: createVendedoresPlanesVenta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendedoresPlanVentaRequest'
+      responses:
+        "201":
+          description: Planes de venta creados exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        "400":
+          description: Error en la solicitud debido a datos inválidos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        "401":
+          description: No autorizado. El usuario no tiene permisos para acceder a este recurso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        "403":
+          description: Prohibido. El usuario no tiene los roles necesarios para esta operación.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenError'
+        "500":
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+components:
+  schemas:
+    VendedorPlanVentaRequest:
+      type: object
+      required:
+        - id
+        - metas
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        metas:
+          type: object
+          additionalProperties:
+            type: number
+            format: double
+          example:
+            ene/2025: 10000
+            feb/2025: 12000
+            mar/2025: 15000
+      example:
+        id: 1
+        metas:
+          ene/2025: 10000
+          feb/2025: 12000
+          mar/2025: 15000
+          abr/2025: 15000
+          may/2025: 17000
+          jun/2025: 18000
+          jul/2025: 20000
+          ago/2025: 20000
+    VendedoresPlanVentaRequest:
+      type: object
+      required:
+        - vendedores
+      properties:
+        vendedores:
+          type: array
+          items:
+            $ref: '#/components/schemas/VendedorPlanVentaRequest'
+      example:
+        vendedores:
+          - id: 1
+            metas:
+              ene/2025: 10000
+              feb/2025: 12000
+              mar/2025: 15000
+          - id: 2
+            metas:
+              ene/2025: 8000
+              feb/2025: 9000
+              mar/2025: 10000
+    SuccessResponse:
+      type: object
+      properties:
+        mensaje:
+          type: string
+          example: "Planes de venta registrados exitosamente."
+        datos:
+          type: object
+          nullable: true
+    ValidationError:
+      type: object
+      properties:
+        mensaje:
+          type: string
+          example: "Error de validación en los datos enviados"
+    UnauthorizedError:
+      type: object
+      properties:
+        mensaje:
+          type: string
+          example: "Acceso no autorizado. Debe iniciar sesión para acceder a este recurso."
+    ForbiddenError:
+      type: object
+      properties:
+        mensaje:
+          type: string
+          example: "Acceso prohibido. No tiene permisos suficientes para esta operación."
+    NotFoundError:
+      type: object
+      properties:
+        mensaje:
+          type: string
+          example: "No se encontró el vendedor especificado."
+    InternalError:
+      type: object
+      properties:
+        mensaje:
+          type: string
+          example: "Error interno del servidor al procesar la solicitud."
+        

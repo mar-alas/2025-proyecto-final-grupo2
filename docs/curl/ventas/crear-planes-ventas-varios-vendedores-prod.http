@@ -1,0 +1,25 @@
+PUT /api/v1/ventas/gestor_ventas/vendedores/planes-venta HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJkaXJlY3Rvci1jb21wcmFzIiwiZXhwIjoxNzQ3MDkwODQ2fQ.Jpmf1Uk2FalKToDYfq4phpgdSi8l9xoNWpBB6dPmYyE
+Content-Type: application/json
+Host: 34.8.175.2
+
+{
+  "vendedores": [
+    {
+      "id": 1,
+      "metas": {
+        "ene/2025": 10000,
+        "feb/2025": 12000,
+        "mar/2025": 15000
+      }
+    },
+    {
+      "id": 2,
+      "metas": {
+        "ene/2025": 8000,
+        "feb/2025": 9000,
+        "mar/2025": 10000
+      }
+    }
+  ]
+}

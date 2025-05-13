@@ -1,0 +1,21 @@
+POST /api/v1/inventario/gestor_productos/productos/procesar-video-recomendacion HTTP/1.1
+Authorization: Bearer token
+Content-Type: application/json
+Host: localhost:3001
+
+{
+  "cliente_id": 123456,
+  "vendedor_id": 654321,
+  "info_video": [
+    {
+      "nombre_producto": "Arroz",
+      "ubicacion": "Pasillo 3",
+      "cantidad": 10
+    },
+    {
+      "nombre_producto": "Pasta",
+      "ubicacion": "Pasillo 1",
+      "cantidad": 4
+    }
+  ]
+}

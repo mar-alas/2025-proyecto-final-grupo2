@@ -1,0 +1,112 @@
+openapi: 3.0.0
+info:
+  title: API de consulta de estados de entrega detallada
+  description: |
+    API para que clientes de CCP puedan consultar el estado detallado de su entrega.
+  version: 1.0.0
+servers:
+  - url: http://RUTA_GCP/api/v1/logistica/gestor_entregas
+    description: Servidor de producción
+  - url: http://127.0.0.1:3009/api/v1/logistica/gestor_entregas
+    description: Servidor de desarrollo
+paths:
+  /detalle:
+    get:
+      tags:
+        - entrega
+      summary: Consultar detalle entrega
+      description: |
+        Obtiene los detalles de una entrega específica del cliente.
+      parameters:
+        - name: cliente_id
+          in: query
+          required: true
+          description: ID del cliente que está consultando sus entregas
+          schema:
+            type: integer
+            format: int64
+            example: 123456
+        - name: entrega_id
+          in: query
+          required: true
+          description: ID de la entrega que se desea consultar
+          schema:
+            type: integer
+            format: int64
+            example: 789012
+
+      responses:
+        '200':
+          description: Informacion detallada de la entrega obtenida exitosamente (puede estar vacía si el cliente no tiene entregas)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntregasResponse'
+        '404':
+          description: Cliente no encontrado o entrega no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClienteNoEncontradoResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+  
+components:
+  schemas:
+    EntregasResponse:
+      type: object
+      properties:
+        placas_vehiculo:
+          type: string
+          example: "ABC123"
+          description: Placas del vehículo asignado a la entrega
+        pedidos_anteriores:
+          type: integer
+          example: 3
+          description: Cantidad de pedidos anteriores asociados a la entrega
+        distancia_restante:
+          type: string
+          example: "5 km"
+          description: Distancia restante para completar la entrega
+        tiempo_estimado:
+          type: string
+          example: "30 minutos"
+          description: Tiempo estimado para completar la entrega
+        cliente_id:
+          type: integer
+          format: int64
+          example: 123456
+          description: ID del cliente que está consultando la entrega
+        pedido_id:
+          type: integer
+          format: int64
+          example: 789012
+          description: ID del pedido asociado a la entrega
+
+    ClienteNoEncontradoResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Cliente no encontrado o entrega no encontrada"
+          description: Descripción general del error
+        message:
+          type: string
+          example: "No se encontró el cliente con el ID especificado o la entrega con el ID especificado."
+          description: Mensaje informativo para el usuario
+    
+    ServerErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Error interno del servidor"
+          description: Descripción general del error
+        message:
+          type: string
+          example: "Ha ocurrido un error procesando su solicitud. Por favor, inténtelo más tarde."
+          description: Mensaje para el usuario

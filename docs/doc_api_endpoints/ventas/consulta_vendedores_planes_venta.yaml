@@ -1,0 +1,124 @@
+openapi: 3.0.3
+info:
+  title: Consultar el listado de vendedores con sus planes de venta
+  version: 1.0.0
+  description: API para la consulta de vendedores con sus planes de venta mensuales
+paths:
+  /api/v1/vendedores/planes-venta:
+    get:
+      summary: Consulta listado de vendedores con sus planes de venta
+      operationId: queryVendedoresPlanes
+      responses:
+        "200":
+          description: Vendedores con planes de venta consultados exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VendedoresPlanesMeta'
+        "401":
+          description: No autorizado. El usuario no tiene permisos para acceder a este recurso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        "403":
+          description: Prohibido. El usuario no tiene los roles necesarios para esta operación.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenError'
+        "404":
+          description: No se encontraron planes de venta.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+        "500":
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+components:
+  schemas:
+    VendedoresPlanesMeta:
+      type: object
+      properties:
+        vendedores:
+          type: array
+          items:
+            $ref: '#/components/schemas/VendedorPlanVenta'
+      example:
+        vendedores:
+          - id: 1
+            nombre: "Luke Ivory"
+            email: "luke.ivory@example.com"
+            metas:
+              ene/2025: 10000
+              feb/2025: 12000
+              mar/2025: 15000
+              abr/2025: 15000
+              may/2025: 17000
+              jun/2025: 18000
+              jul/2025: 20000
+              ago/2025: 20000
+          - id: 2
+            nombre: "Carlos Rodríguez"
+            email: "carlos.rodriguez@example.com"
+            metas:
+              ene/2025: 8000
+              feb/2025: 9000
+              mar/2025: 10000
+              abr/2025: 11000
+              may/2025: 12000
+              jun/2025: 13000
+              jul/2025: 14000
+              ago/2025: 15000
+    VendedorPlanVenta:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        nombre:
+          type: string
+          example: "Luke Ivory"
+        email:
+          type: string
+          format: email
+          example: "luke.ivory@example.com"
+        metas:
+          type: object
+          additionalProperties:
+            type: number
+            format: double
+          example:
+            ene/2025: 10000
+            feb/2025: 12000
+            mar/2025: 15000
+    UnauthorizedError:
+      type: object
+      properties:
+        mensaje:
+          type: string
+          example: "Acceso no autorizado. Debe iniciar sesión para acceder a este recurso."
+    ForbiddenError:
+      type: object
+      properties:
+        mensaje:
+          type: string
+          example: "Acceso prohibido. No tiene permisos suficientes para esta operación."
+    NotFoundError:
+      type: object
+      properties:
+        mensaje:
+          type: string
+          example: "No se encontraron planes de venta registrados en el sistema."
+    InternalError:
+      type: object
+      properties:
+        mensaje:
+          type: string
+          example: "Error interno del servidor al procesar la solicitud."
+    

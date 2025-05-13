@@ -1,2 +1,4 @@
-@baseUrl = http://34.49.18.136
-curl --location '{{baseUrl}}/api/v2/inventario/gestor_productos/productos'
+@baseUrl = http://34.8.175.2
+@token=your_token
+curl --location '{{baseUrl}}/api/v2/inventario/gestor_productos/productos' \
+--header 'Authorization: Bearer {{token}}' 

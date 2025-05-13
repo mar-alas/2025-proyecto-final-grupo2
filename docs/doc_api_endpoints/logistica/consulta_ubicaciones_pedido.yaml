@@ -1,0 +1,125 @@
+openapi: 3.0.0
+info:
+  title: API de consulta de las ubicaciones asociadas a un pedido
+  description: |
+    API de consulta de las ubicaciones asociadas a un pedido. Incluye la ubicación en tiempo real del camión y del cliente.
+  version: 1.0.0
+servers:
+  - url: http://RUTA_GCP/api/v1/logistica/gestor_entregas/ubicaciones_pedido
+    description: Servidor de producción
+  - url: http://127.0.0.1:XXXX/api/v1/logistica/gestor_entregas/ubicaciones_pedido
+    description: Servidor de desarrollo
+paths:
+  /:
+    get:
+      tags:
+        - ubicaciones
+      summary: Consultar ubicaciones asociadas a un pedido
+      description: |
+        Obtiene la lista de ubicaciones de un cliente asociadas a un pedido específico. Incluye la ubicación en tiempo real del camión y del cliente.
+      parameters:
+        - name: cliente_id
+          in: query
+          required: true
+          description: ID del cliente que está consultando sus entregas
+          schema:
+            type: integer
+            format: int64
+            example: 123456
+        
+        - name: entrega_id
+          in: query
+          required: true
+          description: ID de la entrega para el cual se desean consultar las ubicaciones
+          schema:
+            type: integer
+            format: int64
+            example: 654321
+
+        - name: contador
+          in: query
+          required: false
+          description: Numero de get entre 1 y 30. 
+          schema:
+            type: integer
+            format: int64
+            example: 1
+
+      responses:
+        '200':
+          description: Ubicaciones con coordenadas asociadas al pedido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UbicacionesResponse'
+        '404':
+          description: Error en la solicitud
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnSolicitudResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+  
+components:
+  schemas:
+    UbicacionesResponse:
+      type: object
+      properties:
+        coordenadas_cliente:
+          type: object
+          properties:
+            latitud:
+              type: number
+              format: float
+              example: -34.6037
+              description: Latitud de la ubicación del cliente
+            longitud:
+              type: number
+              format: float
+              example: -58.3816
+              description: Longitud de la ubicación del cliente
+        
+        coordenadas_camion:
+          type: object
+          properties:
+            latitud:
+              type: number
+              format: float
+              example: -34.6037
+              description: Latitud de la ubicación del camión
+            longitud:
+              type: number
+              format: float
+              example: -58.3816
+              description: Longitud de la ubicación del camión
+
+
+
+    ErrorEnSolicitudResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Error en solicitud"
+          description: Descripción general del error
+        message:
+          type: string
+          example: "No se encontró el cliente con el ID especificado"
+          description: Mensaje informativo para el usuario
+    
+    ServerErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Error interno del servidor"
+          description: Descripción general del error
+        message:
+          type: string
+          example: "Ha ocurrido un error procesando su solicitud. Por favor, inténtelo más tarde."
+          description: Mensaje para el usuario

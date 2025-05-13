@@ -1,0 +1,61 @@
+openapi: 3.0.3
+info:
+  title: Consultar el listado de vendedores
+  version: 1.0.0
+  description: API para la consulta de vendedores
+
+paths:
+  /api/v1/seguridad/gestor_usuarios/r/vendedores:
+    get:
+      summary: Consulta listado de vendedores
+      operationId: queryClient
+      responses:
+        "200":
+          description: Usuarios consutlados exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VendedoresResponse'
+        "400":
+          description: Error en la solicitud.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    VendedoresResponse:
+      type: object
+      properties:
+        vendedores:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                format: int64
+                example: 123456
+              name:
+                type: string
+                example: "John Doe"
+              email:
+                type: string
+                format: email
+                example: "john.doe@example.com"
+      example:
+        vendedores:
+          - id: 123456
+            name: "John Doe"
+            email: "john.doe@example.com"
+          - id: 789012
+            name: "Jane Smith"
+            email: "jane.smith@example.com"
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Error en la solicitud"
