@@ -1,0 +1,92 @@
+openapi: 3.0.0
+info:
+  title: Asignar ruta a camiones
+  description: |
+    API para consultar la lista de camiones disponibles en el sistema.
+  version: 1.0.0
+servers:
+  - url: http://RUTA_GCP/api/v1/logistica/gestor_entregas/asignar_ruta
+    description: Servidor de producción
+  - url: http://127.0.0.1:3006/api/v1/logistica/gestor_entregas/asignar_ruta
+    description: Servidor de desarrollo
+paths:
+  /asignar_ruta:
+    post:
+      tags:
+        - rutas
+      summary: Asignar rutas a camiones
+      description: |
+        Asigna rutas a los camiones disponibles para una fecha específica. Valida el formato de la fecha y actualiza el estado de las entregas programadas a "Enrutado".
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fecha:
+                  type: string
+                  format: date
+                  example: "2025-05-12"
+                  description: Fecha en formato YYYY-MM-DD para asignar rutas.
+              required:
+                - fecha
+      responses:
+        '200':
+          description: Rutas asignadas exitosamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensajes:
+                    type: array
+                    items:
+                      type: string
+                    description: Lista de mensajes indicando el estado de las asignaciones.
+        '400':
+          description: Error en la solicitud debido a parámetros faltantes o formato de fecha inválido.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '404':
+          description: No hay camiones disponibles.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+
+components:
+  schemas:
+    BadRequestResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "El parámetro 'fecha' es requerido."
+          description: Descripción del error.
+    NotFoundResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "No hay camiones disponibles."
+          description: Descripción del error.
+    ServerErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Error interno del servidor"
+          description: Descripción general del error.
+        message:
+          type: string
+          example: "Error inesperado en el servidor."
+          description: Detalles del error interno.
