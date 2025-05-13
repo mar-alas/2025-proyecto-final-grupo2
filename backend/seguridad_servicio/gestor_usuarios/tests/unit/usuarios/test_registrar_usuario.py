@@ -86,7 +86,8 @@ def test_registro_usuario_con_password_encriptado(mock_repo_class, mock_decrypt,
         "role": "admin",
         "country": "Colombia",
         "city": "Bogotá",
-        "address": "Calle 123"
+        "address": "Calle 123",
+        "client_type": "premium"
     }
 
     response = client.post("/users", json=payload)

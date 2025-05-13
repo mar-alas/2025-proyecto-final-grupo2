@@ -12,7 +12,9 @@ def test_user_mapper_to_model_v2():
         role="cliente",
         country="Colombia",
         city="Bogotá",
-        address="Calle 123"
+        address="Calle 123",
+        client_type="premium",
+        geographic_coordinates="4.60971,-74.08175"
     )
 
     model_data = UserMapper.to_model_v2(user_dto)
@@ -24,7 +26,9 @@ def test_user_mapper_to_model_v2():
         "role": "cliente",
         "country": "Colombia",
         "city": "Bogotá",
-        "address": "Calle 123"
+        "address": "Calle 123",
+        "client_type": "premium",
+        "geographic_coordinates": "4.60971,-74.08175"
     }
 
 def test_user_mapper_to_dto():
@@ -37,7 +41,9 @@ def test_user_mapper_to_dto():
         role="cliente",
         country="Perú",
         city="Lima",
-        address="Av. Siempre Viva"
+        address="Av. Siempre Viva",
+        client_type="regular",
+        geographic_coordinates="-12.0464,-77.0428"
     )
 
     user_dto = UserMapper.to_dto(model_instance)
@@ -50,3 +56,5 @@ def test_user_mapper_to_dto():
     assert user_dto.country == "Perú"
     assert user_dto.city == "Lima"
     assert user_dto.address == "Av. Siempre Viva"
+    assert user_dto.client_type == "regular"
+    assert user_dto.geographic_coordinates == "-12.0464,-77.0428"

@@ -28,7 +28,9 @@ def test_crear_usuario(session):
         role="admin",
         country="Colombia",
         city="Bogotá",
-        address="Calle falsa 123"
+        address="Calle falsa 123",
+        client_type="premium",
+        geographic_coordinates="4.60971,-74.08175"
     )
 
     session.add(usuario)
@@ -43,5 +45,7 @@ def test_crear_usuario(session):
     assert usuario_en_db.country == "Colombia"
     assert usuario_en_db.city == "Bogotá"
     assert usuario_en_db.address == "Calle falsa 123"
+    assert usuario_en_db.client_type == "premium"
+    assert usuario_en_db.geographic_coordinates == "4.60971,-74.08175"
     assert usuario_en_db.uuid is not None
     assert isinstance(usuario_en_db.uuid, str)

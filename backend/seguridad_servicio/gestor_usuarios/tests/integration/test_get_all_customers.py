@@ -5,13 +5,15 @@ from gestor_usuarios.aplicacion.lecturas.get_all_customers import get_all_custom
 
 # Clase simple que simula lo que devuelve el repositorio real
 class FakeUser:
-    def __init__(self, id, name, email, country, city, address):
+    def __init__(self, id, name, email, country, city, address, client_type, geographic_coordinates=None):
         self.id = id
         self.name = name
         self.email = email
         self.country = country
         self.city = city
         self.address = address
+        self.client_type = client_type
+        self.geographic_coordinates = geographic_coordinates
 
 @pytest.fixture
 def client():
@@ -22,8 +24,8 @@ def client():
 
 def test_get_all_customers_success(client):
     mock_users = [
-        FakeUser(1, 'Juan Pérez', 'juan@example.com', 'Colombia', 'Bogotá', 'Calle 123'),
-        FakeUser(2, 'Ana Gómez', 'ana@example.com', 'México', 'CDMX', 'Av Reforma')
+        FakeUser(1, 'Juan Pérez', 'juan@example.com', 'Colombia', 'Bogotá', 'Calle 123', 'premium', '4.60971,-74.08175'),
+        FakeUser(2, 'Ana Gómez', 'ana@example.com', 'México', 'CDMX', 'Av Reforma', 'regular', '19.4326,-99.1332')
     ]
 
     with patch('gestor_usuarios.aplicacion.lecturas.get_all_customers.UserRepository') as MockRepo, \
