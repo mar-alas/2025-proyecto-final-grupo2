@@ -10,7 +10,8 @@ class TestRepositorioEntregasProgramadas(unittest.TestCase):
         self.test_entrega = {
             "fecha_programada": datetime.date(2023, 10, 1),
             "camion_id": 1,
-            "ruta_calculada": "Ruta Test"
+            "ruta_calculada": "Ruta Test",
+            "estado": "Sin ruta",
         }
         with Session() as session:
             entrega = EntregasProgramadas(**self.test_entrega)
@@ -31,7 +32,8 @@ class TestRepositorioEntregasProgramadas(unittest.TestCase):
         entrega_data = EntregasProgramadas(
             fecha_programada=datetime.date(2023, 10, 1),
             camion_id=1,
-            ruta_calculada="Nueva Ruta Test"
+            ruta_calculada="Nueva Ruta Test",
+            estado="Sin ruta"
         )
         # Call the method
         entrega_id = self.repositorio_entregas.agregar_entrega_programada(entrega_data)

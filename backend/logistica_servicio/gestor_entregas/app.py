@@ -5,6 +5,8 @@ from aplicacion.lecturas.home import home_bp
 from aplicacion.lecturas.entregas import consulta_entregas_bp
 from aplicacion.lecturas.entrega_detallada import entrega_detallada_bp
 from aplicacion.lecturas.ubicacion_pedido import ubicacion_pedido_bp
+from aplicacion.lecturas.obtener_ruta import consulta_camiones_bp
+from aplicacion.escrituras.asignar_ruta import asignar_ruta_bp
 from infraestructura.consumidor import ConsumidorLogistica
 import threading
 
@@ -19,6 +21,8 @@ app.register_blueprint(home_bp, url_prefix=URL_HOME)
 app.register_blueprint(consulta_entregas_bp, url_prefix=URL_PREFIX)
 app.register_blueprint(entrega_detallada_bp, url_prefix=URL_PREFIX)
 app.register_blueprint(ubicacion_pedido_bp, url_prefix=URL_PREFIX)
+app.register_blueprint(consulta_camiones_bp, url_prefix=URL_PREFIX)
+app.register_blueprint(asignar_ruta_bp, url_prefix=URL_PREFIX)
 
 if __name__ == '__main__':
     consumidor_logistica = ConsumidorLogistica(topico_pedido="PedidoCreado")
