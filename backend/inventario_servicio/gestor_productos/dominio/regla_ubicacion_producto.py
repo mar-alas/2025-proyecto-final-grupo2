@@ -2,6 +2,10 @@ from dominio.producto_detectado_video import ProductoDetectadoVideo
 from dominio.regla_recomendacion_base_video import ReglaRecomendacion
 
 class ReglaPorUbicacion(ReglaRecomendacion):
+
+    def __init__(self, productos_disponibles=None):
+        self.productos_disponibles = productos_disponibles
+
     complementarios = {
         "Pasillo 1": ["Sal", "Pimienta"],
         "Pasillo 2": ["Aceite", "Vinagre"],

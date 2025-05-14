@@ -2,22 +2,30 @@ import pytest
 from unittest.mock import patch, MagicMock
 from flask import Flask, json
 from aplicacion.escrituras.procesar_video_tienda import procesar_video_tienda_bp
-
+from infraestructura.database import db
 
 @pytest.fixture
 def client():
     app = Flask(__name__)
     app.register_blueprint(procesar_video_tienda_bp, url_prefix="/procesar")
     app.config['TESTING'] = True
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.init_app(app)
+
+    with app.app_context():
+        db.create_all()
+
     with app.test_client() as client:
         yield client
 
 
 @patch("aplicacion.escrituras.procesar_video_tienda.AccessTokenValidator.validate")
-@patch("aplicacion.escrituras.procesar_video_tienda.procesador")
-def test_procesar_video_exitoso(mock_procesador, mock_validate, client):
+@patch("aplicacion.escrituras.procesar_video_tienda.ProcesadorVideo")
+def test_procesar_video_exitoso(mock_procesador_class, mock_validate, client):
     mock_validate.return_value = (True, "")
-    mock_procesador.procesar.return_value = {
+    mock_instance_procesador = MagicMock()
+    mock_instance_procesador.procesar.return_value = {
         "mensaje": "Procesamiento fue exitoso",
         "recomendaciones": [{"producto": "Leche"}],
         "recomendacion_pedido": {
@@ -25,6 +33,8 @@ def test_procesar_video_exitoso(mock_procesador, mock_validate, client):
             "productos": [{"nombre": "Pan"}]
         }
     }
+
+    mock_procesador_class.return_value = mock_instance_procesador
 
     payload = {
         "cliente_id": 123,
@@ -45,7 +55,7 @@ def test_procesar_video_exitoso(mock_procesador, mock_validate, client):
 
 
 @patch("aplicacion.escrituras.procesar_video_tienda.AccessTokenValidator.validate")
-@patch("aplicacion.escrituras.procesar_video_tienda.procesador")
+@patch("aplicacion.escrituras.procesar_video_tienda.ProcesadorVideo")
 def test_procesar_video_error_en_servicio(mock_procesador, mock_validate, client):
     mock_validate.return_value = (True, "")
     mock_procesador.procesar.side_effect = Exception("Fallo interno")
