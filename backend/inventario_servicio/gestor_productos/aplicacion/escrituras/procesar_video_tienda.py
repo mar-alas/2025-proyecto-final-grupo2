@@ -7,11 +7,17 @@ from dominio.regla_ubicacion_producto import ReglaPorUbicacion
 from infraestructura.video_processor import ProcesadorVideo
 from dominio.access_token_manager import AccessTokenValidator
 
+from infraestructura.database import db
+from dominio.product import Product
+from dominio.product_image import ProductImage
+from dominio.product_repository import ProductRepository
+from dominio.get_all_products_service import GetAllProductsService
+
+
 logging.basicConfig(level=logging.INFO)
 procesar_video_tienda_bp = Blueprint('procesar_video_tienda_bp', __name__)
 
-reglas = [ReglaStockBajo(), ReglaPorUbicacion(), ReglaAltaDemanda()]
-procesador = ProcesadorVideo(reglas)
+
 
 @procesar_video_tienda_bp.route('', methods=['POST'])
 def procesar_video_tienda():
@@ -40,6 +46,23 @@ def procesar_video_tienda():
         if cliente_id is None or info_video is None or info_video == []:
             return jsonify({"message": f"Datos invalidos"}), 400
         
+        get_all_products_service = GetAllProductsService(
+            ProductRepository(
+                db.session, 
+                Product, 
+                ProductImage)
+        )
+
+        productos_disponibles, total = get_all_products_service.ejecutar()
+
+        reglas = [
+            ReglaStockBajo(productos_disponibles), 
+            ReglaPorUbicacion(productos_disponibles), 
+            ReglaAltaDemanda(productos_disponibles)
+        ]
+
+        procesador = ProcesadorVideo(reglas)
+
         resultado = procesador.procesar(cliente_id, info_video)
         
         return jsonify(resultado), 201
