@@ -1,6 +1,5 @@
 import unittest
 from unittest.mock import MagicMock, patch
-# from ventas_servicio.gestor_ventas.repositorios.reporte_ventas_historico import RepositorioReporteVentasHistorico
 from infraestructura.repositorio import RepositorioReporteVentasHistorico
 
 class TestRepositorioReporteVentasHistorico(unittest.TestCase):
