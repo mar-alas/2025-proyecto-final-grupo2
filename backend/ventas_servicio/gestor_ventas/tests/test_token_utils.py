@@ -1,7 +1,6 @@
 import unittest
 import jwt
 from datetime import datetime, timedelta, timezone
-from freezegun import freeze_time
 from seedwork_compartido.dominio.seguridad.access_token_manager import generar_token, validar_token, SECRET_KEY
 
 
@@ -24,11 +23,14 @@ class TestJWTTokenUtils(unittest.TestCase):
         self.assertTrue(validar_token(token))
 
     def test_validar_token_expirado_retorna_false(self):
-        # Congela el tiempo al momento actual
+        from freezegun import freeze_time
+
         with freeze_time("2025-01-01 12:00:00") as frozen_time:
-            token = generar_token(self.payload, expiracion_minutos=1)
-            # Avanza el tiempo más allá de la expiración
+            token = generar_token({"user_id": 123}, expiracion_minutos=1)
+
+            # Avanzar el tiempo después de generar el token
             frozen_time.move_to("2025-01-01 12:02:00")
+
             self.assertFalse(validar_token(token))
 
     def test_validar_token_invalido_retorna_false(self):
