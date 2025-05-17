@@ -23,7 +23,7 @@ class TestJWTTokenUtils(unittest.TestCase):
 
     def test_validar_token_expirado_retorna_false(self):
         # Creamos un token con expiración de 1 minuto
-        with patch('tu_modulo.datetime') as mock_datetime:
+        with patch('access_token_manager.datetime') as mock_datetime:
             # Simula que el token se genera en t0
             t0 = datetime(2025, 1, 1, 12, 0, 0, tzinfo=timezone.utc)
             mock_datetime.datetime.now.return_value = t0
@@ -34,7 +34,7 @@ class TestJWTTokenUtils(unittest.TestCase):
             token = generar_token(self.payload, expiracion_minutos=1)
 
         # Ahora simulamos que estamos 2 minutos después
-        with patch('tu_modulo.datetime') as mock_datetime:
+        with patch('access_token_manager.datetime') as mock_datetime:
             t1 = datetime(2025, 1, 1, 12, 2, 0, tzinfo=timezone.utc)
             mock_datetime.datetime.now.return_value = t1
             mock_datetime.datetime.side_effect = lambda *args, **kw: datetime(*args, **kw)
