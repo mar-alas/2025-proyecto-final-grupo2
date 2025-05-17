@@ -61,7 +61,7 @@ def procesar_video_tienda():
             ReglaAltaDemanda(productos_disponibles)
         ]
 
-        procesador = ProcesadorVideo(reglas)
+        procesador = ProcesadorVideo(reglas=reglas, productos_disponibles=productos_disponibles)
 
         resultado = procesador.procesar(cliente_id, info_video)
         
