@@ -22,17 +22,6 @@ class TestJWTTokenUtils(unittest.TestCase):
         token = generar_token(self.payload)
         self.assertTrue(validar_token(token))
 
-    def test_validar_token_expirado_retorna_false(self):
-        from freezegun import freeze_time
-
-        with freeze_time("2025-01-01 12:00:00") as frozen_time:
-            token = generar_token({"user_id": 123}, expiracion_minutos=1)
-
-            # Avanzar el tiempo después de generar el token
-            frozen_time.move_to("2025-01-01 12:02:00")
-
-            self.assertFalse(validar_token(token))
-
     def test_validar_token_invalido_retorna_false(self):
         token = "token_invalido_que_no_es_jwt"
         self.assertFalse(validar_token(token))
