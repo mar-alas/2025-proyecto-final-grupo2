@@ -7,6 +7,7 @@ from aplicacion.escrituras.crear_producto import crear_producto_bp
 from aplicacion.escrituras.crear_productos_via_csv import crear_producto_via_csv_bp
 from aplicacion.lecturas.consultar_productos import consultar_productos_bp
 from aplicacion.escrituras.procesar_video_tienda import procesar_video_tienda_bp
+from aplicacion.lecturas.consultar_zonas import consultar_zonas_bp
 from infraestructura.config import Config
 
 URL_PREFIX = '/api/v1/inventario/gestor_productos'
@@ -14,6 +15,7 @@ URL_HOME = "/"
 URL_CREATE_PRODUCTS = URL_PREFIX+"/productos"
 URL_CREATE_PRODUCTS_VIA_CSV = URL_PREFIX+"/productos/importar-masivamente"
 URL_PROCESAR_VIDEO_RECOMENDACION = URL_PREFIX+"/productos/procesar-video-recomendacion"
+URL_CONSULTAR_ZONAS = URL_PREFIX+"/zonas"
 
 URL_PREFIX_V2 = "/api/v2/inventario/gestor_productos"
 URL_GET_PRODUCTS_V2 = URL_PREFIX_V2 + "/productos"
@@ -33,4 +35,5 @@ def create_app():
     app.register_blueprint(crear_producto_via_csv_bp, url_prefix=URL_CREATE_PRODUCTS_VIA_CSV)
     app.register_blueprint(consultar_productos_bp, url_prefix=URL_GET_PRODUCTS_V2)
     app.register_blueprint(procesar_video_tienda_bp, url_prefix=URL_PROCESAR_VIDEO_RECOMENDACION)
+    app.register_blueprint(consultar_zonas_bp, url_prefix=URL_CONSULTAR_ZONAS)
     return app
