@@ -1,11 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -f ../docker-compose.yml
-    kompose.version: 1.35.0 (HEAD)
-  labels:
-    io.kompose.service: gestor-entregas
   name: gestor-entregas
 spec:
   replicas: 1
@@ -14,14 +9,15 @@ spec:
       io.kompose.service: gestor-entregas
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert -f ../docker-compose.yml
-        kompose.version: 1.35.0 (HEAD)
       labels:
         io.kompose.service: gestor-entregas
     spec:
       containers:
-        - env:
+        - name: gestor-entregas
+          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/logistica_servicio/gestor_entregas:${TAG}
+          ports:
+            - containerPort: 3006
+          env:
             - name: DB_HOSTNAME
               value: logistica-servicio-db
             - name: DB_NAME
@@ -46,9 +42,22 @@ spec:
               value: generador-rutas-entrega
             - name: GENERADOR_RUTAS_PORT
               value: "3005"
-          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/logistica_servicio/gestor_entregas:${TAG}
-          name: gestor-entregas
+        - name: sidecar
+          image: us-central1-docker.pkg.dev/proyecto-final-2-454403/repositorio-imagenes-docker/logistica_servicio/sidecar:latest
           ports:
-            - containerPort: 3006
-              protocol: TCP
-      restartPolicy: Always
+            - containerPort: 5001
+          env:
+            - name: DB_HOSTNAME
+              value: logistica-servicio-db
+            - name: DB_NAME
+              value: logistica_servicio_db
+            - name: DB_PASSWORD
+              value: postgres
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              value: postgres
+            - name: GENERADOR_RUTAS_HOSTNAME
+              value: generador-rutas-entrega
+            - name: GENERADOR_RUTAS_PORT
+              value: "3005"

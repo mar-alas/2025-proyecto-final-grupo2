@@ -8,6 +8,7 @@ from infraestructura.modelos import EntregasProgramadas, EntregaProgramadaDetall
 import os
 GENERADOR_RUTAS_HOSTNAME = os.getenv('GENERADOR_RUTAS_HOSTNAME', default="localhost")
 GENERADOR_RUTAS_PORT = os.getenv('GENERADOR_RUTAS_PORT', default="3005")
+SIDECARD_HOSTNAME = os.getenv('SIDECARD_HOSTNAME', default="localhost")
 
 class LogisticaEntregas:
     def __init__(self):
@@ -92,7 +93,7 @@ class LogisticaEntregas:
                 raise Exception("Error al calcular la ruta.")
             response_data = response.json()
             ruta_json = json.dumps(response_data)
-            
+            sidecar_url = f"http://{SIDECARD_HOSTNAME}:5001/api/v1/logistica/generador_rutas_entrega/sidecar/validate_entrega"
             if not entregas_programadas:
                 # guardar la EntregasProgramadas
                 entrega_programada = EntregasProgramadas(
@@ -107,6 +108,16 @@ class LogisticaEntregas:
                     entrega_programada_id=entrega_programada_id,
                     entrega_id=entrega_id)
                 entrega_programada_detalle_id = self.repositorio_entrega_programadas_detalles.agregar_detalle(entrega_programada_detalle)
+
+                sidecar_payload = {
+                    "entrega_id": entrega_programada_id,
+                    "informacion_ruta": request_data,
+                    "ruta_calculada": response_data
+                }
+                try:
+                    requests.post(sidecar_url, json=sidecar_payload, timeout=2)
+                except Exception as e:
+                    print(f"Warning: Sidecar validation call failed: {e}")
                 return entrega_programada_id, entrega_programada_detalle_id
             else:
                 # guardar entregaProgramadaDetalle
@@ -120,4 +131,14 @@ class LogisticaEntregas:
                     "ruta_calculada": ruta_json
                 }
                 self.repositorio_entregas_programadas.actualizar_entrega_programada(entrega_programada_id, datos_actualizar)
+                print(f"Ruta programada de la entrega_id {entrega_programada_id} se actualizo en la BD con la ruta {ruta_json}")
+                sidecar_payload = {
+                    "entrega_id": entrega_programada_id,
+                    "informacion_ruta": request_data,
+                    "ruta_calculada": response_data
+                }
+                try:
+                    requests.post(sidecar_url, json=sidecar_payload, timeout=2)
+                except Exception as e:
+                    print(f"Warning: Sidecar validation call failed: {e}")
                 return entrega_programada_id, entrega_programada_detalle_id
