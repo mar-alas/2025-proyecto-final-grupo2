@@ -228,11 +228,34 @@ services:
         - PRODUCTOS_PORT=3001
         - GENERADOR_RUTAS_HOSTNAME=gestor_rutas_entrega
         - GENERADOR_RUTAS_PORT=3005
+        - SIDECARD_HOSTNAME=sidecar
     networks:
       - logistica_servicio_net
       - pulsar_net
       - inventario_servicio_net
       - seguridad_servicio_net
+
+  sidecar:
+    build:
+      context: ../
+      dockerfile: backend/Dockerfiles/Dockerfile.sidecar
+    ports:
+      - "5001:5001"
+    depends_on:
+      logistica_servicio_db:
+        condition: service_healthy
+      pulsar:
+        condition: service_healthy
+    environment:
+        - DB_USER=postgres
+        - DB_PASSWORD=postgres
+        - DB_PORT=5432
+        - DB_NAME=logistica_servicio_db
+        - DB_HOSTNAME=logistica_servicio_db
+        - GENERADOR_RUTAS_HOSTNAME=gestor_rutas_entrega
+        - GENERADOR_RUTAS_PORT=3005
+    networks:
+      - logistica_servicio_net
 
   logistica_servicio_db:
     image: postgres

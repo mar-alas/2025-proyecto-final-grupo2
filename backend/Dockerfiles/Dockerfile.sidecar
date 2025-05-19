@@ -1,0 +1,16 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+COPY backend/logistica_servicio/gestor_entregas/requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY backend/logistica_servicio/gestor_entregas /app/
+COPY backend/seedwork_compartido /app/seedwork_compartido
+
+ENV PYTHONPATH="/app/seedwork_compartido:${PYTHONPATH}"
+
+EXPOSE 5001
+
+CMD ["python", "sidecar.py"]
